@@ -1,30 +1,31 @@
-<span style="font-family: 'Helvetica', Arial, sans-serif;">
+<div style="font-family: 'Helvetica', Arial, sans-serif; color: #4A4A4A;">
 
 # Sam Qureshi's Portfolio Terminal
 
-Welcome to my portfolio, which is built to resemble a terminal interface. This project showcases my experience, projects, and contact information, all accessible through terminal commands. The site is fully responsive and adjusts the ASCII art dynamically to fit any screen size, from desktop to mobile.
+Welcome to my portfolio, which is built to resemble a terminal interface. This project showcases my experience, projects, and contact information, all accessible through terminal commands. 
+The site is fully responsive and adjusts the ASCII art dynamically to fit any screen size, from desktop to mobile.
 
 ## Features
 
-- **Whois Command**: Displays information about me, including education and background.
-- **Experience Command**: Lists my professional experience.
-- **Projects Command**: Provides an overview of my projects.
-- **Contact Command**: Displays my contact information.
-- **Weather Command**: Shows the current weather and a 3-day forecast for a given city or your current location.
-- **Man Command**: Describes how to use the available commands.
-- **Clear Command**: Clears the terminal output.
-- **Help Command**: Lists all available commands with brief descriptions.
-- **Responsive Design**: The site is fully responsive, ensuring a great user experience across all devices.
-- **Dynamic ASCII Art**: The ASCII art scales dynamically to fit the screen size.
+- **<span style="color: #FFA07A;">Whois Command</span>**: Displays information about me, including education and background.
+- **<span style="color: #7FFFD4;">Experience Command</span>**: Lists my professional experience.
+- **<span style="color: #FFB6C1;">Projects Command</span>**: Provides an overview of my projects.
+- **<span style="color: #FFD700;">Contact Command</span>**: Displays my contact information.
+- **<span style="color: #20B2AA;">Weather Command</span>**: Shows the current weather and a 3-day forecast for a given city or your current location.
+- **<span style="color: #FF6347;">Man Command</span>**: Describes how to use the available commands.
+- **<span style="color: #40E0D0;">Clear Command</span>**: Clears the terminal output.
+- **<span style="color: #FF69B4;">Help Command</span>**: Lists all available commands with brief descriptions.
+- **<span style="color: #ADFF2F;">Responsive Design</span>**: The site is fully responsive, ensuring a great user experience across all devices.
+- **<span style="color: #BA55D3;">Dynamic ASCII Art</span>**: The ASCII art scales dynamically to fit the screen size.
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Commands](#commands)
-- [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
-- [License](#license)
+- [<span style="color: #6A5ACD;">Installation</span>](#installation)
+- [<span style="color: #6A5ACD;">Usage</span>](#usage)
+- [<span style="color: #6A5ACD;">Commands</span>](#commands)
+- [<span style="color: #6A5ACD;">Technologies Used</span>](#technologies-used)
+- [<span style="color: #6A5ACD;">Contributing</span>](#contributing)
+- [<span style="color: #6A5ACD;">License</span>](#license)
 
 ## Installation
 
@@ -55,15 +56,15 @@ Once the site is running, you'll be presented with a terminal-like interface. Yo
 
 ### Commands
 
-- **whois**: Display information about Sam Qureshi.
-- **experience**: Show work experience.
-- **projects**: List projects.
-- **contact**: Show contact information.
-- **weather [city]**: Display the current weather and a 3-day forecast for the given city. If no city is provided, it uses your current location.
-- **sudo**: (Joke) Attempt to execute with superuser privileges.
-- **man**: Display a manual for commands.
-- **clear**: Clear the terminal output.
-- **help**: Display a list of available commands with brief descriptions.
+- **<span style="color: #FFA07A;">whois</span>**: Display information about Sam Qureshi.
+- **<span style="color: #7FFFD4;">experience</span>**: Show work experience.
+- **<span style="color: #FFB6C1;">projects</span>**: List projects.
+- **<span style="color: #FFD700;">contact</span>**: Show contact information.
+- **<span style="color: #20B2AA;">weather [city]</span>**: Display the current weather and a 3-day forecast for the given city. If no city is provided, it uses your current location.
+- **<span style="color: #FF6347;">sudo</span>**: (Joke) Attempt to execute with superuser privileges.
+- **<span style="color: #40E0D0;">man</span>**: Display a manual for commands.
+- **<span style="color: #FF69B4;">clear</span>**: Clear the terminal output.
+- **<span style="color: #ADFF2F;">help</span>**: Display a list of available commands with brief descriptions.
 
 ## Technologies Used
 
@@ -94,4 +95,4 @@ Under the following terms:
 
 For more details, please see the [LICENSE](LICENSE) file.
 
-</span>
+</div>
