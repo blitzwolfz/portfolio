@@ -1,4 +1,3 @@
-// src/components/Man.tsx
 import React from 'react';
 import styled from 'styled-components';
 
@@ -30,6 +29,9 @@ const Man: React.FC = () => {
             </p>
             <p>
                 <strong>clear</strong>: Clears the terminal output.
+            </p>
+            <p>
+                <strong>portfolio</strong>: Switch back to the portfolio view.
             </p>
             <p>
                 <strong>help</strong>: Lists all available commands with brief descriptions.
