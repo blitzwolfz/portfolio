@@ -7,7 +7,10 @@ import Contact from './components/Contact';
 import AsciiArt from './components/AsciiArt';
 import Man from './components/Man';
 import Weather from './components/Weather';
+// Import the resume PDF file
+import resumePDF from './assets/Sam_Qureshi.pdf';
 
+// Terminal container styling
 const TerminalContainer = styled.div`
     background-color: #1c1c1c;
     color: #d0d0d0;
@@ -68,6 +71,27 @@ const CommandInput = styled.input`
     }
 `;
 
+// Resume view component that opens the resume in a new tab
+const ViewResume: React.FC = () => {
+    useEffect(() => {
+        window.open(resumePDF, '_blank');
+    }, []);
+
+    return <PromptText>Opening resume in a new tab...</PromptText>;
+};
+
+// Resume download component that triggers the download
+const DownloadResume: React.FC = () => {
+    useEffect(() => {
+        const link = document.createElement('a');
+        link.href = resumePDF;
+        link.download = 'Sam_Qureshi.pdf';
+        link.click();
+    }, []);
+
+    return <PromptText>Downloading resume...</PromptText>;
+};
+
 const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' | 'terminal'>> }> = ({ setView }) => {
     const [command, setCommand] = useState('');
     const [output, setOutput] = useState<JSX.Element[]>([]);
@@ -125,6 +149,12 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
             case 'weather':
                 response = <Weather city={city} />;
                 break;
+            case 'viewresume':  // Command to view resume
+                response = <ViewResume />;
+                break;
+            case 'downloadresume':  // Command to download resume
+                response = <DownloadResume />;
+                break;
             case 'sudo':
                 response = <PromptText>You don't have the required permissions to use 'sudo'.</PromptText>;
                 break;
@@ -143,6 +173,8 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                         <br />- projects: List projects.
                         <br />- contact: Show contact information.
                         <br />- weather [city]: Display the weather. If no city is provided, uses your current location.
+                        <br />- viewresume: View the resume in a new tab.
+                        <br />- downloadresume: Download a copy of the resume.
                         <br />- sudo: Attempt to execute with superuser privileges (joke).
                         <br />- man: Display manual for commands.
                         <br />- portfolio: Switch back to the portfolio view.
