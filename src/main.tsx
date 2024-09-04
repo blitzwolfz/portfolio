@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Terminal from './Terminal';
 import { ThemeProvider, createGlobalStyle } from 'styled-components';
+import Cookies from 'js-cookie'; // Add js-cookie for cookie management
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -32,8 +33,17 @@ const Root: React.FC = () => {
     const [view, setView] = useState<'portfolio' | 'terminal'>('portfolio');
     const [isDarkMode, setIsDarkMode] = useState(false);
 
+    useEffect(() => {
+        const savedTheme = Cookies.get('theme');
+        if (savedTheme) {
+            setIsDarkMode(savedTheme === 'dark');
+        }
+    }, []);
+
     const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
+        const newMode = !isDarkMode;
+        setIsDarkMode(newMode);
+        Cookies.set('theme', newMode ? 'dark' : 'light', { expires: 365 }); // Save to cookie
     };
 
     return (

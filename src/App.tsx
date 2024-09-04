@@ -30,6 +30,32 @@ const Subheader = styled.h2`
     max-width: 800px;
 `;
 
+const ExperienceContainer = styled.div`
+    max-width: 900px;
+    margin-bottom: 50px;
+    text-align: left;
+    line-height: 1.5;
+`;
+
+const ExperienceItem = styled.div`
+    margin-bottom: 30px;
+
+    h4 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    ul {
+        list-style-type: disc;
+        margin-left: 20px;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+`;
+
 const sectionalRGBWave = keyframes`
     0% { color: red; }
     20% { color: orange; }
@@ -43,12 +69,12 @@ const HighlightText = styled.span`
     display: inline-block;
     cursor: pointer;
     font-weight: bold;
-    animation: ${sectionalRGBWave} 4s linear infinite; /* Slower and more blocky animation */
+    animation: ${sectionalRGBWave} 4s linear infinite;
 
     span {
         display: inline-block;
         animation: ${sectionalRGBWave} 4s linear infinite;
-        animation-delay: calc(0.15s * var(--char-index)); /* Increased delay for blocky effect */
+        animation-delay: calc(0.15s * var(--char-index));
     }
 
     &:hover {
@@ -74,6 +100,7 @@ const ProjectLink = styled.button`
     font-weight: 500;
     transition: background-color 0.3s, transform 0.3s;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
     &:hover {
         background-color: #5e63f7;
         transform: translateY(-3px);
@@ -86,6 +113,7 @@ const ContactLink = styled.a`
     text-decoration: none;
     margin: 0 5px;
     transition: color 0.3s;
+
     &:hover {
         color: #5e63f7;
         text-decoration: underline;
@@ -123,7 +151,7 @@ const renderWaveText = (text: string) => {
             key={index}
             style={{
                 '--char-index': index,
-                whiteSpace: char === ' ' ? 'pre' : 'normal', // Preserve spaces
+                whiteSpace: char === ' ' ? 'pre' : 'normal',
             } as React.CSSProperties}
         >
             {char}
@@ -186,13 +214,36 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 you can find me jamming to my guitar, <br />
                 watching youtube, and <em><u>building a unicorn startup.🦄</u></em>
             </Subheader>
+
+            {/* Work Experience Section */}
+            <ExperienceContainer>
+                <ExperienceItem>
+                    <h4>Software Developer (Rack-I, Toronto, ON) - Feb - Aug 2023</h4>
+                    <ul>
+                        <li>Made substantial contributions to back-end infrastructure, enhancing data retrieval efficiency by 30%.</li>
+                        <li>Collaborated with front-end teams, reducing bugs by 20%.</li>
+                        <li>Improved deployment time by 25%.</li>
+                    </ul>
+                </ExperienceItem>
+                <ExperienceItem>
+                    <h4>Hardware & Software Analyst Intern (Ryerson University, Toronto, ON) - Sept 2022 - April 2023</h4>
+                    <ul>
+                        <li>Developed an internal database, reducing data entry errors by 15%.</li>
+                        <li>Deployed over 50 new devices, ensuring compliance with hardware policies.</li>
+                        <li>Oversaw data wiping process for over 100 devices, achieving zero data breaches.</li>
+                    </ul>
+                </ExperienceItem>
+                <ExperienceItem>
+                    <h4>Data Clerk Intern (Learning Enrichment Foundation, Toronto, ON) - June - Sept 2022</h4>
+                    <ul>
+                        <li>Streamlined data processing, reducing time by 20%.</li>
+                        <li>Enhanced CRM functionality, improving user satisfaction by 10%.</li>
+                        <li>Documented approaches, decreasing project completion time by 15%.</li>
+                    </ul>
+                </ExperienceItem>
+            </ExperienceContainer>
+
             <Section>
-                <h3>Find me somewhere else on the web:</h3>
-                <p>
-                    <ContactLink href="https://github.com/blitzwolfz" target="_blank" rel="noopener noreferrer">GitHub</ContactLink> |
-                    <ContactLink href="https://www.linkedin.com/in/saminqureshi" target="_blank" rel="noopener noreferrer"> LinkedIn</ContactLink> |
-                    <ContactLink href="mailto:saminm.qureshi@gmail.com"> Email</ContactLink>
-                </p>
                 <h3>Things I've made</h3>
                 {projects.map((project, index) => (
                     <ProjectLink key={index} onClick={() => openModal(index)}>
