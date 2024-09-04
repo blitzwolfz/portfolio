@@ -3,6 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import Modal from './components/Modal';
 import Slideshow from './components/Slideshow';
 import Signature from './components/Signature';
+import resumePDF from './assets/Sam_Qureshi.pdf';
 
 // Keyframes for glowing border effect without spinning the box
 const glowingBorderSpin = keyframes`
@@ -229,6 +230,44 @@ const Footer = styled.footer`
     align-items: center;
 `;
 
+// Styled for glowing buttons with dark glow in light mode and light glow in dark mode
+const ResumeButton = styled.a`
+
+    cursor: pointer;
+    color: ${(props) => props.theme.color};
+    
+
+    @media (max-width: 768px) {
+        max-width: 100%; /* Ensures the box takes full width on mobile */
+        padding: 15px;
+        margin: 10px; /* Adjust margins for mobile */
+    }
+    
+    display: inline-block;
+    background-color: ${(props) => props.theme.buttonBackgroundColor};
+    padding: 15px 30px;
+    margin: 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 0 10px ${(props) =>
+            props.theme.backgroundColor === 'rgb(254, 243, 199)' // Light mode background
+                    ? 'rgba(0, 0, 0, 0.6)'  // Dark glow in light mode
+                    : 'rgba(255, 255, 255, 0.6)'};  // Light glow in dark mode
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: ${glowingBorderSpin} 2s linear infinite;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 20px ${(props) =>
+                props.theme.backgroundColor === 'rgb(254, 243, 199)' // Light mode background
+                        ? 'rgba(0, 0, 0, 0.8)'  // Stronger dark glow in light mode
+                        : 'rgba(255, 255, 255, 0.8)'};  // Stronger light glow in dark mode
+    }
+`;
+
 const renderWaveText = (text: string) => {
     return text.split('').map((char, index) => (
         <span
@@ -343,19 +382,25 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
         <PortfolioContainer>
             <Header>i’m Sam!</Header>
             <Subheader>
-                welcome to my little corner of the internet! <br />
+                welcome to my little corner of the internet! <br/>
                 <HighlightText onClick={() => setView('terminal')}>
                     {renderWaveText('Click me Terminal nerds')}
                     😲
                 </HighlightText>
-                <br />
-                i’m a computer science student at George Brown College. <br />
-                Even achieved a 3.82 cGPA 😎<br />
-                i love to hack and break all my projects. <br />
-                while i’m not clicking away at my keyboard,<br />
-                you can find me jamming to my guitar, <br />
+                <br/>
+                i’m a computer science student at George Brown College. <br/>
+                Even achieved a 3.82 cGPA 😎<br/>
+                i love to hack and break all my projects. <br/>
+                while i’m not clicking away at my keyboard,<br/>
+                you can find me jamming to my guitar, <br/>
                 watching youtube, and <em><u>building a unicorn startup.🦄</u></em>
             </Subheader>
+
+            <Section>
+                <h3>My Resume (No subscription required 😁)</h3>
+                <ResumeButton href={resumePDF} target="_blank" rel="noopener noreferrer">👀 View</ResumeButton>
+                <ResumeButton href={resumePDF} download="Sam_Qureshi.pdf">⬇️ Download</ResumeButton>
+            </Section>
 
             {/* Add Cool places I've worked at */}
             <h3>Cool places I've worked at</h3>
@@ -369,7 +414,8 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                     </TimelineItem>
                 ))}
                 {scrollIndex > 0 && <ScrollButton direction="left" onClick={handlePrevJob}>❮</ScrollButton>}
-                {scrollIndex < workExperience.length - 3 && <ScrollButton direction="right" onClick={handleNextJob}>❯</ScrollButton>}
+                {scrollIndex < workExperience.length - 3 &&
+                    <ScrollButton direction="right" onClick={handleNextJob}>❯</ScrollButton>}
             </TimelineContainer>
 
             <Section>
@@ -384,13 +430,13 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
             <PullStringContainer onClick={toggleTheme}>
                 <PullString>
                     |
-                    <br />
+                    <br/>
                     |
-                    <br />
+                    <br/>
                     |
-                    <br />
+                    <br/>
                     |
-                    <br />
+                    <br/>
                     o
                 </PullString>
             </PullStringContainer>
@@ -406,13 +452,13 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                     </ModalText>
                 )}
                 {selectedProject !== null && (
-                    <Slideshow slides={[projects[selectedProject]]} />
+                    <Slideshow slides={[projects[selectedProject]]}/>
                 )}
             </Modal>
 
             <Footer>
                 Made with love ❤️
-                <Signature />
+                <Signature/>
             </Footer>
         </PortfolioContainer>
     );
