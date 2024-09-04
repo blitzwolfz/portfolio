@@ -15,7 +15,8 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
-    background: white;
+    background: ${(props) => props.theme.backgroundColor};
+    color: ${(props) => props.theme.color};
     padding: 20px;
     border-radius: 8px;
     max-width: 90%;
@@ -23,6 +24,7 @@ const ModalContent = styled.div`
     overflow-y: auto;
     white-space: pre-line; /* Ensure text respects newlines and wraps properly */
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 `;
 
 const CloseButton = styled.button`
@@ -33,6 +35,7 @@ const CloseButton = styled.button`
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+    color: ${(props) => props.theme.color}; /* Matches text color for better visibility */
 `;
 
 interface ModalProps {

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Modal from './components/Modal';
 import Slideshow from './components/Slideshow';
 import Signature from './components/Signature';
 
+// Styled Components for the Portfolio
 const PortfolioContainer = styled.div`
     min-height: 100vh;
     padding: 60px 20px;
@@ -30,32 +31,96 @@ const Subheader = styled.h2`
     max-width: 800px;
 `;
 
-const ExperienceContainer = styled.div`
+// Styled for the timeline with dynamic sizing
+const TimelineContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     max-width: 900px;
     margin-bottom: 50px;
-    text-align: left;
+    position: relative;
+    overflow: hidden;
+    padding: 0 20px;
+`;
+
+const TimelineItem = styled.div`
+    width: 100%;
+    max-width: 600px;
+    border: 2px solid ${(props) => props.theme.buttonBackgroundColor};
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    background-color: ${(props) => props.theme.backgroundColor};
+    color: ${(props) => props.theme.color};
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h4 {
+        margin-bottom: 10px;
+        font-size: 1.25rem;
+    }
+
+    p {
+        margin-bottom: 5px;
+        color: ${(props) => props.theme.buttonTextColor};
+    }
+
+    @media (max-width: 768px) {
+        max-width: 100%;
+    }
+`;
+
+// Styled for navigation buttons in job modals
+const ModalNavButton = styled.button`
+    background-color: ${(props) => props.theme.buttonBackgroundColor};
+    color: ${(props) => props.theme.buttonTextColor};
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    margin: 10px;
+
+    &:hover {
+        background-color: #5e63f7;
+    }
+
+    &:disabled {
+        background-color: #ccc;
+    }
+`;
+
+const ModalText = styled.div`
+    color: ${(props) => props.theme.color};
+    padding: 20px;
+    font-size: 1.1rem;
     line-height: 1.5;
 `;
 
-const ExperienceItem = styled.div`
-    margin-bottom: 30px;
+const ScrollButton = styled.button`
+    position: absolute;
+    top: 50%;
+    ${(props) => (props.direction === 'left' ? 'left: 10px;' : 'right: 10px;')}
+    transform: translateY(-50%);
+    background-color: ${(props) => props.theme.buttonBackgroundColor};
+    color: ${(props) => props.theme.buttonTextColor};
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.3s;
 
-    h4 {
-        font-size: 1.2rem;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    ul {
-        list-style-type: disc;
-        margin-left: 20px;
-    }
-
-    li {
-        margin-bottom: 5px;
+    &:hover {
+        transform: translateY(-50%) scale(1.1);
     }
 `;
 
+// Animated wave for text
 const sectionalRGBWave = keyframes`
     0% { color: red; }
     20% { color: orange; }
@@ -107,19 +172,6 @@ const ProjectLink = styled.button`
     }
 `;
 
-const ContactLink = styled.a`
-    color: ${(props) => props.theme.buttonBackgroundColor};
-    font-weight: 500;
-    text-decoration: none;
-    margin: 0 5px;
-    transition: color 0.3s;
-
-    &:hover {
-        color: #5e63f7;
-        text-decoration: underline;
-    }
-`;
-
 const PullStringContainer = styled.div`
     position: fixed;
     top: 0;
@@ -160,8 +212,31 @@ const renderWaveText = (text: string) => {
 };
 
 const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' | 'terminal'>>, toggleTheme: () => void }> = ({ setView, toggleTheme }) => {
-    const [isModalOpen, setIsModalOpen] = React.useState(false);
-    const [selectedProject, setSelectedProject] = React.useState<number | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedJob, setSelectedJob] = useState<number | null>(null);
+    const [selectedProject, setSelectedProject] = useState<number | null>(null);
+    const [scrollIndex, setScrollIndex] = useState(0);
+
+    const workExperience = [
+        {
+            title: 'Software Developer',
+            company: 'Rack-I, Toronto, ON',
+            dates: 'Feb - Aug 2023',
+            description: 'Made substantial contributions to back-end infrastructure, enhancing data retrieval efficiency by 30%. Collaborated with front-end teams, reducing bugs by 20%. Improved deployment time by 25%.',
+        },
+        {
+            title: 'Hardware & Software Analyst Intern',
+            company: 'Ryerson University, Toronto, ON',
+            dates: 'Sept 2022 - April 2023',
+            description: 'Developed an internal database, reducing data entry errors by 15%. Deployed over 50 new devices, ensuring compliance with hardware policies. Oversaw data wiping process for over 100 devices, achieving zero data breaches.',
+        },
+        {
+            title: 'Data Clerk Intern',
+            company: 'Learning Enrichment Foundation, Toronto, ON',
+            dates: 'June - Sept 2022',
+            description: 'Streamlined data processing, reducing time by 20%. Enhanced CRM functionality, improving user satisfaction by 10%. Documented approaches, decreasing project completion time by 15%.',
+        },
+    ];
 
     const projects = [
         {
@@ -192,9 +267,44 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
         },
     ];
 
-    const openModal = (index: number) => {
+    const openJobModal = (index: number) => {
+        setSelectedJob(index);
+        setIsModalOpen(true);
+    };
+
+    const openProjectModal = (index: number) => {
         setSelectedProject(index);
         setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedJob(null);
+        setSelectedProject(null);
+    };
+
+    const handleNextJob = () => {
+        if (scrollIndex < workExperience.length - 3) {
+            setScrollIndex(scrollIndex + 1);
+        }
+    };
+
+    const handlePrevJob = () => {
+        if (scrollIndex > 0) {
+            setScrollIndex(scrollIndex - 1);
+        }
+    };
+
+    const handleNextModalJob = () => {
+        if (selectedJob !== null && selectedJob < workExperience.length - 1) {
+            setSelectedJob(selectedJob + 1);
+        }
+    };
+
+    const handlePrevModalJob = () => {
+        if (selectedJob !== null && selectedJob > 0) {
+            setSelectedJob(selectedJob - 1);
+        }
     };
 
     return (
@@ -215,38 +325,22 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 watching youtube, and <em><u>building a unicorn startup.🦄</u></em>
             </Subheader>
 
-            {/* Work Experience Section */}
-            <ExperienceContainer>
-                <ExperienceItem>
-                    <h4>Software Developer (Rack-I, Toronto, ON) - Feb - Aug 2023</h4>
-                    <ul>
-                        <li>Made substantial contributions to back-end infrastructure, enhancing data retrieval efficiency by 30%.</li>
-                        <li>Collaborated with front-end teams, reducing bugs by 20%.</li>
-                        <li>Improved deployment time by 25%.</li>
-                    </ul>
-                </ExperienceItem>
-                <ExperienceItem>
-                    <h4>Hardware & Software Analyst Intern (Ryerson University, Toronto, ON) - Sept 2022 - April 2023</h4>
-                    <ul>
-                        <li>Developed an internal database, reducing data entry errors by 15%.</li>
-                        <li>Deployed over 50 new devices, ensuring compliance with hardware policies.</li>
-                        <li>Oversaw data wiping process for over 100 devices, achieving zero data breaches.</li>
-                    </ul>
-                </ExperienceItem>
-                <ExperienceItem>
-                    <h4>Data Clerk Intern (Learning Enrichment Foundation, Toronto, ON) - June - Sept 2022</h4>
-                    <ul>
-                        <li>Streamlined data processing, reducing time by 20%.</li>
-                        <li>Enhanced CRM functionality, improving user satisfaction by 10%.</li>
-                        <li>Documented approaches, decreasing project completion time by 15%.</li>
-                    </ul>
-                </ExperienceItem>
-            </ExperienceContainer>
+            {/* Timeline Experience Section with Scroll Buttons */}
+            <TimelineContainer>
+                {workExperience.slice(scrollIndex, scrollIndex + 3).map((job, index) => (
+                    <TimelineItem key={index} onClick={() => openJobModal(index)}>
+                        <h4>{job.title} ({job.company})</h4>
+                        <p>{job.dates}</p>
+                    </TimelineItem>
+                ))}
+                {scrollIndex > 0 && <ScrollButton direction="left" onClick={handlePrevJob}>❮</ScrollButton>}
+                {scrollIndex < workExperience.length - 3 && <ScrollButton direction="right" onClick={handleNextJob}>❯</ScrollButton>}
+            </TimelineContainer>
 
             <Section>
                 <h3>Things I've made</h3>
                 {projects.map((project, index) => (
-                    <ProjectLink key={index} onClick={() => openModal(index)}>
+                    <ProjectLink key={index} onClick={() => openProjectModal(index)}>
                         {project.title}
                     </ProjectLink>
                 ))}
@@ -266,8 +360,19 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 </PullString>
             </PullStringContainer>
 
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                {selectedProject !== null && <Slideshow slides={[projects[selectedProject]]} />}
+            <Modal isOpen={isModalOpen} onClose={closeModal}>
+                {selectedJob !== null && (
+                    <ModalText>
+                        <h3>{workExperience[selectedJob].title}</h3>
+                        <p>{workExperience[selectedJob].dates}</p>
+                        <p>{workExperience[selectedJob].description}</p>
+                        <ModalNavButton onClick={handlePrevModalJob}>Previous Job</ModalNavButton>
+                        <ModalNavButton onClick={handleNextModalJob}>Next Job</ModalNavButton>
+                    </ModalText>
+                )}
+                {selectedProject !== null && (
+                    <Slideshow slides={[projects[selectedProject]]} />
+                )}
             </Modal>
 
             <Footer>
