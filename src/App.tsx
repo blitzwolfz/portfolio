@@ -123,6 +123,20 @@ const ModalText = styled.div`
     padding: 20px;
     font-size: 1.1rem;
     line-height: 1.5;
+
+    /* Styles for the links */
+    a {
+        color: ${(props) => props.theme.color}; /* Use a visible color for unvisited links */
+        text-decoration: underline;
+
+        &:visited {
+            color: ${(props) => props.theme.color}; /* Ensure visited links remain visible */
+        }
+
+        &:hover {
+            text-shadow: 0 0 5px currentColor; /* Optional hover effect */
+        }
+    }
 `;
 
 // Define the direction prop
@@ -383,6 +397,18 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
         }
     };
 
+    const handleNextModalProject = () => {
+        if (selectedProject !== null && selectedProject < projects.length - 1) {
+            setSelectedProject(selectedProject + 1);
+        }
+    };
+
+    const handlePrevModalProject = () => {
+        if (selectedProject !== null && selectedProject > 0) {
+            setSelectedProject(selectedProject - 1);
+        }
+    };
+
     return (
         <PortfolioContainer>
             <Header>i’m Sam!</Header>
@@ -453,13 +479,26 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                         <h3>{workExperience[selectedJob].title}</h3>
                         <p>{workExperience[selectedJob].dates}</p>
                         <p>{workExperience[selectedJob].description}</p>
-                        <ModalNavButton onClick={handlePrevModalJob}>Previous Job</ModalNavButton>
-                        <ModalNavButton onClick={handleNextModalJob}>Next Job</ModalNavButton>
+                        <ModalNavButton onClick={handlePrevModalJob} disabled={selectedJob === 0}>
+                            Previous Job
+                        </ModalNavButton>
+                        <ModalNavButton onClick={handleNextModalJob} disabled={selectedJob === projects.length - 1}>
+                            Next Job
+                        </ModalNavButton>
                     </ModalText>
                 )}
                 {selectedProject !== null && (
                     <ModalText>
-                        <Slideshow slides={[...projects]} />
+                        <h3>{projects[selectedProject].title}</h3>
+                        <p>{projects[selectedProject].description}</p>
+                        <p><strong>Tech Stack:</strong> {projects[selectedProject].techStack.join(', ')}</p>
+                        <a href={projects[selectedProject].link} target="_blank" rel="noopener noreferrer">View on GitHub</a><br/>
+                        <ModalNavButton onClick={handlePrevModalProject} disabled={selectedProject === 0}>
+                            Previous Project
+                        </ModalNavButton>
+                        <ModalNavButton onClick={handleNextModalProject} disabled={selectedProject === projects.length - 1}>
+                            Next Project
+                        </ModalNavButton>
                     </ModalText>
                 )}
             </Modal>
