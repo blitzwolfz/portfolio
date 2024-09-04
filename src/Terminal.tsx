@@ -92,7 +92,7 @@ const DownloadResume: React.FC = () => {
     return <PromptText>Downloading resume...</PromptText>;
 };
 
-const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' | 'terminal'>> }> = ({ setView }) => {
+const Terminal: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' | 'terminal'>> }> = ({ setView }) => {
     const [command, setCommand] = useState('');
     const [output, setOutput] = useState<JSX.Element[]>([]);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -216,4 +216,4 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
     );
 };
 
-export default App;
+export default Terminal;
