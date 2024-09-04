@@ -4,6 +4,19 @@ import Modal from './components/Modal';
 import Slideshow from './components/Slideshow';
 import Signature from './components/Signature';
 
+// Keyframes for glowing border effect without spinning the box
+const glowingBorderSpin = keyframes`
+    0% {
+        box-shadow: 0 0 10px 0px, 0 0 10px 0px inset;
+    }
+    50% {
+        box-shadow: 0 0 20px 5px, 0 0 20px 5px inset;
+    }
+    100% {
+        box-shadow: 0 0 10px 0px, 0 0 10px 0px inset;
+    }
+`;
+
 // Styled Components for the Portfolio
 const PortfolioContainer = styled.div`
     min-height: 100vh;
@@ -31,7 +44,7 @@ const Subheader = styled.h2`
     max-width: 800px;
 `;
 
-// Styled for the timeline with dynamic sizing
+// Styled for the timeline with dynamic sizing and spinning glowing effect around the box only
 const TimelineContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -40,8 +53,12 @@ const TimelineContainer = styled.div`
     max-width: 900px;
     margin-bottom: 50px;
     position: relative;
-    overflow: hidden;
-    padding: 0 20px;
+    overflow: visible; /* Allow overflow for the glow effect */
+    padding: 0 30px; /* Extra padding to prevent cutoffs */
+
+    @media (max-width: 768px) {
+        padding: 0 15px;
+    }
 `;
 
 const TimelineItem = styled.div`
@@ -51,13 +68,17 @@ const TimelineItem = styled.div`
     border-radius: 10px;
     padding: 20px;
     cursor: pointer;
-    transition: transform 0.3s;
     background-color: ${(props) => props.theme.backgroundColor};
     color: ${(props) => props.theme.color};
+    transition: transform 0.3s;
+    margin: 20px 0; /* Space between items to avoid cutoff at the top/bottom */
 
     &:hover {
-        transform: translateY(-5px);
-        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+        animation: ${glowingBorderSpin} 1.5s linear infinite;
+        box-shadow: ${(props) =>
+                props.theme.backgroundColor === '#000'
+                        ? '0px 0px 20px 5px gold, 0px 0px 20px 5px inset gold' // Golden glow in dark mode
+                        : '0px 0px 20px 5px lightblue, 0px 0px 20px 5px inset lightblue'}; // Light blue glow in light mode
     }
 
     h4 {
@@ -67,11 +88,13 @@ const TimelineItem = styled.div`
 
     p {
         margin-bottom: 5px;
-        color: ${(props) => props.theme.buttonTextColor};
+        color: ${(props) => props.theme.color}; // Ensuring text is readable in both modes
     }
 
     @media (max-width: 768px) {
-        max-width: 100%;
+        max-width: 100%; /* Ensures the box takes full width on mobile */
+        padding: 15px;
+        margin: 10px 0; /* Adjust margins for mobile */
     }
 `;
 
@@ -179,6 +202,15 @@ const PullStringContainer = styled.div`
     cursor: pointer;
     text-align: center;
     z-index: 1000;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        transform: translateY(10px);
+    }
+
+    &:active {
+        transform: translateY(30px);
+    }
 `;
 
 const PullString = styled.div`
@@ -206,8 +238,8 @@ const renderWaveText = (text: string) => {
                 whiteSpace: char === ' ' ? 'pre' : 'normal',
             } as React.CSSProperties}
         >
-            {char}
-        </span>
+      {char}
+    </span>
     ));
 };
 
@@ -318,12 +350,15 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 </HighlightText>
                 <br />
                 i’m a computer science student at George Brown College. <br />
-                Even got a 3.82 cGPA 😎<br />
+                Even achieved a 3.82 cGPA 😎<br />
                 i love to hack and break all my projects. <br />
                 while i’m not clicking away at my keyboard,<br />
                 you can find me jamming to my guitar, <br />
                 watching youtube, and <em><u>building a unicorn startup.🦄</u></em>
             </Subheader>
+
+            {/* Add Cool places I've worked at */}
+            <h3>Cool places I've worked at</h3>
 
             {/* Timeline Experience Section with Scroll Buttons */}
             <TimelineContainer>
