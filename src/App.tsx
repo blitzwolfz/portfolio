@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Modal from './components/Modal';
 import Signature from './components/Signature';
-// @ts-ignore
 import resumePDF from './assets/Sam_Qureshi.pdf';
 
 // Keyframes for glowing border effect without spinning the box
@@ -288,37 +287,6 @@ const ResumeButton = styled.a`
     }
 `;
 
-const BlogButton = styled.button`
-    background-color: ${(props) => props.theme.buttonBackgroundColor};
-    color: ${(props) => props.theme.buttonTextColor};
-    padding: 12px 24px;
-    margin: 15px;
-    border: none;
-    cursor: pointer;
-    border-radius: 30px;
-    font-size: 1.1rem;
-    font-weight: 500;
-    transition: background-color 0.3s, transform 0.3s;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Standard shadow */
-
-    &:hover {
-        background-color: ${(props) =>
-                props.theme.backgroundColor === 'rgb(254, 243, 199)'
-                        ? '#0067ff'  /* Dark hover color for light mode */
-                        : '#ff9800'}; /* Light hover color for dark mode */
-        color: ${(props) =>
-                props.theme.backgroundColor === 'rgb(254, 243, 199)'
-                        ? '#ffffff'  /* White text in light mode */
-                        : '#000000'}; /* Black text in dark mode */
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow on hover */
-    }
-`;
-
-
-
-
-
 const renderWaveText = (text: string) => {
     return text.split('').map((char, index) => (
         <span
@@ -476,26 +444,20 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                         <p>{job.dates}</p>
                     </TimelineItem>
                 ))}
+                {/*@ts-ignore*/}
                 {scrollIndex > 0 && <ScrollButton direction="left" onClick={handlePrevJob}>❮</ScrollButton>}
+                {/*@ts-ignore*/}
                 {scrollIndex < workExperience.length - 3 && <ScrollButton direction="right" onClick={handleNextJob}>❯</ScrollButton>}
             </TimelineContainer>
 
             <Section>
-                <h3>Things I've made 🔨</h3>
+                <h3>Things I've made</h3>
                 {projects.map((project, index) => (
                     <ProjectLink key={index} onClick={() => openProjectModal(index)}>
                         {project.title}
                     </ProjectLink>
                 ))}
             </Section>
-
-            <Section>
-                <h3>Want to read my thoughts 🧾</h3>
-                <BlogButton href="/blog" target="_blank">
-                    Read My Blog 📖
-                </BlogButton>
-            </Section>
-
 
             <PullStringContainer onClick={toggleTheme}>
                 <PullString>
@@ -542,7 +504,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
             </Modal>
 
             <Footer>
-                <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Made with love ❤️</h3>
+                Made with love ❤️
                 <Signature/>
             </Footer>
         </PortfolioContainer>
