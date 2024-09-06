@@ -31,7 +31,7 @@ const darkTheme = {
 
 const Root: React.FC = () => {
     const [view, setView] = useState<'portfolio' | 'terminal'>('portfolio');
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
 
     useEffect(() => {
         const savedTheme = Cookies.get('theme');

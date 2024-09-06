@@ -75,7 +75,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 'with friends on, and I am responsible for the backend in Python, \n' +
                 'which handles computer vision and statistical calculations.',
             link: 'https://github.com/JanninTeam',
-            techStack: ['Java'],
+            techStack: ['Python', "TypeScript", "OpenCV"],
         },
     ];
 
