@@ -274,6 +274,48 @@ export const ResumeButton = styled.a`
     }
 `;
 
+// Keyframes for Rainbow Glow
+const rainbowGlow = keyframes`
+    0% { box-shadow: 0 0 10px red; }
+    20% { box-shadow: 0 0 10px orange; }
+    40% { box-shadow: 0 0 10px yellow; }
+    60% { box-shadow: 0 0 10px green; }
+    80% { box-shadow: 0 0 10px blue; }
+    100% { box-shadow: 0 0 10px violet; }
+`;
+
+// Keyframes for Golden Glow
+const goldenGlow = keyframes`
+    0% { box-shadow: 0 0 10px rgb(255, 215, 0); }
+    50% { box-shadow: 0 0 20px rgb(255, 215, 0); }
+    100% { box-shadow: 0 0 10px rgb(255, 215, 0); }
+`;
+
+// Styled component for StarProjectLink with fillover and updated golden glow
+export const StarProjectLink = styled.button<{ glowType: 'rainbow' | 'golden' }>`
+    background-color: ${(props) => props.theme.buttonBackgroundColor};
+    color: ${(props) => props.theme.buttonTextColor};
+    border: none;
+    padding: 15px 30px;
+    margin: 20px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 0 10px ${(props) =>
+            props.theme.backgroundColor === 'rgb(254, 243, 199)' ? 'rgba(0, 0, 0, 0.6)' : 'rgba(255, 255, 255, 0.6)'};
+    animation: ${(props) => (props.glowType === 'rainbow' ? rainbowGlow : goldenGlow)} 2s linear infinite;
+    transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 20px ${(props) =>
+                props.theme.backgroundColor === 'rgb(254, 243, 199)' ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
+        background: linear-gradient(90deg, ${(props) => props.theme.buttonBackgroundColor}, #5e63f7); /* Fillover effect */
+    }
+`;
+
 export const renderWaveText = (text: string) => {
     return text.split('').map((char, index) => (
         <span

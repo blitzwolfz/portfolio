@@ -9,8 +9,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'Sam_Qureshi.pdf') {
-            return 'assets/Sam_Qureshi.pdf'; // Specify the original directory
+          if (assetInfo.name === 'Sammy_Qureshi.pdf') {
+            return 'assets/Sammy_Qureshi.pdf'; // Specify the original directory
           }
           return 'assets/[name].[ext]'; // Default pattern for other assets
         },
