@@ -144,7 +144,8 @@ export const ScrollButton = styled.button<ScrollButtonProps>`
     background-color: ${(props) => props.theme.buttonBackgroundColor};
     color: ${(props) => props.theme.buttonTextColor};
     border: none;
-    padding: 10px;
+    padding: 5px;
+    padding-bottom: 8px;
     cursor: pointer;
     border-radius: 50%;
     transition: transform 0.3s;

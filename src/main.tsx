@@ -29,7 +29,7 @@ const darkTheme = {
     buttonTextColor: '#fff',
 };
 
-const Root: React.FC = () => {
+const Main: React.FC = () => {
     const [view, setView] = useState<'portfolio' | 'terminal'>('portfolio');
     const [isDarkMode, setIsDarkMode] = useState(true);
 
@@ -58,4 +58,4 @@ const Root: React.FC = () => {
     );
 };
 
-ReactDOM.render(<Root />, document.getElementById('root'));
+ReactDOM.render(<Main />, document.getElementById('root'));

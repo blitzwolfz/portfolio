@@ -29,8 +29,34 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
     const [selectedJob, setSelectedJob] = useState<number | null>(null);
     const [selectedProject, setSelectedProject] = useState<number | null>(null);
     const [scrollIndex, setScrollIndex] = useState(0);
+    const [startupText, setStartupText] = useState("building a unicorn startup.🦄");
+    const [isClicked, setIsClicked] = useState(false);
+
+    const startupPhrases = [
+        "building a unicorn startup.🦄",
+        "launching the next big thing.🚀",
+        "changing the world, one app at a time.🌍",
+        "creating the future of tech.💡",
+        "building something legendary.🏆",
+    ];
+
+    const changeStartupText = () => {
+        setIsClicked(true); // Trigger the click effect
+        let newText = startupText;
+        while (newText === startupText) {
+            newText = startupPhrases[Math.floor(Math.random() * startupPhrases.length)];
+        }
+        setStartupText(newText);
+        setTimeout(() => setIsClicked(false), 200); // Remove the click effect after 200ms
+    };
 
     const workExperience = [
+        {
+            title: 'Lead Backend Developer',
+            company: 'Paulos Poetry, Toronto, ON',
+            dates: 'Aug - Present',
+            description: 'Designed and wrote entire backend of website. Allowed for 20% faster poem posts. Increased efficiency of content delivery by 100%.',
+        },
         {
             title: 'Software Developer',
             company: 'Rack-I, Toronto, ON',
@@ -151,7 +177,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 i love to hack and break all my projects. <br/>
                 while i’m not clicking away at my keyboard,<br/>
                 you can find me jamming to my guitar, <br/>
-                watching youtube, and <em><u>building a unicorn startup.🦄</u></em>
+                watching youtube, and <em><u className={isClicked ? 'clicked' : ''} onClick={changeStartupText}>{startupText}</u></em>
             </Subheader>
 
             <Section>
