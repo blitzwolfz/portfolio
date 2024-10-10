@@ -30,7 +30,8 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
     const [selectedProject, setSelectedProject] = useState<number | null>(null);
     const [scrollIndex, setScrollIndex] = useState(0);
     const [startupText, setStartupText] = useState("building a unicorn startup.🦄");
-    const [isClicked, setIsClicked] = useState(false);
+    const [isPdfVisible, setIsPdfVisible] = useState(false);
+    const [isPdfAnimating, setIsPdfAnimating] = useState(false);
 
     const startupPhrases = [
         "building a unicorn startup.🦄",
@@ -41,13 +42,19 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
     ];
 
     const changeStartupText = () => {
-        setIsClicked(true); // Trigger the click effect
         let newText = startupText;
         while (newText === startupText) {
             newText = startupPhrases[Math.floor(Math.random() * startupPhrases.length)];
         }
         setStartupText(newText);
-        setTimeout(() => setIsClicked(false), 200); // Remove the click effect after 200ms
+    };
+
+    const handleViewResume = () => {
+        setIsPdfAnimating(true); // Start the animation
+        setTimeout(() => {
+            setIsPdfVisible(!isPdfVisible);
+            setIsPdfAnimating(false); // End the animation after the transition
+        }, 500); // 500ms corresponds to the animation duration
     };
 
     const workExperience = [
@@ -164,6 +171,33 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
 
     return (
         <PortfolioContainer>
+            {/* CSS Styles for the PDF animation */}
+            <style>
+                {`
+                .pdf-container {
+                    position: relative;
+                    overflow: hidden;
+                    width: 100%;
+                    height: 0;
+                    transition: height 500ms ease-in-out;
+                }
+                .pdf-container.open {
+                    height: 100vh; /* Full height for larger screens */
+                }
+                .pdf-container iframe {
+                    width: 100%; /* Make the iframe fill the entire width */
+                    height: 100%;
+                    border: none;
+                }
+                /* Ensure the iframe is responsive on smaller devices */
+                @media (max-width: 768px) {
+                    .pdf-container.open {
+                        height: 70vh; /* Slightly smaller for mobile */
+                    }
+                }
+                `}
+            </style>
+
             <Header>i’m Sammy!</Header>
             <Subheader>
                 welcome to my little corner of the internet! <br/>
@@ -177,13 +211,23 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 i love to hack and break all my projects. <br/>
                 while i’m not clicking away at my keyboard,<br/>
                 you can find me jamming to my guitar, <br/>
-                watching youtube, and <em><u className={isClicked ? 'clicked' : ''} onClick={changeStartupText}>{startupText}</u></em>
+                watching youtube, and <em><u onClick={changeStartupText}>{startupText}</u></em>
             </Subheader>
 
             <Section>
                 <h3>My Resume (No subscription required 😁)</h3>
-                <ResumeButton href={resumePDF} target="_blank" rel="noopener noreferrer">👀 View</ResumeButton>
+                <ResumeButton onClick={handleViewResume}>👀 {isPdfVisible ? 'Close' : 'View'}</ResumeButton>
                 <ResumeButton href={resumePDF} download="Sammy_Qureshi.pdf">⬇️ Download</ResumeButton>
+                {isPdfVisible && (
+                    <ResumeButton as="a" href={resumePDF} target="_blank" rel="noopener noreferrer">
+                        🌐 Open in New Tab
+                    </ResumeButton>
+                )}
+                <div className={`pdf-container ${isPdfVisible && !isPdfAnimating ? 'open' : ''}`}>
+                    {isPdfVisible && (
+                        <iframe src={resumePDF} title="Sammy_Qureshi_Resume" />
+                    )}
+                </div>
             </Section>
 
             <h3>Cool places I've worked at</h3>
