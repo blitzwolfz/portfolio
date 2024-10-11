@@ -13,6 +13,23 @@ const glowingBorderSpin = keyframes`
     }
 `;
 
+// Keyframes for Rainbow Glow
+const rainbowGlow = keyframes`
+    0% { box-shadow: 0 0 10px red; }
+    20% { box-shadow: 0 0 10px orange; }
+    40% { box-shadow: 0 0 10px yellow; }
+    60% { box-shadow: 0 0 10px green; }
+    80% { box-shadow: 0 0 10px blue; }
+    100% { box-shadow: 0 0 10px violet; }
+`;
+
+// Keyframes for Golden Glow
+const goldenGlow = keyframes`
+    0% { box-shadow: 0 0 10px rgb(255, 215, 0); }
+    50% { box-shadow: 0 0 20px rgb(255, 215, 0); }
+    100% { box-shadow: 0 0 10px rgb(255, 215, 0); }
+`;
+
 // Styled Components for the Portfolio
 export const PortfolioContainer = styled.div`
     min-height: 100vh;
@@ -38,6 +55,14 @@ export const Subheader = styled.h2`
     font-weight: 400;
     margin-bottom: 20px;
     max-width: 800px;
+    a.email {  // Targeting anchor tags within the Subheader component
+        color: red;  // Setting the text color of the links to red
+        text-decoration: none;  // Optionally removes underline from links
+
+        &:hover {
+            text-decoration: underline;  // Underline on hover for better user interaction feedback
+        }
+    }
 `;
 
 export const TimelineContainer = styled.div`
@@ -275,21 +300,39 @@ export const ResumeButton = styled.a`
     }
 `;
 
-// Keyframes for Rainbow Glow
-const rainbowGlow = keyframes`
-    0% { box-shadow: 0 0 10px red; }
-    20% { box-shadow: 0 0 10px orange; }
-    40% { box-shadow: 0 0 10px yellow; }
-    60% { box-shadow: 0 0 10px green; }
-    80% { box-shadow: 0 0 10px blue; }
-    100% { box-shadow: 0 0 10px violet; }
-`;
+export const ContactMeButton = styled.a`
+    cursor: pointer;
+    color: ${(props) => props.theme.color};
+    
+    @media (max-width: 768px) {
+        max-width: 100%;
+        padding: 15px;
+        margin: 10px;
+    }
+    
+    display: inline-block;
+    background-color: ${(props) => props.theme.buttonBackgroundColor};
+    padding: 15px 30px;
+    margin: 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    box-shadow: 0 0 10px ${(props) =>
+    props.theme.backgroundColor === 'rgb(254, 243, 199)'
+        ? 'rgba(0, 0, 0, 0.6)'
+        : 'rgba(255, 255, 255, 0.6)'};
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: ${goldenGlow} 2s linear infinite;
 
-// Keyframes for Golden Glow
-const goldenGlow = keyframes`
-    0% { box-shadow: 0 0 10px rgb(255, 215, 0); }
-    50% { box-shadow: 0 0 20px rgb(255, 215, 0); }
-    100% { box-shadow: 0 0 10px rgb(255, 215, 0); }
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0 20px ${(props) =>
+    props.theme.backgroundColor === 'rgb(254, 243, 199)'
+        ? 'rgba(0, 0, 0, 0.8)'
+        : 'rgba(255, 255, 255, 0.8)'};
+    }
 `;
 
 // Styled component for StarProjectLink with fillover and updated golden glow

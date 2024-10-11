@@ -21,7 +21,7 @@ import {
     Footer,
     ResumeButton,
     renderWaveText,
-    StarProjectLink, // Import the StarProjectLink styled component for glowing effect
+    StarProjectLink, ContactMeButton, // Import the StarProjectLink styled component for glowing effect
 } from './components/Portfolio.tsx';
 
 const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' | 'terminal'>>, toggleTheme: () => void }> = ({ setView, toggleTheme }) => {
@@ -32,6 +32,12 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
     const [startupText, setStartupText] = useState("building a unicorn startup.🦄");
     const [isPdfVisible, setIsPdfVisible] = useState(false);
     const [isPdfAnimating, setIsPdfAnimating] = useState(false);
+
+    const [isContactVisible, setIsContactVisible] = useState(false);
+
+    const toggleContactVisibility = () => {
+        setIsContactVisible(!isContactVisible);
+    };
 
     const startupPhrases = [
         "building a unicorn startup.🦄",
@@ -62,7 +68,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
             title: 'Lead Backend Developer',
             company: 'Paulos Poetry, Toronto, ON',
             dates: 'Aug - Present',
-            description: 'Designed and wrote entire backend of website. Allowed for 20% faster poem posts. Increased efficiency of content delivery by 100%.',
+            description: 'Developed and implemented the complete backend for a website, enabling a 20% increase in the speed of poem submissions and doubling the efficiency of content delivery.',
         },
         {
             title: 'Software Developer',
@@ -212,6 +218,17 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 while i’m not clicking away at my keyboard,<br/>
                 you can find me jamming to my guitar, <br/>
                 watching youtube, and <em><u onClick={changeStartupText}>{startupText}</u></em>
+            </Subheader>
+
+            <Subheader>
+                <ContactMeButton onClick={toggleContactVisibility}>{isContactVisible ? 'Hide Contact Info' : 'Show Contact Info'}</ContactMeButton>
+                {isContactVisible && (
+                    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <p>Name: Samin Qureshi</p>
+                        <p>Email: <a className={"email"} href="mailto:sam.qureshi@example.com">sam.qureshi@example.com</a></p>
+                        <ContactMeButton as="a" href="mailto:sam.qureshi@example.com">Email Me</ContactMeButton>
+                    </div>
+                )}
             </Subheader>
 
             <Section>
