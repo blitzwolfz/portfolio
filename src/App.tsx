@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from './components/Modal';
 import Signature from './components/Signature';
-import resumePDF from './assets/Sammy_Qureshi.pdf';
+import resumePDF from './assets/Sam_Qureshi.pdf';
 
 // Import styles from Portfolio.tsx
 import {
@@ -136,7 +136,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 `}
             </style>
 
-            <Header>i’m Sammy!</Header>
+            <Header>i’m Sam!</Header>
             <Subheader>
                 welcome to my little corner of the internet! <br/>
                 <HighlightText onClick={() => setView('terminal')}>
@@ -145,7 +145,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 </HighlightText>
                 <br/>
                 i’m a computer science student at George Brown College. <br/>
-                Even achieved a 3.82 cGPA 😎<br/>
+                Even achieved a 3.78 cGPA 😎<br/>
                 i love to hack and break all my projects. <br/>
                 while i’m not clicking away at my keyboard,<br/>
                 you can find me jamming to my guitar, <br/>
@@ -156,9 +156,9 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 <ContactMeButton onClick={toggleContactVisibility}>{isContactVisible ? 'Hide Contact Info' : 'Show Contact Info'}</ContactMeButton>
                 {isContactVisible && (
                     <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                        <p>Name: Samin Qureshi</p>
-                        <p>Email: <a className={"email"} href="mailto:sam.qureshi@example.com">sam.qureshi@example.com</a></p>
-                        <ContactMeButton as="a" href="mailto:sam.qureshi@example.com">Email Me</ContactMeButton>
+                        <p>Name: Sam Qureshi</p>
+                        <p>Email: <a className={"email"} href="mailto:saminm.qureshi@gmail.com">saminm.qureshi@gmail.com</a></p>
+                        <ContactMeButton as="a" href="mailto:saminm.qureshi@gmail.com">Email Me</ContactMeButton>
                     </div>
                 )}
             </Subheader>
@@ -166,7 +166,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
             <Section>
                 <h3>My Resume (No subscription required 😁)</h3>
                 <ResumeButton onClick={handleViewResume}>👀 {isPdfVisible ? 'Close' : 'View'}</ResumeButton>
-                <ResumeButton href={resumePDF} download="Sammy_Qureshi.pdf">⬇️ Download</ResumeButton>
+                <ResumeButton href={resumePDF} download="Sam_Qureshi.pdf">⬇️ Download</ResumeButton>
                 {isPdfVisible && (
                     <ResumeButton as="a" href={resumePDF} target="_blank" rel="noopener noreferrer">
                         🌐 Open in New Tab

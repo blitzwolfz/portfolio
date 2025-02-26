@@ -8,7 +8,7 @@ import AsciiArt from './components/AsciiArt';
 import Man from './components/Man';
 import Weather from './components/Weather';
 // Import the resume PDF file
-import resumePDF from './assets/Sammy_Qureshi.pdf';
+import resumePDF from './assets/Sam_Qureshi.pdf';
 
 // Terminal container styling
 const TerminalContainer = styled.div`

@@ -27,13 +27,14 @@ export const workExperience = [
 
 export const projects = [
     {
-        title: 'Pokedex',
-        description: 'A little Progressive Web App (PWA) I designed due to my love of Pokemon,\n it\'s installable ' +
-            'anywhere you can install a PWA. \nUses Axios and TypeScript for the main backend, and React for the frontend.',
-        link: 'https://www.blitzwolfz.xyz',
-        techStack: ['TypeScript', 'Vite', 'Axios', 'PWA'],
-        starred: true, // This is a star project
-        glowType: 'golden', // Choose glow type (golden or rainbow)
+        title: 'Red Language',
+        description: 'A toy interpreter designed to teach the concepts behind the creation of interpreters and the programming\n' +
+            'languages associated with them. It successfully compiled over 100 test cases, demonstrating robust support\n' +
+            'for object-oriented design, inheritance, and polymorphism.',
+        link: '', // No link for this project
+        techStack: ['Java'],
+        starred: true, // Non-star project
+        glowType: 'golden'
     },
     {
         title: 'Meme Royale',
@@ -46,13 +47,13 @@ export const projects = [
         glowType: 'golden', // Choose glow type (golden or rainbow)
     },
     {
-        title: 'Red Language',
-        description: 'A toy interpreter designed to teach the concepts behind the creation of interpreters and the programming\n' +
-            'languages associated with them. It successfully compiled over 100 test cases, demonstrating robust support\n' +
-            'for object-oriented design, inheritance, and polymorphism.',
-        link: '', // No link for this project
-        techStack: ['Java'],
-        starred: false, // Non-star project
+        title: 'Pokedex',
+        description: 'A little Progressive Web App (PWA) I designed due to my love of Pokemon,\n it\'s installable ' +
+            'anywhere you can install a PWA. \nUses Axios and TypeScript for the main backend, and React for the frontend.',
+        link: 'https://www.blitzwolfz.xyz',
+        techStack: ['TypeScript', 'Vite', 'Axios', 'PWA'],
+        starred: false, // This is a star project
+        // glowType: 'golden', // Choose glow type (golden or rainbow)
     },
     {
         title: 'Ball Motion',
