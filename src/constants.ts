@@ -2,25 +2,25 @@ export const workExperience = [
     {
         title: 'Lead Backend Developer',
         company: 'Paulos Poetry, Toronto, ON',
-        dates: 'Aug - Present',
+        dates: 'Aug 2024 - Nov 2024',
         description: 'Developed and implemented the complete backend for a website. Enabled a 20% increase in the speed of poem submissions. Doubled the efficiency of content delivery.',
     },
     {
         title: 'Software Developer',
         company: 'Rack-I, Toronto, ON',
-        dates: 'Feb - Aug 2023',
+        dates: 'Feb 2023 - Aug 2023',
         description: 'Made substantial contributions to back-end infrastructure, enhancing data retrieval efficiency by 30%. Collaborated with front-end teams, reducing bugs by 20%. Improved deployment time by 25%.',
     },
     {
         title: 'Hardware & Software Analyst Intern',
         company: 'Ryerson University, Toronto, ON',
-        dates: 'Sept 2022 - April 2023',
+        dates: 'Sep 2022 - Apr 2023',
         description: 'Developed an internal database, reducing data entry errors by 15%. Deployed over 50 new devices, ensuring compliance with hardware policies. Oversaw data wiping process for over 100 devices, achieving zero data breaches.',
     },
     {
         title: 'Data Clerk Intern',
         company: 'Learning Enrichment Foundation, Toronto, ON',
-        dates: 'June - Sept 2022',
+        dates: 'Jun - Sep 2022',
         description: 'Streamlined data processing, reducing time by 20%. Enhanced CRM functionality, improving user satisfaction by 10%. Documented approaches, decreasing project completion time by 15%.',
     },
 ];
