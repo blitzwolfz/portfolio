@@ -174,7 +174,7 @@ const App: React.FC<{ setView: React.Dispatch<React.SetStateAction<'portfolio' |
                 )}
                 <div className={`pdf-container ${isPdfVisible && !isPdfAnimating ? 'open' : ''}`}>
                     {isPdfVisible && (
-                        <iframe src={resumePDF} title="Sammy_Qureshi_Resume" />
+                        <iframe src={resumePDF} title="Sam_Qureshi_Resume" />
                     )}
                 </div>
             </Section>
