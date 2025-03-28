@@ -81,6 +81,13 @@ export const TimelineContainer = styled.div`
     }
 `;
 
+// Keyframe animation for floating effect
+const floatUpDown = keyframes`
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+`;
+
 export const TimelineItem = styled.div`
     width: 100%;
     max-width: 600px;
@@ -92,6 +99,8 @@ export const TimelineItem = styled.div`
     color: ${(props) => props.theme.color};
     transition: transform 0.3s;
     margin: 20px 0;
+
+    animation: ${floatUpDown} 2.5s ease-in-out infinite; // Applying the animation
 
     &:hover {
         animation: ${glowingBorderSpin} 1.5s linear infinite;
