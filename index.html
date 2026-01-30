@@ -83,6 +83,22 @@
     .dark .terminal-prompt { color: #0a84ff; }
     .dark .terminal-success { color: #ff453a; }
 
+    /* Terminal input styling */
+    #terminal-input {
+      caret-color: #30d158;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    .dark #terminal-input {
+      caret-color: #0a84ff;
+      color: #0a0a0a;
+    }
+    #terminal-input::placeholder {
+      color: rgba(245, 245, 247, 0.3);
+    }
+    .dark #terminal-input::placeholder {
+      color: rgba(10, 10, 10, 0.3);
+    }
+
     /* Form inputs */
     input, textarea { background-color: #ffffff; color: #0a0a0a; border: 3px solid #0a0a0a; }
     .dark input, .dark textarea { background-color: #ffffff; color: #0a0a0a; border: 3px solid #0a0a0a; }
@@ -93,6 +109,15 @@
     .dark ::-webkit-scrollbar-track { background: #1c1c1e; border-left: 2px solid #f5f5f7; }
     ::-webkit-scrollbar-thumb { background: #0a0a0a; border: 2px solid #f5f5f7; }
     .dark ::-webkit-scrollbar-thumb { background: #f5f5f7; border: 2px solid #1c1c1e; }
+
+    /* Hide scrollbar for wireframes horizontal scroll */
+    .scrollbar-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .scrollbar-hide::-webkit-scrollbar {
+      display: none;
+    }
 
     /* =========================
        SYSTEM OFFLINE GLITCH FX
@@ -206,6 +231,9 @@
   </style>
 
   <!-- Removed <base target="_blank" /> so in-page links don't open new tabs. -->
+
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
 <body class="bg-brutal-white text-brutal-black dark:bg-brutal-black dark:text-brutal-white">
@@ -221,11 +249,12 @@
       </div>
 
       <!-- Desktop links -->
-      <div class="hidden md:flex gap-6 mono text-sm font-bold">
-        <a href="#systems" class="hover:text-brutal-blue dark:hover:text-brutal-cyan transition-colors">[SYSTEMS]</a>
-        <a href="#projects" class="hover:text-brutal-red transition-colors">[PROJECTS]</a>
-        <a href="#compiler" class="hover:text-brutal-green transition-colors">[COMPILER]</a>
-        <a href="#resume" class="hover:text-brutal-yellow transition-colors">[RESUME]</a>
+      <div class="hidden lg:flex gap-4 mono text-sm font-bold">
+        <a href="#bio" class="hover:text-brutal-cyan transition-colors">[BIO]</a>
+        <a href="#academics" class="hover:text-brutal-blue transition-colors">[ACADEMICS]</a>
+        <a href="#capstone" class="hover:text-brutal-green transition-colors">[CAPSTONE]</a>
+        <a href="#professional" class="hover:text-brutal-red transition-colors">[PROFESSIONAL]</a>
+        <a href="#terminal" class="hover:text-brutal-yellow transition-colors">[TERMINAL]</a>
         <a href="#contact" class="hover:text-brutal-yellow transition-colors">[CONTACT]</a>
       </div>
 
@@ -238,7 +267,7 @@
         <!-- Mobile menu button -->
         <button
           onclick="toggleMobileMenu()"
-          class="md:hidden brutal-card bg-transparent px-3 py-2 mono font-bold text-xs border-brutal-black dark:border-brutal-white"
+          class="lg:hidden brutal-card bg-transparent px-3 py-2 mono font-bold text-xs border-brutal-black dark:border-brutal-white"
           aria-label="Open menu"
         >
           MENU
@@ -247,12 +276,13 @@
     </div>
 
     <!-- Mobile menu panel -->
-    <div id="mobile-menu" class="md:hidden hidden border-t-[3px] border-brutal-black dark:border-brutal-white px-4 py-4 bg-brutal-white dark:bg-brutal-black">
+    <div id="mobile-menu" class="lg:hidden hidden border-t-[3px] border-brutal-black dark:border-brutal-white px-4 py-4 bg-brutal-white dark:bg-brutal-black">
       <div class="flex flex-col gap-3 mono font-bold text-sm">
-        <a href="#systems" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[SYSTEMS]</a>
-        <a href="#projects" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[PROJECTS]</a>
-        <a href="#compiler" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[COMPILER]</a>
-        <a href="#resume" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[RESUME]</a>
+        <a href="#bio" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[BIO]</a>
+        <a href="#academics" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[ACADEMICS]</a>
+        <a href="#capstone" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CAPSTONE]</a>
+        <a href="#professional" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[PROFESSIONAL]</a>
+        <a href="#terminal" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[TERMINAL]</a>
         <a href="#contact" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CONTACT]</a>
       </div>
     </div>
@@ -277,7 +307,7 @@
         </p>
 
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2 md:pt-4">
-          <a href="#projects" class="brutal-card inline-flex justify-center bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-6 md:px-8 py-3 mono font-bold">
+          <a href="#professional" class="brutal-card inline-flex justify-center bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-6 md:px-8 py-3 mono font-bold">
             VIEW_WORK →
           </a>
           <a href="#contact" class="brutal-card inline-flex justify-center bg-transparent px-6 md:px-8 py-3 mono font-bold">
@@ -319,26 +349,451 @@
     </div>
   </div>
 
-  <!-- Work History -->
-  <section id="systems" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <!-- ============================================== -->
+  <!-- SECTION 1: PERSONAL DATA BIO                  -->
+  <!-- ============================================== -->
+  <section id="bio" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
-      WORK_HISTORY<span class="text-brutal-red">.JSON</span>
+      PERSONAL<span class="text-brutal-cyan">_BIO</span>
     </h2>
-    <div class="space-y-6" id="work-container"></div>
-  </section>
 
-  <!-- Projects -->
-  <section id="projects" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex justify-between items-end mb-10 md:mb-12">
-        <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tighter">PROJECTS</h2>
-        <div class="hidden md:block mono text-right">
-          <div class="text-3xl font-bold">02</div>
-          <div class="text-sm opacity-60">MAJOR RELEASES</div>
+    <!-- Profile Header with Image -->
+    <div class="flex flex-col md:flex-row gap-6 md:gap-8 mb-8">
+      <!-- Profile Image -->
+      <div id="profile-image-container" class="flex-shrink-0">
+        <!-- Rendered by JavaScript -->
+      </div>
+      <!-- Bio Summary -->
+      <div class="flex-1 flex flex-col justify-center">
+        <h3 id="bio-name" class="text-2xl md:text-3xl font-bold mb-2">SAMIN QURESHI</h3>
+        <p id="bio-title" class="text-lg md:text-xl text-brutal-cyan dark:text-brutal-cyan mb-2">Software Developer & CS Student</p>
+        <p id="bio-tagline" class="mono text-sm opacity-70 mb-4">Co-Founder & CTO @ Stealth AI Startup</p>
+        <p id="bio-summary" class="text-sm md:text-base leading-relaxed opacity-90">Building chess engines, iOS apps, and code intelligence platforms.</p>
+        <div class="flex flex-wrap gap-3 mt-4">
+          <span id="bio-status" class="brutal-card bg-brutal-green text-brutal-black px-3 py-1 mono text-xs font-bold">OPEN TO WORK</span>
+          <span id="bio-location" class="brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-3 py-1 mono text-xs font-bold">TORONTO</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+      <!-- Philosophy / Career Statement -->
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8">
+        <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
+          PHILOSOPHY<span class="text-brutal-cyan">_STATEMENT.MD</span>
+        </h3>
+        <blockquote class="text-lg md:text-xl leading-relaxed mb-4 border-l-4 border-brutal-cyan pl-4 italic">
+          "We are the facilitators of our own creative evolution"
+        </blockquote>
+        <p class="text-sm opacity-60 mb-6">— Bill Hicks</p>
+        <div class="space-y-4 text-sm md:text-base leading-relaxed">
+          <p>
+            I believe software development is more than writing code—it's about solving real problems that impact people's lives. My journey from building chess engines to mental health applications reflects my core belief: technology should serve humanity, not the other way around.
+          </p>
+          <p>
+            Currently pursuing my education while co-founding an AI startup, I'm driven by the intersection of low-level performance optimization and user-centric design. My experience with Swift, C++, and systems programming has taught me that the best solutions often emerge from understanding problems at their deepest level. Looking ahead, I aspire to build technology that makes a meaningful difference—whether that's through accessible mental health tools, intelligent code assistance, or innovations yet to be imagined.
+          </p>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-grid"></div>
+      <!-- Resume & Cover Letter -->
+      <div class="space-y-6">
+        <!-- Resume Card -->
+        <div class="brutal-card bg-brutal-blue text-white p-6">
+          <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
+            RESUME<span class="text-brutal-yellow">_FILE.PDF</span>
+          </h3>
+          <p class="text-sm opacity-80 mb-4">Full professional resume with work history, skills, and education.</p>
+          <div class="flex flex-wrap gap-3">
+            <a id="bio-resume-download" href="#" download class="brutal-card bg-white text-brutal-black px-4 py-2 mono font-bold text-xs">
+              DOWNLOAD_PDF →
+            </a>
+            <a href="#resume" class="brutal-card bg-transparent border-white text-white px-4 py-2 mono font-bold text-xs">
+              VIEW_SECTION →
+            </a>
+          </div>
+        </div>
+
+        <!-- Cover Letter Card -->
+        <div class="brutal-card bg-brutal-green text-brutal-black p-6">
+          <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
+            COVER<span class="text-brutal-blue">_LETTER.TXT</span>
+          </h3>
+          <p class="text-sm opacity-80 mb-2">Software Engineer Position</p>
+          <button onclick="toggleCoverLetter()" class="brutal-card bg-brutal-black text-white px-4 py-2 mono font-bold text-xs mt-2">
+            VIEW_TEMPLATE →
+          </button>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black p-6">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <div class="mono text-xs opacity-60 mb-1">LOCATION</div>
+              <div class="font-bold">Toronto, ON</div>
+            </div>
+            <div>
+              <div class="mono text-xs opacity-60 mb-1">STATUS</div>
+              <div class="font-bold text-brutal-green dark:text-brutal-blue">Open to Work</div>
+            </div>
+            <div>
+              <div class="mono text-xs opacity-60 mb-1">EMAIL</div>
+              <div class="font-bold text-sm">saminm.qureshi@gmail.com</div>
+            </div>
+            <div>
+              <div class="mono text-xs opacity-60 mb-1">FOCUS</div>
+              <div class="font-bold">iOS / Full Stack</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cover Letter Modal -->
+    <div id="cover-letter-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+      <div class="brutal-card bg-white dark:bg-brutal-dark max-w-3xl w-full max-h-[80vh] overflow-y-auto">
+        <div class="bg-brutal-green px-4 py-3 flex items-center justify-between border-b-[3px] border-brutal-black">
+          <span class="mono text-sm font-bold">COVER_LETTER_TEMPLATE.TXT</span>
+          <button onclick="toggleCoverLetter()" class="brutal-card bg-brutal-red text-white px-3 py-1 mono font-bold text-xs">CLOSE ✕</button>
+        </div>
+        <div class="p-6 md:p-8 mono text-sm leading-relaxed space-y-4">
+          <p><strong>Dear Hiring Manager,</strong></p>
+          <p>
+            I am writing to express my interest in the Software Engineer position at [Company Name]. As a developer with hands-on experience in Swift, C++, Java, and full-stack development, combined with my current role as CTO at an AI startup, I am confident in my ability to contribute meaningfully to your team.
+          </p>
+          <p>
+            My technical background spans from building a 1800+ Elo chess engine with GPU acceleration to publishing Serenity+, a mental health application on the App Store. This range demonstrates my ability to work across the stack—from low-level bitboard optimizations to polished user interfaces with SwiftUI.
+          </p>
+          <p>
+            Currently, I am completing my Advanced Diploma in Computer Programming Analysis at George Brown College, with plans to pursue a Bachelor of Computing at the University of Guelph starting September 2026. This academic foundation, combined with my practical experience at Toronto Metropolitan University and my startup work, has prepared me for the challenges of professional software development.
+          </p>
+          <p>
+            I am particularly drawn to [Company Name] because [specific reason]. I would welcome the opportunity to discuss how my skills and passion for building impactful software align with your team's goals.
+          </p>
+          <p>Thank you for considering my application.</p>
+          <p><strong>Sincerely,</strong><br>Samin Qureshi</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- INTERACTIVE TERMINAL                          -->
+  <!-- ============================================== -->
+  <section id="terminal" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tighter">
+        INTERACTIVE<span class="text-brutal-green">_TERMINAL.SH</span>
+      </h2>
+      <p class="mono text-sm opacity-60 mb-6">Type 'help' or click a command below to explore</p>
+
+      <div class="terminal-window brutal-card border-brutal-white">
+        <div class="terminal-header px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex gap-2">
+              <div class="w-3 h-3 bg-brutal-red border-2 border-brutal-white"></div>
+              <div class="w-3 h-3 bg-brutal-yellow border-2 border-brutal-white"></div>
+              <div class="w-3 h-3 bg-brutal-green border-2 border-brutal-white"></div>
+            </div>
+            <span class="mono text-xs font-bold opacity-60 ml-2">samin@portfolio:~</span>
+          </div>
+          <span class="mono text-xs opacity-40">bash v5.1.0</span>
+        </div>
+
+        <div class="p-4 md:p-6 mono text-sm md:text-base min-h-[300px] md:min-h-[350px] max-h-[500px] overflow-y-auto" id="terminal-display">
+          <div class="mb-2 opacity-80">
+            <span class="terminal-prompt mr-2">$</span>
+            ./welcome.sh
+          </div>
+          <div class="mb-4 text-brutal-green">
+            ╔══════════════════════════════════════════╗<br>
+            ║  SAMIN QURESHI // PORTFOLIO TERMINAL     ║<br>
+            ║  Type 'help' for available commands      ║<br>
+            ╚══════════════════════════════════════════╝
+          </div>
+          <div id="terminal-output" class="space-y-1"></div>
+          <div class="flex items-center mt-4" id="terminal-input-line">
+            <span class="terminal-prompt mr-2">$</span>
+            <input
+              type="text"
+              id="terminal-input"
+              class="flex-1 bg-transparent border-none outline-none text-brutal-white mono"
+              placeholder="type a command..."
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Command Buttons Grid -->
+      <div class="mt-6">
+        <div class="mono text-xs opacity-60 mb-3">QUICK COMMANDS:</div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          <button onclick="runCommand('help')" class="brutal-card bg-brutal-white text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ help
+          </button>
+          <button onclick="runCommand('whoami')" class="brutal-card bg-brutal-cyan text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ whoami
+          </button>
+          <button onclick="runCommand('skills')" class="brutal-card bg-brutal-yellow text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ skills
+          </button>
+          <button onclick="runCommand('education')" class="brutal-card bg-brutal-blue text-white px-4 py-2 mono font-bold text-xs">
+            $ education
+          </button>
+          <button onclick="runCommand('experience')" class="brutal-card bg-brutal-green text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ experience
+          </button>
+          <button onclick="runCommand('projects')" class="brutal-card bg-brutal-red text-white px-4 py-2 mono font-bold text-xs">
+            $ projects
+          </button>
+          <button onclick="runCommand('capstone')" class="brutal-card bg-brutal-cyan text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ capstone
+          </button>
+          <button onclick="runCommand('contact')" class="brutal-card bg-brutal-yellow text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ contact
+          </button>
+          <button onclick="runCommand('links')" class="brutal-card bg-brutal-blue text-white px-4 py-2 mono font-bold text-xs">
+            $ links
+          </button>
+          <button onclick="runCommand('download resume')" class="brutal-card bg-brutal-green text-brutal-black px-4 py-2 mono font-bold text-xs">
+            $ download resume
+          </button>
+          <button onclick="runCommand('neofetch')" class="brutal-card bg-brutal-red text-white px-4 py-2 mono font-bold text-xs">
+            $ neofetch
+          </button>
+          <button onclick="runCommand('clear')" class="brutal-card bg-brutal-dark text-brutal-white border-brutal-white px-4 py-2 mono font-bold text-xs">
+            $ clear
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 2: ACADEMIC CREDENTIALS               -->
+  <!-- ============================================== -->
+  <section id="academics" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
+        ACADEMIC<span class="text-brutal-blue">_CREDENTIALS</span>
+      </h2>
+
+      <!-- Education Timeline -->
+      <div id="education-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <!-- Rendered by JavaScript from CONFIG.education -->
+      </div>
+
+      <!-- Certifications & Awards -->
+      <div class="brutal-card bg-brutal-dark border-brutal-white p-6 mb-12">
+        <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+          CERTIFICATIONS<span class="text-brutal-red">_AWARDS.DAT</span>
+        </h3>
+        <div id="certifications-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Placeholder items - replace with actual certifications -->
+          <div class="brutal-card bg-brutal-black border-brutal-white/30 p-4">
+            <div class="mono text-xs uppercase mb-2 text-brutal-yellow">Jan 2024 - Dec 2025</div>
+            <div class="font-bold">Dean's List</div>
+            <div class="mono text-xs opacity-50 mt-1">George Brown Polytechnic</div>
+          </div>
+          <div class="brutal-card bg-brutal-black border-brutal-white/30 p-4">
+            <div class="mono text-xs uppercase mb-2 text-brutal-yellow">Province of Ontario</div>
+            <div class="font-bold">WHIMIS</div>
+            <div class="mono text-xs opacity-50 mt-1">Year 2025</div>
+          </div>
+          <div class="brutal-card bg-brutal-black border-brutal-white/30 p-4">
+            <div class="mono text-xs uppercase mb-2 text-brutal-yellow">LinkedIn</div>
+            <div class="font-bold">Cybersecurity at Work</div>
+            <div class="mono text-xs opacity-50 mt-1">Year 2025</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Academic Work Samples -->
+      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        ACADEMIC_WORK<span class="text-brutal-cyan">_SAMPLES.ARR</span>
+        <span class="mono text-xs font-normal opacity-60 ml-2">[MIN: 5]</span>
+      </h3>
+      <div id="academic-samples-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- These will be populated by JS from CONFIG.academicSamples -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 3: CAPSTONE PROJECT                   -->
+  <!-- ============================================== -->
+  <section id="capstone" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
+      CAPSTONE<span class="text-brutal-green">_PROJECT</span>
+    </h2>
+    <p class="mono text-sm opacity-60 mb-10 md:mb-12" id="capstone-subtitle"><!-- Rendered by JS --></p>
+
+    <!-- Project Header - Rendered by JS -->
+    <div id="capstone-header" class="mb-8">
+      <!-- Rendered by JavaScript from CONFIG.capstone -->
+    </div>
+
+    <!-- Capstone Details Grid - Rendered by JS -->
+    <div id="capstone-details" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Rendered by JavaScript from CONFIG.capstone -->
+    </div>
+
+    <!-- Wireframes/Mockups Section -->
+    <div class="mt-8 brutal-card bg-brutal-dark text-brutal-white p-6 border-brutal-white">
+      <div class="flex items-center justify-between mb-4">
+        <h4 class="font-bold text-base md:text-lg tracking-tight">
+          WIREFRAMES<span class="text-brutal-yellow">_MOCKUPS.FIG</span>
+        </h4>
+        <div id="wireframes-nav" class="hidden flex items-center gap-2">
+          <button onclick="scrollWireframes(-1)" class="brutal-card bg-brutal-black border-brutal-white w-8 h-8 flex items-center justify-center mono font-bold hover:bg-brutal-yellow hover:text-brutal-black transition-colors">←</button>
+          <button onclick="scrollWireframes(1)" class="brutal-card bg-brutal-black border-brutal-white w-8 h-8 flex items-center justify-center mono font-bold hover:bg-brutal-yellow hover:text-brutal-black transition-colors">→</button>
+        </div>
+      </div>
+      <div id="wireframes-scroll" class="overflow-x-auto pb-4 -mx-2 px-2 scrollbar-hide">
+        <div id="wireframes-container" class="flex gap-4">
+          <!-- Rendered by JavaScript from CONFIG.capstone.wireframes -->
+        </div>
+      </div>
+      <p id="wireframes-hint" class="mono text-xs opacity-50 mt-4">To add wireframes: Update CONFIG.capstone.wireframes array</p>
+    </div>
+
+    <!-- Status Reports -->
+    <div class="mt-8 brutal-card bg-white dark:bg-brutal-dark p-6">
+      <h4 class="font-bold text-base md:text-lg mb-4 tracking-tight">
+        STATUS<span class="text-brutal-cyan">_REPORTS.LOG</span>
+      </h4>
+      <div id="status-reports-container" class="space-y-3">
+        <div class="brutal-card bg-brutal-green/10 dark:bg-brutal-green/20 border-brutal-green p-4">
+          <div class="flex justify-between items-start mb-2">
+            <span class="mono text-xs font-bold text-brutal-green">WEEK 4</span>
+            <span class="mono text-xs opacity-60">Latest</span>
+          </div>
+          <p class="text-sm">Database schema finalized. Supabase authentication configured. Initial API endpoints created for user management.</p>
+        </div>
+        <div class="brutal-card bg-transparent p-4 opacity-70">
+          <div class="flex justify-between items-start mb-2">
+            <span class="mono text-xs font-bold">WEEK 3</span>
+            <span class="mono text-xs opacity-60"></span>
+          </div>
+          <p class="text-sm">Project requirements gathered. Tech stack finalized. Development environment set up.</p>
+        </div>
+        <div class="brutal-card bg-transparent p-4 opacity-50">
+          <div class="flex justify-between items-start mb-2">
+            <span class="mono text-xs font-bold">WEEK 1-2</span>
+            <span class="mono text-xs opacity-60"></span>
+          </div>
+          <p class="text-sm">Team formed. Initial brainstorming and concept validation. Project scope defined.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION 4: PROFESSIONAL SUMMARY               -->
+  <!-- ============================================== -->
+  <section id="professional" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
+        PROFESSIONAL<span class="text-brutal-red">_SUMMARY</span>
+      </h2>
+
+          <!-- Work Experience Subsection -->
+      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        WORK<span class="text-brutal-yellow">_EXPERIENCE.JSON</span>
+      </h3>
+      <div class="space-y-6 mb-12" id="work-container"></div>
+
+      <!-- Professional Work Samples (Projects) -->
+      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        PROJECT<span class="text-brutal-cyan">_SAMPLES.EXE</span>
+        <!-- <span class="mono text-xs font-normal opacity-60 ml-2">[2-3]</span> -->
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12" id="projects-grid"></div>
+
+      <!-- Volunteer / Community Service -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        VOLUNTEER<span class="text-brutal-green">_SERVICE.SH</span>
+      </h3> -->
+      <!-- <div id="volunteer-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"> -->
+        <!-- Placeholder items -->
+        <!-- <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold text-lg mb-2">[Volunteer Organization]</h4>
+          <p class="text-sm opacity-70 mb-2">[Role / Contribution]</p>
+          <p class="mono text-xs opacity-50">[Date Range]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold text-lg mb-2">[Community Project]</h4>
+          <p class="text-sm opacity-70 mb-2">[Description of involvement]</p>
+          <p class="mono text-xs opacity-50">Update CONFIG.volunteer</p>
+        </div> -->
+      <!-- </div> -->
+
+      <!-- Letters of Recommendation -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        RECOMMENDATION<span class="text-brutal-blue">_LETTERS.PDF</span>
+      </h3>
+      <div id="recommendations-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Recommender Name]</h4>
+          <p class="text-sm opacity-70">[Title / Organization]</p>
+          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Recommender Name]</h4>
+          <p class="text-sm opacity-70">[Title / Organization]</p>
+          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Add More...]</h4>
+          <p class="text-sm opacity-70">Update CONFIG.recommendations</p>
+        </div>
+      </div> -->
+
+      <!-- Awards and Recognition -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        AWARDS<span class="text-brutal-red">_RECOGNITION.TXT</span>
+      </h3>
+      <div id="awards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-yellow brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">★</span>
+          </div>
+          <h4 class="font-bold">[Award Name]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-red brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-white font-bold text-lg">▲</span>
+          </div>
+          <h4 class="font-bold">[Recognition]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-cyan brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">◆</span>
+          </div>
+          <h4 class="font-bold">[Achievement]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-green brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">+</span>
+          </div>
+          <h4 class="font-bold">[Add More]</h4>
+          <p class="mono text-xs opacity-50 mt-1">CONFIG.awards</p>
+        </div>
+      </div> -->
     </div>
   </section>
 
@@ -420,56 +875,6 @@
     </div>
   </div>
 
-  <!-- Terminal -->
-  <section id="compiler" class="py-16 md:py-20 px-4 md:px-8 max-w-4xl mx-auto">
-    <h2 class="text-4xl sm:text-5xl md:text-5xl font-bold mb-6 md:mb-8 tracking-tighter">
-      INTERACTIVE<span class="text-brutal-green">_TERM</span>
-    </h2>
-
-    <div class="terminal-window brutal-card">
-      <div class="terminal-header px-4 py-3 flex items-center gap-3">
-        <div class="flex gap-2">
-          <div class="w-3 h-3 rounded-full bg-brutal-red border border-current"></div>
-          <div class="w-3 h-3 rounded-full bg-brutal-yellow border border-current"></div>
-          <div class="w-3 h-3 rounded-full bg-brutal-green border border-current"></div>
-        </div>
-        <span class="mono text-xs font-bold opacity-60 ml-2">compiler.repl</span>
-      </div>
-
-      <div class="p-4 md:p-6 mono text-sm md:text-base min-h-[260px] md:min-h-[300px] overflow-y-auto" id="terminal">
-        <div class="mb-2 opacity-80">
-          <span class="terminal-prompt mr-2">➜</span>
-          <span class="terminal-path mr-2">~</span>
-          ./initialize_portfolio.sh
-        </div>
-        <div class="mb-4 opacity-60 text-sm">Loading system modules...</div>
-        <div id="terminal-output" class="space-y-1"></div>
-        <div class="flex items-center mt-4">
-          <span class="terminal-prompt mr-2">➜</span>
-          <span class="terminal-path mr-2">~</span>
-          <span class="animate-pulse">_</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <button onclick="runCommand('skills')" class="brutal-card bg-brutal-yellow text-brutal-black px-5 py-3 mono font-bold text-sm w-full">
-        $ list_skills
-      </button>
-      <button onclick="runCommand('experience')" class="brutal-card bg-brutal-blue text-white px-5 py-3 mono font-bold text-sm w-full">
-        $ show_exp
-      </button>
-      <button onclick="runCommand('contact')" class="brutal-card bg-brutal-red text-white px-5 py-3 mono font-bold text-sm w-full">
-        $ get_contact
-      </button>
-      <button onclick="runCommand('clear')" class="brutal-card bg-white dark:bg-brutal-dark px-5 py-3 mono font-bold text-sm w-full">
-        $ clear
-      </button>
-    </div>
-  </section>
-
-
-
   <!-- Contact -->
   <section id="contact" class="py-16 md:py-20 px-4 md:px-8 max-w-2xl mx-auto">
     <div class="brutal-card bg-brutal-yellow p-6 md:p-8 transform rotate-1 hover:rotate-0 transition-transform duration-300">
@@ -490,17 +895,17 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block mono font-bold mb-2 text-xs uppercase text-brutal-black">Identifier (Name)</label>
-            <input type="text" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue" placeholder="ENTER_NAME" />
+            <input type="text" name="from_name" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue" placeholder="ENTER_NAME" />
           </div>
           <div>
             <label class="block mono font-bold mb-2 text-xs uppercase text-brutal-black">Return Address (Email)</label>
-            <input type="email" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue" placeholder="ENTER_EMAIL" />
+            <input type="email" name="from_email" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue" placeholder="ENTER_EMAIL" />
           </div>
         </div>
 
         <div>
           <label class="block mono font-bold mb-2 text-xs uppercase text-brutal-black">Data Payload (Message)</label>
-          <textarea rows="4" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue resize-none" placeholder="ENTER_MESSAGE..."></textarea>
+          <textarea rows="4" name="message" required class="w-full p-3 mono focus:outline-none focus:ring-2 focus:ring-brutal-blue resize-none" placeholder="ENTER_MESSAGE..."></textarea>
         </div>
 
         <button
@@ -512,25 +917,29 @@
         </button>
       </form>
 
-      <div id="form-feedback" class="hidden mt-4 brutal-card bg-brutal-green text-brutal-black border-brutal-black p-4 mono font-bold text-center">
-        ✓ MESSAGE_QUEUED_FOR_PROCESSING
-      </div>
+      <div id="form-feedback" class="hidden mt-4 brutal-card bg-brutal-green text-brutal-black border-brutal-black p-4 mono font-bold text-center"></div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="border-t-[3px] border-brutal-black dark:border-brutal-white py-8 px-4 text-center mono text-sm bg-brutal-black text-brutal-white">
-    <p>© 2026 <span class="font-bold">SAMIN QURESHI</span> // COMPILED WITH ♥ AND MONSTER MANGO LOCO</p>
-    <div class="flex flex-wrap justify-center gap-4 mt-4 opacity-70">
-      <a target="_blank" rel="noopener noreferrer" href="https://github.com/blitzwolfz" class="hover:text-brutal-cyan transition-colors">GITHUB</a>
-      <span class="hidden sm:inline">•</span>
-      <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/saminqureshi/" class="hover:text-brutal-cyan transition-colors">LINKEDIN</a>
-      <span class="hidden sm:inline">•</span>
-      <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/blitzo.png" class="hover:text-brutal-cyan transition-colors">PHOTOGRAPHY INSTAGRAM</a>
+    <p>© 2026 <span class="font-bold" id="footer-name">SAMIN QURESHI</span> // COMPILED WITH <span class="text-brutal-red">█</span> AND MONSTER MANGO LOCO</p>
+    <div id="footer-links" class="flex flex-wrap justify-center gap-4 mt-4 opacity-70">
+      <!-- Rendered by JavaScript from CONFIG.links -->
     </div>
     <br>
-    <p>TORONTO / REMOTE</p>
+    <p id="footer-location">TORONTO / REMOTE</p>
   </footer>
+
+  <!-- Back to Previous Position Button -->
+  <button
+    id="back-to-position"
+    class="hidden fixed bottom-6 right-6 z-50 brutal-card bg-brutal-yellow text-brutal-black px-4 py-3 mono font-bold text-sm items-center gap-2 hover:bg-brutal-white hover:scale-105 transition-transform"
+    onclick="goBackToPosition()"
+  >
+    <span class="text-lg">↑</span>
+    <span>BACK</span>
+  </button>
 
   <script>
     const CONFIG = {
@@ -539,19 +948,162 @@
         email: "saminm.qureshi@gmail.com",
         location: "TORONTO / REMOTE",
       },
+      // =============================================
+      // SECTION VISIBILITY (set to false to hide)
+      // =============================================
+      sections: {
+        bio: true,
+        terminal: true,
+        academics: true,
+        capstone: true,
+        professional: true,
+        resume: true,
+        contact: true,
+      },
       ui: {
         showComingSoonBanners: true,
-        showContactUnavailableBanner: true,
-
+        showContactUnavailableBanner: false, // Set to false to enable contact form
         // Resume availability toggle:
         // true => glitch "COMING_SOON" and download disabled
         // false => download enabled (as long as downloadUrl is set)
-        showResumeUnavailableBanner: true,
+        showResumeUnavailableBanner: false,
+      },
+      // =============================================
+      // EMAILJS CONFIGURATION
+      // Get these from https://dashboard.emailjs.com
+      // =============================================
+      emailjs: {
+        publicKey: "Sn_ho8DPlx4PP2KhR",      // EmailJS Public Key (Account > API Keys)
+        serviceId: "service_mz43na6",      // EmailJS Service ID (Email Services)
+        templateId: "template_ggbud2m",    // EmailJS Template ID (Email Templates)
       },
       resume: {
-        // Set to your hosted PDF (example: "/resume.pdf" or "https://yourdomain.com/resume.pdf")
         downloadUrl: "Sam_Qureshi.pdf",
       },
+      // =============================================
+      // BIO & ABOUT
+      // =============================================
+      bio: {
+        title: "Software Developer & CS Student",
+        tagline: "Co-Founder & CTO @ Stealth AI Startup",
+        summary: "Building chess engines, iOS apps, and code intelligence platforms.",
+        status: "Open to opportunities",
+        // Profile image - set to null or "" for placeholder
+        profileImage: "headshot.png", // e.g., "profile.jpg" or "images/headshot.png"
+      },
+      // =============================================
+      // SKILLS
+      // =============================================
+      skills: {
+        languages: [
+          { name: "Swift", level: 100, label: "Expert" },
+          { name: "C++", level: 80, label: "Advanced" },
+          { name: "Java", level: 80, label: "Advanced" },
+          { name: "TypeScript", level: 70, label: "Proficient" },
+          { name: "Python", level: 60, label: "Intermediate" },
+        ],
+        frameworks: [
+          "SwiftUI", "UIKit", "Metal", "Core ML",
+          "React", "React Native", "Expo",
+          "Node.js", "Express", "Supabase"
+        ],
+        domains: [
+          "iOS Development",
+          "Chess Engines",
+          "Compiler Design",
+          "Web Applications"
+        ],
+      },
+      // =============================================
+      // EDUCATION
+      // =============================================
+      education: [
+        {
+          institution: "George Brown Polytechnic",
+          degree: "Computer Programming Analysis",
+          type: "Advanced Diploma",
+          status: "CURRENT",
+          expected: "Apr 2025",
+          color: "bg-brutal-blue",
+        },
+        {
+          institution: "University of Guelph",
+          degree: "Bachelor of Computing",
+          type: "Undergraduate Degree",
+          status: "UPCOMING",
+          expected: "Starting September 2026",
+          color: "bg-brutal-yellow",
+        },
+      ],
+      // =============================================
+      // CAPSTONE PROJECT
+      // =============================================
+      capstone: {
+        name: "LMNL.app",
+        tagline: "Limiting Social Media Overuse",
+        problem: "Social media overuse",
+        solution: "Usage tracking & mindful limits",
+        role: "Back-end & Database Developer",
+        teamSize: "Group Project",
+        status: "In Development",
+        timeline: "W25 Semester",
+        tech: ["Expo", "React Native", "Supabase", "PostgreSQL"],
+        description: "LMNL.app is a mobile application designed to combat the growing problem of social media addiction. By providing users with tools to monitor, limit, and reflect on their social media usage, LMNL empowers people to reclaim their time and mental well-being.",
+        vision: "To create a healthier relationship between users and their devices by providing intuitive tools that encourage mindful technology use without completely disconnecting from the digital world.",
+        requirements: [
+          "User authentication and profile management",
+          "Real-time usage tracking and analytics",
+          "Customizable usage limits and notifications",
+          "Progress visualization and reporting",
+          "Cross-platform mobile support (iOS/Android)",
+        ],
+        phases: [
+          { name: "Research & Design", status: "DONE" },
+          { name: "Backend Development", status: "ACTIVE" },
+          { name: "Frontend Integration", status: "PENDING" },
+          { name: "Testing & Deployment", status: "PENDING" },
+        ],
+        analysis: {
+          description: "The system architecture utilizes Supabase for backend services including authentication, real-time database, and storage. React Native with Expo enables rapid cross-platform development.",
+          architecture: "Client-Server",
+          database: "PostgreSQL (Supabase)",
+          api: "RESTful",
+        },
+        implementation: "My responsibilities include designing and implementing the Supabase database schema, creating secure API endpoints, managing user authentication flows, and ensuring data integrity across the platform.",
+        // Wireframes/Mockups Configuration
+        // Option 1: Set folder path and list filenames
+        // Option 2: Use full paths in the images array
+        wireframesFolder: "lmnl-shots/",
+        wireframes: [
+          { src: "Screen 1 (Login).png", label: "Login" },
+          { src: "Screen 2 (Sign up).png", label: "Sign Up" },
+          { src: "Screen 4 (Profile).png", label: "Profile" },
+          { src: "Screen 5 (Post).png", label: "Post" },
+          { src: "Screen 7 (Search).png", label: "Search" },
+          { src: "Screen 8 (Settings).png", label: "Settings" },
+          { src: "Screen 9 (Notifi).png", label: "Notifications" },
+          { src: "Frame.png", label: "Frame 1" },
+          { src: "Frame-1.png", label: "Frame 2" },
+          { src: "Frame-2.png", label: "Frame 3" },
+          { src: "Frame-3.png", label: "Frame 4" },
+          { src: "Frame-4.png", label: "Frame 5" },
+        ],
+      },
+      // =============================================
+      // SOCIAL LINKS
+      // =============================================
+      links: {
+        github: "github.com/blitzwolfz",
+        githubUrl: "https://github.com/blitzwolfz",
+        linkedin: "linkedin.com/in/saminqureshi",
+        linkedinUrl: "https://www.linkedin.com/in/saminqureshi/",
+        instagram: "@blitzo.png",
+        instagramUrl: "https://www.instagram.com/blitzo.png",
+        instagramLabel: "Photography",
+      },
+      // =============================================
+      // WORK EXPERIENCE
+      // =============================================
       work: [
         {
           company: "STEALTH AI STARTUP",
@@ -591,6 +1143,72 @@
           href: "https://apps.apple.com/us/app/serenityplus/id6754047372",
         },
       ],
+      // =============================================
+      // ACADEMIC WORK SAMPLES (Minimum 5 Required)
+      // Update these with your actual academic projects
+      // =============================================
+      academicSamples: [
+        {
+          name: "Inventory Management System",
+          course: "COMP2139",
+          tech: ["C#", ".NET", "SQL"],
+          description: "Worked in a team to develop a full-stack inventory management system using C# and .NET for the backend and SQL for the database. Implemented features such as product tracking, order management, and reporting.",
+          placeholder: false,
+        },
+        {
+          name: "Employee Management System",
+          course: "COMP3123",
+          tech: ["JavaScript", "Node.js", "Express", "MongoDB"],
+          description: "Developed a web-based employee management system that allows HR to manage employee records, track attendance, and generate reports. Utilized Node.js and Express for the backend and MongoDB for data storage.",
+          placeholder: false,
+        },
+        {
+          name: "TUI Monster Fighting Game",
+          course: "COMP2152",
+          tech: ["Python", "OOP", "TUI"],
+          description: "With my group members, we created a text-based monster fighting game using Python. Implemented object-oriented programming principles to design the game mechanics, including monster attributes, battle system, and user interactions.",
+          placeholder: false,
+        },
+        {
+          name: "Gomoku Bot",
+          course: "COMP2080",
+          tech: ["Java", "Minimax Algorithm", "AI"],
+          description: "In a group of 3, we developed an AI bot that plays Gomoku using the Minimax algorithm with alpha-beta pruning. The bot evaluates board positions and makes optimal moves to compete against human players.",
+          placeholder: false,
+        },
+        {
+          name: "HR Payroll System",
+          course: "COMP2130",
+          tech: ["Java", "JavaFX", "MySQL"],
+          description: "Developed a payroll system that manages employee salaries, deductions, and tax calculations. Implemented a user-friendly interface using JavaFX and stored data in a MySQL database.",
+          placeholder: false,
+        },
+      ],
+      // =============================================
+      // CERTIFICATIONS & AWARDS
+      // =============================================
+      certifications: [
+        // Example: { name: "AWS Certified Developer", issuer: "Amazon Web Services", year: "2024" }
+
+      ],
+      awards: [
+        // Example: { name: "Dean's List", issuer: "George Brown College", year: "2024" }
+        { name: "Dean's List", issuer: "George Brown College", year: "W25" },
+        { name: "Dean's List", issuer: "George Brown College", year: "F25" },
+        { name: "Dean's List", issuer: "George Brown College", year: "S24" }
+      ],
+      // =============================================
+      // VOLUNTEER & COMMUNITY SERVICE
+      // =============================================
+      volunteer: [
+        // Example: { org: "Code for Canada", role: "Volunteer Developer", period: "2023-2024", description: "..." }
+      ],
+      // =============================================
+      // LETTERS OF RECOMMENDATION
+      // =============================================
+      recommendations: [
+        // Example: { name: "Prof. John Smith", title: "Professor, Computer Science", org: "George Brown", file: "rec_letter_1.pdf" }
+      ],
     };
 
     function renderWork() {
@@ -598,13 +1216,13 @@
       container.innerHTML = CONFIG.work
         .map(
           (job) => `
-            <div class="brutal-card bg-white dark:bg-brutal-dark p-5 md:p-6">
+            <div class="brutal-card bg-white text-brutal-black dark:bg-brutal-dark dark:text-brutal-white p-5 md:p-6">
               <div class="flex flex-col md:flex-row md:items-start justify-between gap-3 md:gap-4 mb-4">
                 <div>
                   <h3 class="text-xl md:text-2xl font-bold mb-1">${job.company}</h3>
                   <p class="mono text-xs md:text-sm font-bold opacity-60 uppercase">${job.role}</p>
                 </div>
-                <div class="${job.color} text-brutal-black dark:text-brutal-black px-4 py-2 mono text-xs md:text-sm font-bold brutal-card border-[3px] whitespace-nowrap self-start">
+                <div class="${job.color} text-brutal-black px-4 py-2 mono text-xs md:text-sm font-bold brutal-card border-[3px] whitespace-nowrap self-start">
                   ${job.period}
                 </div>
               </div>
@@ -613,7 +1231,7 @@
                 ${job.tech
                   .map(
                     (t) => `
-                      <span class="mono text-[11px] md:text-xs border-2 border-brutal-black dark:border-brutal-white px-3 py-1 font-bold bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black">
+                      <span class="mono text-[11px] md:text-xs border-2 border-brutal-black px-3 py-1 font-bold bg-brutal-black text-brutal-white">
                         ${t}
                       </span>
                     `
@@ -706,6 +1324,409 @@
         .join("");
     }
 
+    // Render Profile Image and Bio Header from CONFIG
+    function renderProfileImage() {
+      const container = document.getElementById("profile-image-container");
+      const nameEl = document.getElementById("bio-name");
+      const titleEl = document.getElementById("bio-title");
+      const taglineEl = document.getElementById("bio-tagline");
+      const summaryEl = document.getElementById("bio-summary");
+      const statusEl = document.getElementById("bio-status");
+      const locationEl = document.getElementById("bio-location");
+
+      // Update text content
+      if (nameEl) nameEl.textContent = CONFIG.personal.name;
+      if (titleEl) titleEl.textContent = CONFIG.bio.title;
+      if (taglineEl) taglineEl.textContent = CONFIG.bio.tagline;
+      if (summaryEl) summaryEl.textContent = CONFIG.bio.summary;
+      if (statusEl) statusEl.textContent = CONFIG.bio.status.toUpperCase();
+      if (locationEl) locationEl.textContent = CONFIG.personal.location.split('/')[0].trim().toUpperCase();
+
+      // Render profile image or placeholder
+      if (container) {
+        const hasImage = CONFIG.bio.profileImage && CONFIG.bio.profileImage.trim() !== '';
+
+        if (hasImage) {
+          container.innerHTML = `
+            <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white overflow-hidden w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-white dark:bg-brutal-dark">
+              <img
+                src="${CONFIG.bio.profileImage}"
+                alt="${CONFIG.personal.name}"
+                class="w-full h-full object-cover"
+                onerror="this.parentElement.innerHTML = createProfilePlaceholder()"
+              >
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-black dark:bg-brutal-white flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-white dark:text-brutal-black">${CONFIG.personal.name.split(' ').map(n => n[0]).join('')}</div>
+                <div class="mono text-xs text-brutal-white/50 dark:text-brutal-black/50 mt-2">PROFILE.IMG</div>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+
+    // Fallback for broken images
+    function createProfilePlaceholder() {
+      return `
+        <div class="w-full h-full bg-brutal-black dark:bg-brutal-white flex items-center justify-center">
+          <div class="text-center">
+            <div class="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-white dark:text-brutal-black">${CONFIG.personal.name.split(' ').map(n => n[0]).join('')}</div>
+            <div class="mono text-xs text-brutal-white/50 dark:text-brutal-black/50 mt-2">PROFILE.IMG</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Wireframes from CONFIG
+    function renderWireframes() {
+      const container = document.getElementById("wireframes-container");
+      const nav = document.getElementById("wireframes-nav");
+      const hint = document.getElementById("wireframes-hint");
+      if (!container) return;
+
+      const wireframes = CONFIG.capstone.wireframes || [];
+      const folder = CONFIG.capstone.wireframesFolder || "";
+      const placeholderLabels = ["Wireframe", "Mockup", "Screenshot", "Diagram"];
+
+      // If no wireframes, show 4 placeholders
+      if (wireframes.length === 0) {
+        container.innerHTML = placeholderLabels.map(label => `
+          <div class="brutal-card bg-brutal-black border-brutal-white/30 flex-shrink-0 w-40 md:w-48 flex items-center justify-center opacity-60" style="aspect-ratio: 9/16;">
+            <div class="text-center mono text-xs">
+              <div class="w-10 h-10 mx-auto mb-2 border-2 border-brutal-white/30 flex items-center justify-center">
+                <span class="text-brutal-white/30 text-lg">+</span>
+              </div>
+              <div class="text-brutal-yellow">[PLACEHOLDER]</div>
+              <div class="opacity-50 mt-1">Add ${label.toLowerCase()}</div>
+            </div>
+          </div>
+        `).join('');
+        if (hint) hint.style.display = '';
+        if (nav) nav.classList.add('hidden');
+      } else {
+        // Build image path with folder prefix
+        const getImagePath = (wf) => {
+          const src = typeof wf === 'string' ? wf : wf.src;
+          if (folder && !src.startsWith('http') && !src.startsWith('/')) {
+            return folder + (folder.endsWith('/') ? '' : '/') + src;
+          }
+          return src;
+        };
+
+        container.innerHTML = wireframes.map((wf, index) => {
+          const src = getImagePath(wf);
+          const label = typeof wf === 'string' ? '' : (wf.label || '');
+          return `
+            <div class="brutal-card bg-brutal-black border-brutal-white overflow-hidden group cursor-pointer flex-shrink-0 w-40 md:w-48" style="aspect-ratio: 9/16;" data-wf-index="${index}" onclick="openWireframeByIndex(${index})">
+              <div class="w-full h-full relative">
+                <img
+                  src="${encodeURI(src)}"
+                  alt="${label || 'Wireframe'}"
+                  class="w-full h-full object-cover transition-transform group-hover:scale-105"
+                  onerror="this.parentElement.innerHTML = createWireframePlaceholder('${label.replace(/'/g, "\\'")}' || 'Image')"
+                >
+                ${label ? `
+                  <div class="absolute bottom-0 left-0 right-0 bg-brutal-black/90 px-2 py-1">
+                    <span class="mono text-[10px] text-brutal-white">${label.toUpperCase()}</span>
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+        if (hint) hint.style.display = 'none';
+        if (nav) nav.classList.remove('hidden');
+      }
+    }
+
+    // Scroll wireframes horizontally
+    function scrollWireframes(direction) {
+      const scrollContainer = document.getElementById("wireframes-scroll");
+      if (!scrollContainer) return;
+      const scrollAmount = 200;
+      scrollContainer.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+
+    // Fallback for broken wireframe images
+    function createWireframePlaceholder(label) {
+      return `
+        <div class="w-full h-full bg-brutal-black flex items-center justify-center">
+          <div class="text-center mono text-xs">
+            <div class="w-10 h-10 mx-auto mb-2 border-2 border-brutal-red/50 flex items-center justify-center">
+              <span class="text-brutal-red text-lg">!</span>
+            </div>
+            <div class="text-brutal-red">ERROR</div>
+            <div class="opacity-50 mt-1">${label}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Wireframe Modal (click to enlarge)
+    // Open wireframe modal by index (avoids escaping issues)
+    function openWireframeByIndex(index) {
+      const wireframes = CONFIG.capstone.wireframes || [];
+      const folder = CONFIG.capstone.wireframesFolder || "";
+      if (index < 0 || index >= wireframes.length) return;
+
+      const wf = wireframes[index];
+      const srcFile = typeof wf === 'string' ? wf : wf.src;
+      const src = folder ? folder + (folder.endsWith('/') ? '' : '/') + srcFile : srcFile;
+      const label = typeof wf === 'string' ? '' : (wf.label || '');
+
+      openWireframeModal(src, label);
+    }
+
+    function openWireframeModal(src, label) {
+      const existing = document.getElementById('wireframe-modal');
+      if (existing) existing.remove();
+
+      const modal = document.createElement('div');
+      modal.id = 'wireframe-modal';
+      modal.className = 'fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 cursor-pointer';
+      modal.onclick = () => modal.remove();
+      modal.innerHTML = `
+        <div class="max-w-2xl max-h-[90vh] brutal-card border-brutal-white bg-brutal-black overflow-hidden" onclick="event.stopPropagation()">
+          <div class="bg-brutal-white px-4 py-2 flex items-center justify-between">
+            <span class="mono text-xs font-bold text-brutal-black">${label ? label.toUpperCase() : 'WIREFRAME.PNG'}</span>
+            <button onclick="document.getElementById('wireframe-modal').remove()" class="text-brutal-black font-bold hover:text-brutal-red">✕</button>
+          </div>
+          <img src="${encodeURI(src)}" alt="${label}" class="max-h-[80vh] w-auto">
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+
+    // Render Footer from CONFIG
+    function renderFooter() {
+      const nameEl = document.getElementById("footer-name");
+      const linksEl = document.getElementById("footer-links");
+      const locationEl = document.getElementById("footer-location");
+
+      if (nameEl) nameEl.textContent = CONFIG.personal.name;
+      if (locationEl) locationEl.textContent = CONFIG.personal.location;
+
+      if (linksEl) {
+        linksEl.innerHTML = `
+          <a target="_blank" rel="noopener noreferrer" href="${CONFIG.links.githubUrl}" class="hover:text-brutal-cyan transition-colors">GITHUB</a>
+          <span class="hidden sm:inline">•</span>
+          <a target="_blank" rel="noopener noreferrer" href="${CONFIG.links.linkedinUrl}" class="hover:text-brutal-cyan transition-colors">LINKEDIN</a>
+          <span class="hidden sm:inline">•</span>
+          <a target="_blank" rel="noopener noreferrer" href="${CONFIG.links.instagramUrl}" class="hover:text-brutal-cyan transition-colors">${CONFIG.links.instagramLabel.toUpperCase()} INSTAGRAM</a>
+        `;
+      }
+    }
+
+    // Render Capstone from CONFIG
+    function renderCapstone() {
+      const subtitle = document.getElementById("capstone-subtitle");
+      const header = document.getElementById("capstone-header");
+      const details = document.getElementById("capstone-details");
+      if (!header || !details) return;
+
+      const cap = CONFIG.capstone;
+
+      // Subtitle
+      if (subtitle) {
+        subtitle.textContent = `${cap.teamSize} | George Brown College | ${cap.timeline}`;
+      }
+
+      // Header
+      header.innerHTML = `
+        <div class="brutal-card bg-brutal-green text-brutal-black p-6 md:p-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+              <h3 class="text-3xl md:text-4xl font-bold">${cap.name}</h3>
+              <p class="mono text-sm opacity-70 mt-1">${cap.tagline}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              ${cap.tech.map(t => `<span class="brutal-card bg-brutal-black text-white px-3 py-1 mono text-xs font-bold">${t.toUpperCase()}</span>`).join('')}
+            </div>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mono text-sm">
+            <div>
+              <div class="opacity-60 text-xs uppercase mb-1">My Role</div>
+              <div class="font-bold">${cap.role}</div>
+            </div>
+            <div>
+              <div class="opacity-60 text-xs uppercase mb-1">Team Size</div>
+              <div class="font-bold">${cap.teamSize}</div>
+            </div>
+            <div>
+              <div class="opacity-60 text-xs uppercase mb-1">Status</div>
+              <div class="font-bold">${cap.status}</div>
+            </div>
+            <div>
+              <div class="opacity-60 text-xs uppercase mb-1">Timeline</div>
+              <div class="font-bold">${cap.timeline}</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Details - 6 cards in a grid
+      details.innerHTML = `
+        <!-- Project Summary -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            PROJECT<span class="text-brutal-blue">_SUMMARY.MD</span>
+          </h4>
+          <p class="text-sm leading-relaxed opacity-90">${cap.description}</p>
+        </div>
+
+        <!-- Project Vision -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            PROJECT<span class="text-brutal-cyan">_VISION.TXT</span>
+          </h4>
+          <p class="text-sm leading-relaxed opacity-90">${cap.vision}</p>
+        </div>
+
+        <!-- Business Requirements -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            REQUIREMENTS<span class="text-brutal-yellow">_SPEC.JSON</span>
+          </h4>
+          <ul class="text-sm space-y-2 opacity-90">
+            ${cap.requirements.map(r => `<li>• ${r}</li>`).join('')}
+          </ul>
+        </div>
+
+        <!-- Project Plan -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            PROJECT<span class="text-brutal-red">_PLAN.GANTT</span>
+          </h4>
+          <div class="text-sm space-y-2 opacity-90">
+            ${cap.phases.map(phase => {
+              let statusClass = 'opacity-50';
+              let statusText = phase.status;
+              if (phase.status === 'DONE') statusClass = 'bg-brutal-green text-brutal-black px-2 py-0.5 font-bold';
+              else if (phase.status === 'ACTIVE') statusClass = 'bg-brutal-yellow text-brutal-black px-2 py-0.5 font-bold';
+              return `
+                <div class="flex justify-between items-center">
+                  <span>${phase.name}</span>
+                  <span class="mono text-xs ${statusClass}">${statusText}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Requirements Analysis -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            ANALYSIS<span class="text-brutal-green">_DESIGN.UML</span>
+          </h4>
+          <p class="text-sm leading-relaxed opacity-90 mb-3">${cap.analysis.description}</p>
+          <div class="mono text-xs opacity-60">
+            Architecture: ${cap.analysis.architecture} | Database: ${cap.analysis.database} | API: ${cap.analysis.api}
+          </div>
+        </div>
+
+        <!-- System Implementation -->
+        <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+          <h4 class="font-bold text-base md:text-lg mb-3 tracking-tight">
+            SYSTEM<span class="text-brutal-red">_IMPL.SRC</span>
+          </h4>
+          <p class="text-sm leading-relaxed opacity-90">${cap.implementation}</p>
+        </div>
+      `;
+    }
+
+    // Render Education from CONFIG
+    function renderEducation() {
+      const container = document.getElementById("education-container");
+      if (!container) return;
+
+      container.innerHTML = CONFIG.education
+        .map((edu, index) => {
+          const statusColor = edu.status === "CURRENT" ? "bg-brutal-green" : "bg-brutal-yellow";
+          const numColor = edu.color || "bg-brutal-blue";
+          const textColor = edu.status === "CURRENT" ? "text-brutal-cyan" : "text-brutal-yellow";
+          return `
+            <div class="brutal-card bg-brutal-dark border-brutal-white p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="w-12 h-12 ${numColor} brutal-card border-brutal-white flex items-center justify-center text-xl font-bold ${edu.status !== 'CURRENT' ? 'text-brutal-black' : ''}">${String(index + 1).padStart(2, '0')}</div>
+                <span class="mono text-xs ${statusColor} text-brutal-black px-3 py-1 font-bold">${edu.status}</span>
+              </div>
+              <h3 class="text-xl md:text-2xl font-bold mb-2">${edu.degree}</h3>
+              <p class="mono text-sm opacity-60 mb-2">${edu.type}</p>
+              <p class="${textColor} font-bold">${edu.institution}</p>
+              <p class="mono text-xs opacity-50 mt-2">${edu.status === 'CURRENT' ? 'Expected: ' : ''}${edu.expected}</p>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // Render Academic Work Samples
+    function renderAcademicSamples() {
+      const container = document.getElementById("academic-samples-container");
+      if (!container) return;
+
+      container.innerHTML = CONFIG.academicSamples
+        .map((sample, index) => {
+          const isPlaceholder = sample.placeholder === true;
+          return `
+            <div class="brutal-card bg-brutal-dark border-brutal-white p-5 ${isPlaceholder ? 'opacity-60' : ''}">
+              ${isPlaceholder ? '<div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>' : ''}
+              <div class="flex items-start justify-between mb-3">
+                <div class="w-8 h-8 bg-brutal-cyan brutal-card border-brutal-white flex items-center justify-center text-sm font-bold text-brutal-black">
+                  ${String(index + 1).padStart(2, '0')}
+                </div>
+                <span class="mono text-xs opacity-50">${sample.course}</span>
+              </div>
+              <h4 class="font-bold text-lg mb-2">${sample.name}</h4>
+              <p class="text-sm opacity-70 mb-3">${sample.description}</p>
+              <div class="flex flex-wrap gap-1">
+                ${sample.tech.map(t => `<span class="mono text-[10px] border border-brutal-white/30 px-2 py-0.5 opacity-60">${t}</span>`).join('')}
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    // Cover Letter Modal Toggle
+    function toggleCoverLetter() {
+      const modal = document.getElementById("cover-letter-modal");
+      if (!modal) return;
+      modal.classList.toggle("hidden");
+      document.body.style.overflow = modal.classList.contains("hidden") ? "" : "hidden";
+    }
+
+    // Close modal on backdrop click
+    document.addEventListener("click", (e) => {
+      const modal = document.getElementById("cover-letter-modal");
+      if (e.target === modal) {
+        toggleCoverLetter();
+      }
+    });
+
+    // Initialize Bio section resume link
+    function initBioResumeLink() {
+      const bioResumeLink = document.getElementById("bio-resume-download");
+      if (!bioResumeLink) return;
+
+      const comingSoon = CONFIG.ui.showResumeUnavailableBanner || !CONFIG.resume.downloadUrl;
+      if (comingSoon) {
+        bioResumeLink.classList.add("pointer-events-none", "opacity-60");
+        bioResumeLink.textContent = "RESUME_OFFLINE";
+        bioResumeLink.removeAttribute("href");
+      } else {
+        bioResumeLink.href = CONFIG.resume.downloadUrl;
+      }
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const btn = document.getElementById("theme-text");
@@ -742,7 +1763,57 @@
       menu.classList.add("hidden");
     }
 
-    // ✅ In-page anchor links: smooth scroll + close mobile menu + no new tabs
+    // =============================================
+    // BACK TO POSITION BUTTON
+    // =============================================
+    let previousScrollPosition = null;
+    let backButtonTimeout = null;
+    let backButtonActive = false;
+
+    function showBackButton(scrollY) {
+      previousScrollPosition = scrollY;
+      backButtonActive = false; // Disable scroll check temporarily
+      const btn = document.getElementById('back-to-position');
+      if (!btn) return;
+
+      // Clear any existing timeout
+      if (backButtonTimeout) clearTimeout(backButtonTimeout);
+
+      // Show button
+      btn.classList.remove('hidden');
+      btn.classList.add('flex');
+
+      // Enable scroll check after scroll animation completes
+      setTimeout(() => {
+        backButtonActive = true;
+      }, 800);
+
+      // Auto-hide after 8 seconds
+      backButtonTimeout = setTimeout(() => {
+        hideBackButton();
+      }, 8000);
+    }
+
+    function hideBackButton() {
+      const btn = document.getElementById('back-to-position');
+      if (!btn) return;
+      btn.classList.add('hidden');
+      btn.classList.remove('flex');
+      previousScrollPosition = null;
+      backButtonActive = false;
+    }
+
+    function goBackToPosition() {
+      if (previousScrollPosition !== null) {
+        window.scrollTo({
+          top: previousScrollPosition,
+          behavior: 'smooth'
+        });
+        hideBackButton();
+      }
+    }
+
+    // ✅ In-page anchor links: smooth scroll + close mobile menu + no new tabs + back button
     document.addEventListener("click", (e) => {
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
@@ -752,17 +1823,30 @@
       const target = document.querySelector(hash);
       if (!target) return;
 
+      // Store current position before jumping
+      const currentScroll = window.scrollY;
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+      const distance = Math.abs(targetPosition - currentScroll);
+
       e.preventDefault();
       closeMobileMenu();
       target.scrollIntoView({ behavior: "smooth", block: "start" });
       history.pushState(null, "", hash);
+
+      // Show back button if jumping significant distance
+      if (distance > 300) {
+        showBackButton(currentScroll);
+      }
     });
 
     // Terminal
     const terminalOutput = document.getElementById("terminal-output");
+    const terminalInput = document.getElementById("terminal-input");
+    const commandHistory = [];
+    let historyIndex = -1;
 
     function scrollTerminalToBottom() {
-      const terminal = document.getElementById("terminal");
+      const terminal = document.getElementById("terminal-display");
       if (!terminal) return;
       terminal.scrollTop = terminal.scrollHeight;
     }
@@ -773,71 +1857,318 @@
       if (type === "success") {
         line.innerHTML = `<span class="terminal-success font-bold">${text}</span>`;
       } else if (type === "command") {
-        line.innerHTML = `<span class="terminal-prompt mr-2">➜</span><span class="terminal-path mr-2">~</span><span class="terminal-command">${text}</span>`;
+        line.innerHTML = `<span class="terminal-prompt mr-2">$</span><span class="terminal-command">${text}</span>`;
+      } else if (type === "error") {
+        line.innerHTML = `<span class="text-brutal-red">${text}</span>`;
+      } else if (type === "info") {
+        line.innerHTML = `<span class="text-brutal-cyan">${text}</span>`;
+      } else if (type === "highlight") {
+        line.innerHTML = `<span class="text-brutal-yellow">${text}</span>`;
       } else {
-        line.textContent = text;
+        line.innerHTML = text;
       }
       terminalOutput.appendChild(line);
       scrollTerminalToBottom();
     }
 
+    function addMultiLine(lines) {
+      lines.forEach(line => addLine(line));
+    }
+
     function runCommand(cmd) {
-      if (cmd === "clear") {
+      const command = cmd.toLowerCase().trim();
+
+      if (command === "clear") {
         terminalOutput.innerHTML = "";
+        if (terminalInput) terminalInput.value = "";
         scrollTerminalToBottom();
         return;
       }
-      addLine(`$ ${cmd}`, "command");
+
+      addLine(command, "command");
+      if (terminalInput) terminalInput.value = "";
 
       setTimeout(() => {
-        switch (cmd) {
+        switch (command) {
+          case "help":
+            addLine("┌─────────────────────────────────────────┐", "info");
+            addLine("│  AVAILABLE COMMANDS                     │", "info");
+            addLine("├─────────────────────────────────────────┤", "info");
+            addLine("│  whoami      - About me                 │");
+            addLine("│  skills      - Technical skills         │");
+            addLine("│  education   - Academic background      │");
+            addLine("│  experience  - Work history             │");
+            addLine("│  projects    - Portfolio projects       │");
+            addLine("│  capstone    - Capstone project info    │");
+            addLine("│  contact     - Contact information      │");
+            addLine("│  links       - Social links             │");
+            addLine("│  download resume - Get my resume        │");
+            addLine("│  neofetch    - System info (for fun)    │");
+            addLine("│  clear       - Clear terminal           │");
+            addLine("│  help        - Show this message        │");
+            addLine("└─────────────────────────────────────────┘", "info");
+            break;
+
+          case "whoami":
+            addLine("┌─────────────────────────────────────────┐", "highlight");
+            addLine(`│  ${CONFIG.personal.name.padEnd(38)}│`, "highlight");
+            addLine("└─────────────────────────────────────────┘", "highlight");
+            addLine("");
+            addLine(`  ${CONFIG.bio.title}`);
+            addLine(`  ${CONFIG.bio.tagline}`);
+            addLine("");
+            addLine(`  ${CONFIG.bio.summary}`);
+            addLine("");
+            addLine(`  Location: ${CONFIG.personal.location}`);
+            addLine(`  Status:   ${CONFIG.bio.status}`);
+            addLine("");
+            addLine("[OK]", "success");
+            break;
+
           case "skills":
-            addLine("Languages:    Swift, Java, C++, TypeScript");
-            addLine("Frameworks:   SwiftUI, Metal, Core ML, React");
-            addLine("Domains:      Web App Design, Chess Engines, iOS Apps");
-            addLine("✓ OK", "success");
+            addLine("LANGUAGES:", "highlight");
+            CONFIG.skills.languages.forEach(lang => {
+              const filled = Math.round(lang.level / 5);
+              const empty = 20 - filled;
+              const bar = "█".repeat(filled) + "░".repeat(empty);
+              addLine(`  ${lang.name.padEnd(12)} ${bar}  ${lang.label}`);
+            });
+            addLine("");
+            addLine("FRAMEWORKS:", "highlight");
+            // Split frameworks into rows of 4
+            const fwRows = [];
+            for (let i = 0; i < CONFIG.skills.frameworks.length; i += 4) {
+              fwRows.push(CONFIG.skills.frameworks.slice(i, i + 4).join(", "));
+            }
+            fwRows.forEach(row => addLine(`  ${row}`));
+            addLine("");
+            addLine("DOMAINS:", "highlight");
+            CONFIG.skills.domains.forEach(domain => addLine(`  ${domain}`));
+            addLine("");
+            addLine("[OK]", "success");
             break;
+
+          case "education":
+            addLine("EDUCATION:", "highlight");
+            addLine("");
+            CONFIG.education.forEach(edu => {
+              addLine(`  [${edu.status}] ${edu.institution}`, "info");
+              addLine(`  ${edu.degree}`);
+              addLine(`  ${edu.type} | ${edu.expected}`);
+              addLine("");
+            });
+            addLine("[OK]", "success");
+            break;
+
           case "experience":
-            CONFIG.work.forEach((job) => addLine(`${job.period} ${job.company}`));
-            addLine("✓ OK", "success");
+            addLine("WORK EXPERIENCE:", "highlight");
+            addLine("");
+            CONFIG.work.forEach((job) => {
+              addLine(`  [${job.period}]`, "info");
+              addLine(`  ${job.company}`);
+              addLine(`  ${job.role}`);
+              addLine(`  ${job.description}`);
+              addLine("");
+            });
+            addLine("[OK]", "success");
             break;
+
+          case "projects":
+            addLine("PROJECTS:", "highlight");
+            addLine("");
+            CONFIG.projects.forEach((proj, i) => {
+              addLine(`  [${String(i + 1).padStart(2, '0')}] ${proj.name}`, "info");
+              addLine(`      ${proj.description}`);
+              addLine(`      Tech: ${proj.tech.join(", ")}`);
+              addLine(`      Status: ${proj.live ? "LIVE" : "IN DEVELOPMENT"}`);
+              addLine("");
+            });
+            addLine("[OK]", "success");
+            break;
+
+          case "capstone":
+            addLine("┌─────────────────────────────────────────┐", "info");
+            addLine(`│  CAPSTONE: ${CONFIG.capstone.name.padEnd(28)}│`, "info");
+            addLine("└─────────────────────────────────────────┘", "info");
+            addLine("");
+            addLine(`  Problem:  ${CONFIG.capstone.problem}`, "highlight");
+            addLine(`  Solution: ${CONFIG.capstone.solution}`);
+            addLine("");
+            addLine("  Tech Stack:");
+            CONFIG.capstone.tech.forEach(t => addLine(`    - ${t}`));
+            addLine("");
+            addLine(`  My Role: ${CONFIG.capstone.role}`);
+            addLine(`  Status:  ${CONFIG.capstone.status} (${CONFIG.capstone.timeline})`);
+            addLine("");
+            addLine("[OK]", "success");
+            break;
+
           case "contact":
-            addLine(`Email:    ${CONFIG.personal.email}`);
-            addLine(`Location: ${CONFIG.personal.location}`);
-            addLine(`Status:   ${CONFIG.ui.showContactUnavailableBanner ? "Offline" : "Available"}`);
-            addLine("✓ OK", "success");
+            addLine("CONTACT INFO:", "highlight");
+            addLine("");
+            addLine(`  Email:    ${CONFIG.personal.email}`);
+            addLine(`  Location: ${CONFIG.personal.location}`);
+            addLine(`  Status:   ${CONFIG.ui.showContactUnavailableBanner ? "Currently Offline" : "Available"}`);
+            addLine("");
+            addLine("  Run 'links' for social profiles");
+            addLine("");
+            addLine("[OK]", "success");
+            break;
+
+          case "links":
+            addLine("SOCIAL LINKS:", "highlight");
+            addLine("");
+            addLine(`  GitHub:    ${CONFIG.links.github}`);
+            addLine(`  LinkedIn:  ${CONFIG.links.linkedin}`);
+            addLine(`  Instagram: ${CONFIG.links.instagram} (${CONFIG.links.instagramLabel})`);
+            addLine("");
+            addLine("[OK]", "success");
+            break;
+
+          case "download resume":
+            if (CONFIG.ui.showResumeUnavailableBanner || !CONFIG.resume.downloadUrl) {
+              addLine("ERROR: Resume currently offline", "error");
+              addLine("Reason: Final polishing in progress");
+              addLine("Try again later.");
+            } else {
+              addLine("Initiating download...", "info");
+              addLine(`File: ${CONFIG.resume.downloadUrl}`);
+              setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = CONFIG.resume.downloadUrl;
+                link.download = '';
+                link.click();
+                addLine("Download started!", "success");
+              }, 500);
+            }
+            break;
+
+          case "neofetch":
+            const firstName = CONFIG.personal.name.split(" ")[0].toUpperCase();
+            addLine("", "");
+            addLine("  ███████╗ █████╗ ███╗   ███╗██╗███╗   ██╗", "info");
+            addLine("  ██╔════╝██╔══██╗████╗ ████║██║████╗  ██║", "info");
+            addLine("  ███████╗███████║██╔████╔██║██║██╔██╗ ██║", "info");
+            addLine("  ╚════██║██╔══██║██║╚██╔╝██║██║██║╚██╗██║", "info");
+            addLine("  ███████║██║  ██║██║ ╚═╝ ██║██║██║ ╚████║", "info");
+            addLine("  ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝", "info");
+            addLine("");
+            addLine(`  User:     ${CONFIG.personal.name}`);
+            addLine(`  Role:     ${CONFIG.bio.title}`);
+            addLine("  OS:       Portfolio v2.0 (Neo-Brutalist)");
+            addLine("  Host:     Web Browser");
+            addLine("  Kernel:   JavaScript ES6+");
+            addLine("  Shell:    interactive-terminal.sh");
+            addLine("  Theme:    Brutal Dark/Light");
+            addLine(`  Location: ${CONFIG.personal.location}`);
+            addLine(`  Skills:   ${CONFIG.skills.languages.length} languages, ${CONFIG.skills.frameworks.length} frameworks`);
+            addLine(`  Projects: ${CONFIG.projects.length} shipped`);
+            addLine("");
+            addLine("  ██ ██ ██ ██ ██ ██ ██ ██", "highlight");
+            addLine("");
+            break;
+
+          case "sudo":
+          case "sudo rm":
+          case "sudo rm -rf":
+            addLine("Nice try. Permission denied.", "error");
+            addLine("This incident will be reported.", "error");
+            break;
+
+          case "ls":
+            addLine("bio/  academics/  capstone/  professional/  contact/");
+            break;
+
+          case "pwd":
+            addLine(`/home/${CONFIG.personal.name.split(" ")[0].toLowerCase()}/portfolio`);
+
+          case "date":
+            addLine(new Date().toString());
+            break;
+
+          case "echo hello":
+          case "echo":
+            addLine("hello, world");
+            break;
+
+          default:
+            if (command.startsWith("cd ")) {
+              addLine(`Changed directory to ${command.slice(3)}`, "info");
+            } else if (command.startsWith("echo ")) {
+              addLine(command.slice(5));
+            } else if (command) {
+              addLine(`Command not found: ${command}`, "error");
+              addLine("Type 'help' for available commands");
+            }
             break;
         }
-      }, 150);
+      }, 100);
+    }
+
+    // Terminal keyboard input handling
+    if (terminalInput) {
+      terminalInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const cmd = terminalInput.value.trim();
+          if (cmd) {
+            commandHistory.push(cmd);
+            historyIndex = commandHistory.length;
+            runCommand(cmd);
+          }
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          if (historyIndex > 0) {
+            historyIndex--;
+            terminalInput.value = commandHistory[historyIndex];
+          }
+        } else if (e.key === "ArrowDown") {
+          e.preventDefault();
+          if (historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            terminalInput.value = commandHistory[historyIndex];
+          } else {
+            historyIndex = commandHistory.length;
+            terminalInput.value = "";
+          }
+        } else if (e.key === "l" && e.ctrlKey) {
+          e.preventDefault();
+          runCommand("clear");
+        }
+      });
+
+      // Focus terminal on click
+      document.getElementById("terminal-display")?.addEventListener("click", () => {
+        terminalInput.focus();
+      });
     }
 
     function toastComingSoon(projectName) {
       runCommand("clear");
-      addLine(`$ why ${projectName}`, "command");
-      const compiler = document.getElementById("compiler");
+      addLine(`why ${projectName}`, "command");
+      const terminal = document.getElementById("terminal");
       setTimeout(() => {
         addLine("This module is not publicly deployed yet.");
         addLine("ETA: when it stops fighting me.");
-        addLine("✓ OK", "success");
-        compiler.scrollIntoView({ behavior: "smooth", block: "start" });
+        addLine("[OK]", "success");
+        terminal?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);
     }
 
     function toastResumeWhy() {
       runCommand("clear");
-      addLine("$ why resume", "command");
-      const compiler = document.getElementById("compiler");
+      addLine("why resume", "command");
+      const terminal = document.getElementById("terminal");
       setTimeout(() => {
         if (CONFIG.ui.showResumeUnavailableBanner || !CONFIG.resume.downloadUrl) {
           addLine("Resume export is locked right now.");
           addLine("Reason: final polishing + redaction passes.");
-          addLine("✓ OK", "success");
+          addLine("[OK]", "success");
         } else {
           addLine("Resume is live.");
           addLine("Download is enabled.");
-          addLine("✓ OK", "success");
+          addLine("[OK]", "success");
         }
-        compiler.scrollIntoView({ behavior: "smooth", block: "start" });
+        terminal?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 150);
     }
 
@@ -904,17 +2235,12 @@
       }
     }
 
-    initResumeModule();
-    renderWork();
-    renderProjects();
-    initTheme();
-
-    // Contact form handling
+    // Contact form handling with EmailJS
     function handleSubmit(event) {
       event.preventDefault();
-      
+
       const isContactUnavailable = CONFIG.ui.showContactUnavailableBanner;
-      
+
       if (isContactUnavailable) {
         // Show offline banner
         const banner = document.getElementById("contact-unavailable-banner");
@@ -922,16 +2248,49 @@
         return;
       }
 
-      // If contact is available, show success message
       const form = document.getElementById("contact-form");
       const feedback = document.getElementById("form-feedback");
-      
-      feedback.classList.remove("hidden");
-      form.reset();
-      
-      setTimeout(() => {
-        feedback.classList.add("hidden");
-      }, 3000);
+      const submitBtn = document.getElementById("contact-submit");
+      const originalBtnText = submitBtn.textContent;
+
+      // Disable button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = "TRANSMITTING...";
+
+      // Send email via EmailJS
+      emailjs.sendForm(
+        CONFIG.emailjs.serviceId,
+        CONFIG.emailjs.templateId,
+        form,
+        CONFIG.emailjs.publicKey
+      )
+      .then(() => {
+        // Success
+        feedback.textContent = "✓ MESSAGE_QUEUED_FOR_PROCESSING";
+        feedback.classList.remove("hidden", "bg-brutal-red");
+        feedback.classList.add("bg-brutal-green");
+        form.reset();
+
+        setTimeout(() => {
+          feedback.classList.add("hidden");
+        }, 5000);
+      })
+      .catch((error) => {
+        // Error
+        console.error("EmailJS Error:", error);
+        feedback.textContent = "✗ TRANSMISSION_FAILED - TRY_AGAIN";
+        feedback.classList.remove("hidden", "bg-brutal-green");
+        feedback.classList.add("bg-brutal-red");
+
+        setTimeout(() => {
+          feedback.classList.add("hidden");
+        }, 5000);
+      })
+      .finally(() => {
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      });
     }
 
     // Initialize contact module on page load
@@ -939,9 +2298,14 @@
       const banner = document.getElementById("contact-unavailable-banner");
       const submitBtn = document.getElementById("contact-submit");
       const form = document.getElementById("contact-form");
-      
+
+      // Initialize EmailJS with public key
+      if (typeof emailjs !== 'undefined' && CONFIG.emailjs.publicKey !== "YOUR_PUBLIC_KEY") {
+        emailjs.init(CONFIG.emailjs.publicKey);
+      }
+
       const isUnavailable = CONFIG.ui.showContactUnavailableBanner;
-      
+
       if (isUnavailable) {
         banner.classList.remove("hidden");
         submitBtn.classList.add("pointer-events-none", "opacity-60");
@@ -959,13 +2323,69 @@
       }
     }
 
+    // Hide disabled sections based on CONFIG.sections
+    function initSectionVisibility() {
+      const sectionMap = {
+        bio: 'bio',
+        terminal: 'terminal',
+        academics: 'academics',
+        capstone: 'capstone',
+        professional: 'professional',
+        resume: 'resume',
+        contact: 'contact',
+      };
+
+      Object.entries(CONFIG.sections).forEach(([key, enabled]) => {
+        const sectionId = sectionMap[key];
+        if (sectionId) {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            section.style.display = enabled ? '' : 'none';
+          }
+        }
+      });
+
+      // Also hide nav links for disabled sections
+      document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+        const href = link.getAttribute('href').replace('#', '');
+        if (CONFIG.sections[href] === false) {
+          link.style.display = 'none';
+          // Also hide the bullet/separator before or after if it exists
+          const nextSibling = link.nextElementSibling;
+          if (nextSibling && nextSibling.textContent === '•') {
+            nextSibling.style.display = 'none';
+          }
+        }
+      });
+    }
+
+    function initBackToPosition() {
+      // Hide button when user scrolls near the previous position
+      window.addEventListener('scroll', () => {
+        if (backButtonActive && previousScrollPosition !== null) {
+          const distance = Math.abs(window.scrollY - previousScrollPosition);
+          if (distance < 100) {
+            hideBackButton();
+          }
+        }
+      });
+    }
+
+    // Initialize all modules
+    initSectionVisibility();
     initContactModule();
     initResumeModule();
+    initBioResumeLink();
+    renderProfileImage();
     renderWork();
     renderProjects();
+    renderEducation();
+    renderCapstone();
+    renderWireframes();
+    renderAcademicSamples();
+    renderFooter();
     initTheme();
-
-    // ...existing code...
+    initBackToPosition();
   </script>
 </body>
 </html>
