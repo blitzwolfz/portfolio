@@ -1855,9 +1855,10 @@
       },
       // =============================================
       // API ENDPOINTS (Cloudflare Pages Functions)
+      // Note: /api/spotify endpoint actually uses Last.fm
       // =============================================
       apis: {
-        spotify: '/api/spotify',
+        spotify: '/api/spotify',  // Last.fm data (kept for backward compatibility)
         github: '/api/github',
       },
       // =============================================
@@ -3765,7 +3766,7 @@
       document.removeEventListener('keyup', handleTypingKeyup);
     }
 
-    // Now Playing - Real Spotify API via Cloudflare Function
+    // Now Playing - Last.fm API via Cloudflare Function
     let nowPlayingInterval = null;
     
     async function updateNowPlaying() {
@@ -3777,44 +3778,45 @@
         const data = await res.json();
         
         if (data.error) {
-          display.innerHTML = `<span class="opacity-60">${data.message || 'Spotify not configured'}</span>`;
+          display.innerHTML = `<span class="opacity-60">${data.message || 'Last.fm not configured'}</span>`;
           return;
         }
         
-        if (!data.isPlaying) {
-          display.innerHTML = '<span class="opacity-60">Not currently playing</span>';
-          return;
-        }
-        
-        // Calculate progress bar width
-        const progressPercent = data.duration > 0 
-          ? Math.round((data.progress / data.duration) * 100) 
-          : 0;
+        // Show the most recent track (whether currently playing or recently played)
+        const statusIcon = data.isPlaying ? '▶' : '◼';
+        const statusClass = data.isPlaying ? 'text-brutal-green' : 'opacity-60';
         
         display.innerHTML = `
+          <span class="${statusClass} mr-2">${statusIcon}</span>
           <a href="${data.trackUrl || '#'}" target="_blank" rel="noopener" class="hover:underline">
             ${data.title}
           </a>
           <span class="text-sm opacity-60">- ${data.artist}</span>
         `;
         
-        // Update progress bar if it exists
+        // Update progress bar (pulse animation when playing)
         const progressBar = document.getElementById('now-playing-progress');
         if (progressBar) {
-          progressBar.style.width = `${progressPercent}%`;
+          if (data.isPlaying) {
+            progressBar.classList.add('animate-pulse');
+            progressBar.style.width = '60%';
+          } else {
+            progressBar.classList.remove('animate-pulse');
+            progressBar.style.width = '0%';
+          }
         }
         
       } catch (error) {
         console.error('Failed to fetch now playing:', error);
-        display.innerHTML = '<span class="opacity-60">Unable to fetch Spotify data</span>';
+        display.innerHTML = '<span class="opacity-60">Unable to fetch Last.fm data</span>';
       }
     }
     
     function startNowPlayingUpdates() {
       // Initial fetch
       updateNowPlaying();
-      // Update every 30 seconds
-      nowPlayingInterval = setInterval(updateNowPlaying, 30000);
+      // Update every 60 seconds (Last.fm updates every 2-3 minutes anyway)
+      nowPlayingInterval = setInterval(updateNowPlaying, 60000);
     }
 
     // Quotes
