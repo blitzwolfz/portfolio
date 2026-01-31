@@ -1562,14 +1562,15 @@
       <!-- Now Playing Widget -->
       <div class="mt-8 brutal-card bg-brutal-green text-brutal-black p-6">
         <div class="flex items-center gap-4">
-          <div class="w-16 h-16 bg-brutal-black brutal-card flex items-center justify-center">
-            <span class="text-2xl">🎵</span>
+          <div id="now-playing-art" class="w-16 h-16 bg-brutal-black brutal-card flex items-center justify-center overflow-hidden">
+            <img id="now-playing-img" src="" alt="Album Art" class="w-full h-full object-cover hidden">
+            <span id="now-playing-icon" class="text-2xl">🎵</span>
           </div>
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <div class="mono text-xs opacity-60 mb-1">NOW PLAYING</div>
-            <div id="now-playing" class="font-bold text-lg">Loading...</div>
+            <div id="now-playing" class="font-bold text-lg truncate">Loading...</div>
             <div class="w-full h-2 bg-brutal-black/20 mt-2 overflow-hidden">
-              <div class="h-full bg-brutal-black animate-pulse" style="width: 60%;"></div>
+              <div id="now-playing-progress" class="h-full bg-brutal-black animate-pulse" style="width: 60%;"></div>
             </div>
           </div>
           <div class="mono text-xs opacity-60">via Last.fm</div>
@@ -1679,9 +1680,9 @@
       <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
         <h4 class="font-bold mb-3 text-sm tracking-tight">DEV<span class="text-brutal-cyan">_STACK</span></h4>
         <div class="space-y-2 text-xs mono">
-          <div class="flex justify-between"><span>Editor</span><span class="font-bold">VS Code</span></div>
+          <div class="flex justify-between"><span>Editor</span><span class="font-bold">IntelliJ IDEA</span></div>
           <div class="flex justify-between"><span>Theme</span><span class="font-bold">Dark+</span></div>
-          <div class="flex justify-between"><span>Terminal</span><span class="font-bold">PowerShell</span></div>
+          <div class="flex justify-between"><span>Terminal</span><span class="font-bold">zsh</span></div>
           <div class="flex justify-between"><span>Font</span><span class="font-bold">JetBrains Mono</span></div>
         </div>
       </div>
@@ -1692,8 +1693,8 @@
         <div class="space-y-2 text-xs mono">
           <div class="flex justify-between"><span>Machine</span><span class="font-bold">Custom PC</span></div>
           <div class="flex justify-between"><span>OS</span><span class="font-bold">Windows 11</span></div>
-          <div class="flex justify-between"><span>CPU</span><span class="font-bold">AMD Ryzen 9</span></div>
-          <div class="flex justify-between"><span>RAM</span><span class="font-bold">32GB DDR4</span></div>
+          <div class="flex justify-between"><span>CPU</span><span class="font-bold">Intel i5</span></div>
+          <div class="flex justify-between"><span>RAM</span><span class="font-bold">64GB DDR5</span></div>
         </div>
       </div>
 
@@ -1703,8 +1704,8 @@
         <div class="space-y-2 text-xs mono">
           <div class="flex justify-between"><span>VCS</span><span class="font-bold">Git</span></div>
           <div class="flex justify-between"><span>Host</span><span class="font-bold">GitHub</span></div>
-          <div class="flex justify-between"><span>CI/CD</span><span class="font-bold">GitHub Actions</span></div>
-          <div class="flex justify-between"><span>Deploy</span><span class="font-bold">Pages</span></div>
+          <div class="flex justify-between"><span>CI/CD</span><span class="font-bold">Travis CI</span></div>
+          <div class="flex justify-between"><span>Deploy</span><span class="font-bold">Cloudflare Pages</span></div>
         </div>
       </div>
     </div>
@@ -3771,6 +3772,8 @@
     
     async function updateNowPlaying() {
       const display = document.getElementById('now-playing');
+      const imgEl = document.getElementById('now-playing-img');
+      const iconEl = document.getElementById('now-playing-icon');
       if (!display) return;
       
       try {
@@ -3779,6 +3782,9 @@
         
         if (data.error) {
           display.innerHTML = `<span class="opacity-60">${data.message || 'Last.fm not configured'}</span>`;
+          // Show music icon, hide image
+          if (imgEl) imgEl.classList.add('hidden');
+          if (iconEl) iconEl.classList.remove('hidden');
           return;
         }
         
@@ -3793,6 +3799,23 @@
           </a>
           <span class="text-sm opacity-60">- ${data.artist}</span>
         `;
+        
+        // Update album art
+        if (data.albumArt && imgEl && iconEl) {
+          imgEl.src = data.albumArt;
+          imgEl.classList.remove('hidden');
+          iconEl.classList.add('hidden');
+          
+          // Handle image load error
+          imgEl.onerror = () => {
+            imgEl.classList.add('hidden');
+            iconEl.classList.remove('hidden');
+          };
+        } else if (imgEl && iconEl) {
+          // No album art - show icon
+          imgEl.classList.add('hidden');
+          iconEl.classList.remove('hidden');
+        }
         
         // Update progress bar (pulse animation when playing)
         const progressBar = document.getElementById('now-playing-progress');
@@ -3809,6 +3832,9 @@
       } catch (error) {
         console.error('Failed to fetch now playing:', error);
         display.innerHTML = '<span class="opacity-60">Unable to fetch Last.fm data</span>';
+        // Show music icon on error
+        if (imgEl) imgEl.classList.add('hidden');
+        if (iconEl) iconEl.classList.remove('hidden');
       }
     }
     

@@ -72,11 +72,34 @@ export async function onRequestGet(context) {
     const isNowPlaying = currentTrack['@attr']?.nowplaying === 'true';
     
     // Get album art (Last.fm provides multiple sizes)
+    // Filter out empty strings - Last.fm often returns "" for missing artwork
     const images = currentTrack.image || [];
-    const albumArt = images.find(img => img.size === 'large')?.['#text'] || 
-                     images.find(img => img.size === 'medium')?.['#text'] ||
-                     images.find(img => img.size === 'small')?.['#text'] ||
-                     null;
+    const largeArt = images.find(img => img.size === 'large')?.['#text'];
+    const mediumArt = images.find(img => img.size === 'medium')?.['#text'];
+    const smallArt = images.find(img => img.size === 'small')?.['#text'];
+    
+    // Use first non-empty image URL
+    const albumArt = largeArt || mediumArt || smallArt || null;
+    
+    // Clean up Last.fm's placeholder URLs
+    const cleanAlbumArt = albumArt && !albumArt.includes('2a96cbd8b46e442fc41c2b86b821562f') 
+      ? albumArt 
+      : null;
+
+    // Try to get album art from iTunes as fallback
+    let finalAlbumArt = cleanAlbumArt;
+    if (!finalAlbumArt) {
+      try {
+        const itunesQuery = encodeURIComponent(`${currentTrack.name} ${currentTrack.artist?.['#text'] || ''}`);
+        const itunesRes = await fetch(`https://itunes.apple.com/search?term=${itunesQuery}&limit=1&entity=song`);
+        const itunesData = await itunesRes.json();
+        if (itunesData.results && itunesData.results.length > 0) {
+          finalAlbumArt = itunesData.results[0].artworkUrl100?.replace('100x100', '300x300') || null;
+        }
+      } catch (e) {
+        // iTunes fallback failed, continue without album art
+      }
+    }
 
     // Format response (matching the old Spotify format for compatibility)
     const response = {
@@ -84,7 +107,7 @@ export async function onRequestGet(context) {
       title: currentTrack.name || 'Unknown Track',
       artist: currentTrack.artist?.['#text'] || currentTrack.artist?.name || 'Unknown Artist',
       album: currentTrack.album?.['#text'] || '',
-      albumArt: albumArt,
+      albumArt: finalAlbumArt,
       trackUrl: currentTrack.url || null,
       // Last.fm specific fields
       source: 'lastfm',
