@@ -36,12 +36,535 @@
     };
   </script>
 
+  <!-- Dynamic Favicon -->
+  <link rel="icon" type="image/svg+xml" id="dynamic-favicon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23FFD700' width='100' height='100'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='%230a0a0a' font-family='monospace'>SQ</text></svg>">
+
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="SAMIN QURESHI - Software Developer">
+  <meta property="og:description" content="Building chess engines, programming languages, and Swift apps.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="headshot.png">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
     body {
       font-family: "Space Grotesk", sans-serif;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
     .mono { font-family: "IBM Plex Mono", monospace; }
+
+    /* ============================================
+       SYSTEM BOOT OVERLAY
+       ============================================ */
+    #boot-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 2rem;
+      font-family: "IBM Plex Mono", monospace;
+      color: #30d158;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow: hidden;
+    }
+    #boot-overlay.boot-complete {
+      animation: bootFadeOut 0.5s ease forwards;
+      animation-delay: 0.2s;
+    }
+    @keyframes bootFadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+    .boot-line {
+      opacity: 0;
+      animation: bootLine 0.05s ease forwards;
+    }
+    @keyframes bootLine {
+      to { opacity: 1; }
+    }
+    .boot-success { color: #30d158; }
+    .boot-info { color: #64d2ff; }
+    .boot-warn { color: #ffd700; }
+
+    /* ============================================
+       CONNECTION STATUS BAR
+       ============================================ */
+    #status-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0a0a0a;
+      border-top: 2px solid #f5f5f7;
+      padding: 4px 16px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 11px;
+      z-index: 40;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .dark #status-bar {
+      background: #f5f5f7;
+      border-top-color: #0a0a0a;
+      color: #0a0a0a;
+    }
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #30d158;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ============================================
+       NOISE TEXTURE OVERLAY
+       ============================================ */
+    #noise-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* ============================================
+       SCANLINE EFFECT
+       ============================================ */
+    #scanlines {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9997;
+      opacity: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15),
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      transition: opacity 0.3s ease;
+    }
+    #scanlines.active {
+      opacity: 0.1;
+    }
+
+    /* ============================================
+       MATRIX RAIN CANVAS
+       ============================================ */
+    #matrix-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9996;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #matrix-canvas.active {
+      opacity: 0.15;
+    }
+
+    /* ============================================
+       CURSOR TRAIL EFFECT
+       ============================================ */
+    .cursor-trail {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      background: #30d158;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9995;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+    .dark .cursor-trail {
+      background: #0a84ff;
+    }
+
+    /* ============================================
+       ASCII ART BANNER
+       ============================================ */
+    .ascii-banner {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 10px;
+      line-height: 1.2;
+      white-space: pre;
+      overflow-x: auto;
+      color: #0a0a0a;
+    }
+    .dark .ascii-banner {
+      color: #f5f5f7;
+    }
+
+    /* ============================================
+       DYNAMIC GRID BACKGROUND
+       ============================================ */
+    #grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.03;
+      background-image: 
+        linear-gradient(rgba(10,10,10,0.5) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(10,10,10,0.5) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .dark #grid-bg {
+      background-image: 
+        linear-gradient(rgba(245,245,247,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,245,247,0.3) 1px, transparent 1px);
+    }
+
+    /* ============================================
+       RADAR SCAN EFFECT
+       ============================================ */
+    #radar-scan {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(48, 209, 88, 0.03) 50%,
+        transparent 100%
+      );
+      animation: radarScan 8s linear infinite;
+    }
+    @keyframes radarScan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100vh); }
+    }
+
+    /* ============================================
+       SKILL PROGRESS BARS
+       ============================================ */
+    .skill-bar-container {
+      background: rgba(10, 10, 10, 0.1);
+      height: 8px;
+      overflow: hidden;
+      position: relative;
+    }
+    .dark .skill-bar-container {
+      background: rgba(245, 245, 247, 0.1);
+    }
+    .skill-bar {
+      height: 100%;
+      background: #0a84ff;
+      width: 0;
+      transition: width 1s ease-out;
+    }
+    .skill-bar.animate {
+      width: var(--skill-level);
+    }
+
+    /* ============================================
+       GLITCH HOVER ENHANCEMENTS
+       ============================================ */
+    .glitch-hover:hover {
+      animation: glitchHover 0.3s ease;
+    }
+    @keyframes glitchHover {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+
+    /* ============================================
+       TYPING GAME STYLES
+       ============================================ */
+    .typing-game-display {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 18px;
+      line-height: 1.8;
+      padding: 20px;
+      background: #0a0a0a;
+      color: #f5f5f7;
+      border: 3px solid #f5f5f7;
+      min-height: 120px;
+    }
+    .typing-char {
+      position: relative;
+    }
+    .typing-char.correct {
+      color: #30d158;
+    }
+    .typing-char.incorrect {
+      color: #ff453a;
+      background: rgba(255, 69, 58, 0.2);
+    }
+    .typing-char.current {
+      background: rgba(100, 210, 255, 0.3);
+    }
+    .typing-char.current::after {
+      content: '|';
+      position: absolute;
+      right: -3px;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* ============================================
+       CHESS GAME STYLES
+       ============================================ */
+    #chess-board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0;
+      border: 3px solid #0a0a0a;
+      width: 100%;
+      max-width: 400px;
+      aspect-ratio: 1;
+    }
+    .dark #chess-board {
+      border-color: #f5f5f7;
+    }
+    .chess-square {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chess-square.light {
+      background: #f5f5f7;
+      color: #0a0a0a;
+    }
+    .chess-square.dark {
+      background: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .chess-square.selected {
+      background: #ffd700 !important;
+    }
+    .chess-square.valid-move {
+      box-shadow: inset 0 0 0 3px #30d158;
+    }
+    .chess-square.last-move {
+      background: #64d2ff !important;
+    }
+
+    /* ============================================
+       PERIODIC TABLE OF SKILLS
+       ============================================ */
+    .periodic-table {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      font-family: "IBM Plex Mono", monospace;
+    }
+    @media (max-width: 768px) {
+      .periodic-table {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    .periodic-element {
+      aspect-ratio: 1;
+      border: 2px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      font-size: 10px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .periodic-element:hover {
+      transform: scale(1.1);
+      z-index: 10;
+    }
+    .periodic-element .symbol {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .periodic-element .name {
+      font-size: 8px;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .element-language { background: rgba(10, 132, 255, 0.2); border-color: #0a84ff; }
+    .element-framework { background: rgba(255, 215, 0, 0.2); border-color: #ffd700; }
+    .element-tool { background: rgba(48, 209, 88, 0.2); border-color: #30d158; }
+    .element-domain { background: rgba(255, 69, 58, 0.2); border-color: #ff453a; }
+
+    /* ============================================
+       SYSTEM TOAST NOTIFICATIONS
+       ============================================ */
+    #toast-container {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .system-toast {
+      background: #0a0a0a;
+      border: 2px solid #f5f5f7;
+      color: #f5f5f7;
+      padding: 12px 16px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      min-width: 200px;
+      animation: toastSlide 0.3s ease;
+    }
+    .dark .system-toast {
+      background: #f5f5f7;
+      border-color: #0a0a0a;
+      color: #0a0a0a;
+    }
+    @keyframes toastSlide {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .system-toast.success { border-color: #30d158; }
+    .system-toast.error { border-color: #ff453a; }
+    .system-toast.info { border-color: #64d2ff; }
+
+    /* ============================================
+       COMPILE ANIMATION
+       ============================================ */
+    #compile-overlay {
+      position: fixed;
+      inset: 0;
+      background: #0a0a0a;
+      z-index: 10000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: "IBM Plex Mono", monospace;
+      color: #30d158;
+    }
+    #compile-overlay.active {
+      display: flex;
+    }
+    .compile-progress {
+      width: 300px;
+      height: 20px;
+      border: 2px solid #30d158;
+      margin-top: 20px;
+      position: relative;
+    }
+    .compile-progress-bar {
+      height: 100%;
+      background: #30d158;
+      width: 0;
+      transition: width 0.1s linear;
+    }
+    .compile-log {
+      margin-top: 20px;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      width: 300px;
+    }
+
+    /* ============================================
+       VISITOR COUNTER
+       ============================================ */
+    .visitor-counter {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+      background: #0a0a0a;
+      color: #ff453a;
+      padding: 4px 8px;
+      border: 2px solid #ff453a;
+    }
+    .dark .visitor-counter {
+      background: #f5f5f7;
+    }
+
+    /* ============================================
+       KEYBOARD SHORTCUTS HELP
+       ============================================ */
+    #shortcuts-help {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    #shortcuts-help.active {
+      display: flex;
+    }
+    .shortcuts-panel {
+      background: #0a0a0a;
+      border: 3px solid #f5f5f7;
+      padding: 24px;
+      max-width: 500px;
+      width: 100%;
+      color: #f5f5f7;
+    }
+    .shortcut-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(245, 245, 247, 0.2);
+    }
+    .shortcut-key {
+      background: rgba(245, 245, 247, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px;
+    }
+
+    /* ============================================
+       SCROLL-TRIGGERED ANIMATIONS
+       ============================================ */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .typewriter {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid;
+      animation: typing 2s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: currentColor }
+    }
 
     /* === Mobile safety: prevent horizontal scroll + iOS font zoom weirdness === */
     html, body { max-width: 100%; overflow-x: hidden; }
@@ -238,8 +761,79 @@
 
 <body class="bg-brutal-white text-brutal-black dark:bg-brutal-black dark:text-brutal-white">
 
+  <!-- SYSTEM BOOT OVERLAY -->
+  <div id="boot-overlay"></div>
+
+  <!-- NOISE TEXTURE OVERLAY -->
+  <div id="noise-overlay"></div>
+
+  <!-- SCANLINES OVERLAY -->
+  <div id="scanlines"></div>
+
+  <!-- MATRIX RAIN CANVAS -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- DYNAMIC GRID BACKGROUND -->
+  <div id="grid-bg"></div>
+
+  <!-- RADAR SCAN EFFECT -->
+  <div id="radar-scan"></div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- COMPILE OVERLAY -->
+  <div id="compile-overlay">
+    <div class="text-xl font-bold mb-4">COMPILING PORTFOLIO...</div>
+    <div class="compile-progress">
+      <div class="compile-progress-bar" id="compile-bar"></div>
+    </div>
+    <div class="compile-log mono" id="compile-log"></div>
+  </div>
+
+  <!-- KEYBOARD SHORTCUTS HELP -->
+  <div id="shortcuts-help" onclick="toggleShortcutsHelp()">
+    <div class="shortcuts-panel" onclick="event.stopPropagation()">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold">KEYBOARD SHORTCUTS</h3>
+        <button onclick="toggleShortcutsHelp()" class="text-brutal-red font-bold">✕</button>
+      </div>
+      <div class="space-y-2 text-sm">
+        <div class="shortcut-row"><span>Help / Shortcuts</span><span class="shortcut-key">?</span></div>
+        <div class="shortcut-row"><span>Focus Terminal</span><span class="shortcut-key">/</span></div>
+        <div class="shortcut-row"><span>Toggle Theme</span><span class="shortcut-key">t</span></div>
+        <div class="shortcut-row"><span>Toggle Matrix</span><span class="shortcut-key">m</span></div>
+        <div class="shortcut-row"><span>Toggle Scanlines</span><span class="shortcut-key">s</span></div>
+        <div class="shortcut-row"><span>Scroll to Top</span><span class="shortcut-key">g + g</span></div>
+        <div class="shortcut-row"><span>Scroll to Bottom</span><span class="shortcut-key">G</span></div>
+        <div class="shortcut-row"><span>Next Section</span><span class="shortcut-key">j</span></div>
+        <div class="shortcut-row"><span>Previous Section</span><span class="shortcut-key">k</span></div>
+        <div class="shortcut-row"><span>Konami Code</span><span class="shortcut-key">↑↑↓↓←→←→BA</span></div>
+      </div>
+      <p class="mt-4 text-xs opacity-60">Press any key to close</p>
+    </div>
+  </div>
+
+  <!-- Connection Status Bar (Top) -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-brutal-black dark:bg-brutal-white border-b-2 border-brutal-white dark:border-brutal-black py-1 px-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center mono text-[10px] text-brutal-white dark:text-brutal-black">
+      <div class="flex items-center gap-4">
+        <span class="status-indicator">
+          <span class="status-dot"></span>
+          <span>ONLINE</span>
+        </span>
+        <span class="hidden sm:inline">PING: <span id="ping-display">12</span>ms</span>
+        <span class="hidden md:inline">UPTIME: <span id="uptime-display">00:00:00</span></span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span class="hidden sm:inline" id="location-display">DETECTING...</span>
+        <span id="visitor-counter" class="visitor-counter">VISITORS: 0001</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-brutal-white dark:bg-brutal-black border-b-[3px] border-brutal-black dark:border-brutal-white">
+  <nav class="fixed top-8 left-0 right-0 z-50 bg-brutal-white dark:bg-brutal-black border-b-[3px] border-brutal-black dark:border-brutal-white">
     <div class="max-w-7xl mx-auto flex justify-between items-center px-4 py-4">
       <div class="flex items-center gap-3">
         <div class="w-3 h-3 bg-brutal-red border-2 border-brutal-black dark:border-brutal-white"></div>
@@ -249,12 +843,15 @@
       </div>
 
       <!-- Desktop links -->
-      <div class="hidden lg:flex gap-4 mono text-sm font-bold">
+      <div class="hidden xl:flex gap-4 mono text-sm font-bold">
         <a href="#bio" class="hover:text-brutal-cyan transition-colors">[BIO]</a>
         <a href="#academics" class="hover:text-brutal-blue transition-colors">[ACADEMICS]</a>
         <a href="#capstone" class="hover:text-brutal-green transition-colors">[CAPSTONE]</a>
         <a href="#professional" class="hover:text-brutal-red transition-colors">[PROFESSIONAL]</a>
-        <a href="#terminal" class="hover:text-brutal-yellow transition-colors">[TERMINAL]</a>
+        <a href="#skills" class="hover:text-brutal-yellow transition-colors">[SKILLS]</a>
+        <a href="#terminal" class="hover:text-brutal-cyan transition-colors">[TERMINAL]</a>
+        <a href="#games" class="hover:text-brutal-green transition-colors">[GAMES]</a>
+        <a href="#meta" class="hover:text-brutal-blue transition-colors">[META]</a>
         <a href="#contact" class="hover:text-brutal-yellow transition-colors">[CONTACT]</a>
       </div>
 
@@ -282,21 +879,34 @@
         <a href="#academics" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[ACADEMICS]</a>
         <a href="#capstone" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CAPSTONE]</a>
         <a href="#professional" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[PROFESSIONAL]</a>
+        <a href="#skills" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[SKILLS]</a>
         <a href="#terminal" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[TERMINAL]</a>
+        <a href="#games" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[GAMES]</a>
+        <a href="#meta" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[META]</a>
         <a href="#contact" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CONTACT]</a>
       </div>
     </div>
   </nav>
 
   <!-- Hero -->
-  <section class="pt-28 md:pt-32 pb-16 md:pb-20 px-4 md:px-8 min-h-[92vh] md:min-h-screen flex flex-col justify-center max-w-7xl mx-auto">
+  <section class="pt-36 md:pt-40 pb-16 md:pb-20 px-4 md:px-8 min-h-[92vh] md:min-h-screen flex flex-col justify-center max-w-7xl mx-auto">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start">
       <div class="space-y-6 md:space-y-8">
         <div class="inline-block bg-brutal-yellow text-brutal-green px-4 py-2 mono text-xs md:text-sm font-bold transform -rotate-1 brutal-card border-[3px]">
           █ AVAILABLE FOR HIRE
         </div>
 
-        <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold leading-[0.92] tracking-tighter">
+        <!-- ASCII Art Banner -->
+        <div class="ascii-banner mb-6 hidden md:block">
+███████╗ █████╗ ███╗   ███╗██╗███╗   ██╗
+██╔════╝██╔══██╗████╗ ████║██║████╗  ██║
+███████╗███████║██╔████╔██║██║██╔██╗ ██║
+╚════██║██╔══██║██║╚██╔╝██║██║██║╚██╗██║
+███████║██║  ██║██║ ╚═╝ ██║██║██║ ╚████║
+╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝
+        </div>
+
+        <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold leading-[0.92] tracking-tighter reveal-on-scroll">
           SOFTWARE<br />
           <span class="text-brutal-blue dark:text-brutal-cyan">DEVELOPER</span>
         </h1>
@@ -873,6 +1483,246 @@
     </div>
   </div>
 
+  <!-- ============================================== -->
+  <!-- SECTION: PERIODIC TABLE OF SKILLS             -->
+  <!-- ============================================== -->
+  <section id="skills" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
+      SKILL<span class="text-brutal-cyan">_MATRIX</span>
+      <span class="mono text-sm font-normal opacity-60 ml-4">[PERIODIC TABLE]</span>
+    </h2>
+
+    <!-- Periodic Table of Skills -->
+    <div class="brutal-card bg-white dark:bg-brutal-dark p-6 mb-8">
+      <h3 class="text-lg font-bold mb-4 tracking-tight">PERIODIC<span class="text-brutal-yellow">_TABLE.OF</span>_SKILLS</h3>
+      <div class="periodic-table" id="periodic-table">
+        <!-- Populated by JS -->
+      </div>
+      <div class="flex flex-wrap gap-4 mt-6 text-xs mono">
+        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-blue/20 border border-brutal-blue"></span> Languages</span>
+        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-yellow/20 border border-brutal-yellow"></span> Frameworks</span>
+        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-green/20 border border-brutal-green"></span> Tools</span>
+        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-red/20 border border-brutal-red"></span> Domains</span>
+      </div>
+    </div>
+
+    <!-- Animated Skill Bars -->
+    <div class="brutal-card bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black p-6">
+      <h3 class="text-lg font-bold mb-6 tracking-tight">SKILL<span class="text-brutal-green">_LEVELS.DAT</span></h3>
+      <div class="space-y-4" id="skill-bars">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION: GAMES & INTERACTIVE                  -->
+  <!-- ============================================== -->
+  <section id="games" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
+        INTERACTIVE<span class="text-brutal-green">_GAMES</span>
+      </h2>
+      <p class="mono text-sm opacity-60 mb-10">Type 'games' in the terminal for more options</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Chess Mini-Game -->
+        <div class="brutal-card bg-brutal-dark border-brutal-white p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">CHESS<span class="text-brutal-yellow">_PUZZLE.EXE</span></h3>
+            <span class="mono text-xs opacity-60">Daily Challenge</span>
+          </div>
+          <p class="text-sm opacity-80 mb-4">Mate in 2 moves. White to play.</p>
+          <div id="chess-board" class="mx-auto mb-4">
+            <!-- Chess board populated by JS -->
+          </div>
+          <div class="flex justify-between items-center">
+            <button onclick="resetChess()" class="brutal-card bg-brutal-white text-brutal-black px-4 py-2 mono text-xs font-bold">RESET_BOARD</button>
+            <span id="chess-status" class="mono text-sm text-brutal-green"></span>
+          </div>
+        </div>
+
+        <!-- Typing Speed Test -->
+        <div class="brutal-card bg-brutal-dark border-brutal-white p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold">TYPING<span class="text-brutal-cyan">_SPEED.TEST</span></h3>
+            <span id="typing-wpm" class="mono text-2xl font-bold text-brutal-cyan">0 WPM</span>
+          </div>
+          <p class="text-sm opacity-60 mb-4">Test your typing speed. Click the text to start.</p>
+          <div id="typing-game" class="typing-game-display mb-4 cursor-pointer" onclick="startTypingGame()">
+            Click to start typing test...
+          </div>
+          <div class="flex justify-between items-center">
+            <button onclick="resetTypingGame()" class="brutal-card bg-brutal-white text-brutal-black px-4 py-2 mono text-xs font-bold">NEW_TEST</button>
+            <span id="typing-accuracy" class="mono text-sm opacity-60">Accuracy: 0%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Now Playing Widget -->
+      <div class="mt-8 brutal-card bg-brutal-green text-brutal-black p-6">
+        <div class="flex items-center gap-4">
+          <div class="w-16 h-16 bg-brutal-black brutal-card flex items-center justify-center">
+            <span class="text-2xl">🎵</span>
+          </div>
+          <div class="flex-1">
+            <div class="mono text-xs opacity-60 mb-1">NOW PLAYING</div>
+            <div id="now-playing" class="font-bold text-lg">Loading...</div>
+            <div class="w-full h-2 bg-brutal-black/20 mt-2 overflow-hidden">
+              <div class="h-full bg-brutal-black animate-pulse" style="width: 60%;"></div>
+            </div>
+          </div>
+          <div class="mono text-xs opacity-60">via Last.fm</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION: META / COLOPHON / CHANGELOG          -->
+  <!-- ============================================== -->
+  <section id="meta" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
+      META<span class="text-brutal-blue">_DATA</span>
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <!-- Colophon -->
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">COLOPHON<span class="text-brutal-yellow">.TXT</span></h3>
+        <p class="text-sm opacity-80 mb-4">This portfolio was built with:</p>
+        <ul class="space-y-2 text-sm mono">
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> HTML5 + Tailwind CSS</li>
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> Vanilla JavaScript (no frameworks)</li>
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> IBM Plex Mono & Space Grotesk fonts</li>
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> EmailJS for contact form</li>
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> Hosted on Cloudflare Pages</li>
+          <li class="flex items-center gap-2"><span class="text-brutal-green">→</span> Cloudflare Functions for API</li>
+        </ul>
+        <div class="mt-4 pt-4 border-t border-brutal-black/10 dark:border-brutal-white/10">
+          <p class="text-xs mono opacity-60">Built by hand with ♥ and too much caffeine</p>
+        </div>
+      </div>
+
+      <!-- Quote of the Day -->
+      <div class="brutal-card bg-brutal-blue text-white p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">QUOTE<span class="text-brutal-yellow">_OF_DAY.RND</span></h3>
+        <blockquote id="daily-quote" class="text-lg italic mb-4 border-l-4 border-brutal-yellow pl-4">
+          "Loading wisdom..."
+        </blockquote>
+        <p id="quote-author" class="text-sm opacity-80 text-right">— System</p>
+        <button onclick="refreshQuote()" class="mt-4 brutal-card bg-brutal-white text-brutal-black px-3 py-1 mono text-xs font-bold">REFRESH</button>
+      </div>
+    </div>
+
+    <!-- Changelog -->
+    <div class="brutal-card bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black p-6 mb-8">
+      <h3 class="text-lg font-bold mb-4 tracking-tight">CHANGELOG<span class="text-brutal-green">.MD</span></h3>
+      <div class="space-y-4 mono text-sm max-h-60 overflow-y-auto">
+        <div class="border-l-2 border-brutal-green pl-4">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">v2.0.0</span>
+            <span class="text-xs opacity-60">2026-01-30</span>
+          </div>
+          <ul class="text-xs opacity-80 space-y-1">
+            <li>+ Added 40+ new interactive features</li>
+            <li>+ Chess puzzle mini-game</li>
+            <li>+ Typing speed test</li>
+            <li>+ Periodic table of skills</li>
+            <li>+ System boot sequence</li>
+            <li>+ Matrix rain effect</li>
+            <li>+ Konami code easter egg</li>
+          </ul>
+        </div>
+        <div class="border-l-2 border-brutal-yellow pl-4 opacity-60">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">v1.5.0</span>
+            <span class="text-xs opacity-60">2025-12-15</span>
+          </div>
+          <ul class="text-xs space-y-1">
+            <li>+ Interactive terminal</li>
+            <li>+ Dark mode support</li>
+            <li>+ Responsive mobile design</li>
+          </ul>
+        </div>
+        <div class="border-l-2 border-brutal-gray pl-4 opacity-40">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="font-bold">v1.0.0</span>
+            <span class="text-xs">2025-09-01</span>
+          </div>
+          <ul class="text-xs space-y-1">
+            <li>+ Initial release</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- GitHub Activity Feed -->
+    <div class="brutal-card bg-brutal-dark border-brutal-white text-brutal-white p-6 mb-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+        <h3 class="text-lg font-bold tracking-tight">GITHUB<span class="text-brutal-green">_ACTIVITY.FEED</span></h3>
+        <div class="flex items-center gap-3">
+          <span id="github-stats" class="text-xs mono opacity-60">Loading...</span>
+          <a href="https://github.com/blitzwolfz" target="_blank" rel="noopener" class="brutal-card bg-brutal-white text-brutal-black px-3 py-1 mono text-xs font-bold hover:bg-brutal-cyan transition-colors">
+            VIEW_PROFILE →
+          </a>
+        </div>
+      </div>
+      <div id="github-activity" class="space-y-2">
+        <div class="text-sm opacity-60 mono">Fetching activity...</div>
+      </div>
+    </div>
+
+    <!-- Tools & Stack -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <!-- Development Stack -->
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+        <h4 class="font-bold mb-3 text-sm tracking-tight">DEV<span class="text-brutal-cyan">_STACK</span></h4>
+        <div class="space-y-2 text-xs mono">
+          <div class="flex justify-between"><span>Editor</span><span class="font-bold">VS Code</span></div>
+          <div class="flex justify-between"><span>Theme</span><span class="font-bold">Dark+</span></div>
+          <div class="flex justify-between"><span>Terminal</span><span class="font-bold">PowerShell</span></div>
+          <div class="flex justify-between"><span>Font</span><span class="font-bold">JetBrains Mono</span></div>
+        </div>
+      </div>
+
+      <!-- Hardware -->
+      <div class="brutal-card bg-brutal-yellow text-brutal-black p-6">
+        <h4 class="font-bold mb-3 text-sm tracking-tight">HARDWARE<span class="text-brutal-blue">.SPECS</span></h4>
+        <div class="space-y-2 text-xs mono">
+          <div class="flex justify-between"><span>Machine</span><span class="font-bold">Custom PC</span></div>
+          <div class="flex justify-between"><span>OS</span><span class="font-bold">Windows 11</span></div>
+          <div class="flex justify-between"><span>CPU</span><span class="font-bold">AMD Ryzen 9</span></div>
+          <div class="flex justify-between"><span>RAM</span><span class="font-bold">32GB DDR4</span></div>
+        </div>
+      </div>
+
+      <!-- Workflow -->
+      <div class="brutal-card bg-brutal-green text-brutal-black p-6">
+        <h4 class="font-bold mb-3 text-sm tracking-tight">WORKFLOW<span class="text-brutal-red">.YML</span></h4>
+        <div class="space-y-2 text-xs mono">
+          <div class="flex justify-between"><span>VCS</span><span class="font-bold">Git</span></div>
+          <div class="flex justify-between"><span>Host</span><span class="font-bold">GitHub</span></div>
+          <div class="flex justify-between"><span>CI/CD</span><span class="font-bold">GitHub Actions</span></div>
+          <div class="flex justify-between"><span>Deploy</span><span class="font-bold">Pages</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Steal This / Open Source -->
+    <div class="brutal-card bg-brutal-red text-white p-6">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-bold mb-2 tracking-tight">STEAL_THIS<span class="text-brutal-yellow">_REPO.GIT</span></h3>
+          <p class="text-sm opacity-80">This portfolio is open source. Feel free to fork it, study it, or build your own version.</p>
+        </div>
+        <a href="https://github.com/blitzwolfz/portfolio" target="_blank" rel="noopener" class="brutal-card bg-brutal-white text-brutal-black px-6 py-3 mono font-bold text-sm whitespace-nowrap">
+          FORK_ON_GITHUB →
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Contact -->
   <section id="contact" class="py-16 md:py-20 px-4 md:px-8 max-w-2xl mx-auto">
     <div class="brutal-card bg-brutal-yellow p-6 md:p-8 transform rotate-1 hover:rotate-0 transition-transform duration-300">
@@ -920,14 +1770,36 @@
   </section>
 
   <!-- Footer -->
-  <footer class="border-t-[3px] border-brutal-black dark:border-brutal-white py-8 px-4 text-center mono text-sm bg-brutal-black text-brutal-white">
+  <footer class="border-t-[3px] border-brutal-black dark:border-brutal-white py-8 px-4 text-center mono text-sm bg-brutal-black text-brutal-white mb-8">
     <p>© 2026 <span class="font-bold" id="footer-name">SAMIN QURESHI</span> // MADE WITH <span class="text-brutal-red">♥</span> AND MONSTER MANGO LOCO</p>
     <div id="footer-links" class="flex flex-wrap justify-center gap-4 mt-4 opacity-70">
       <!-- Rendered by JavaScript from CONFIG.links -->
     </div>
     <br>
     <p id="footer-location">TORONTO / REMOTE</p>
+    <div class="mt-4 text-xs opacity-50">
+      <span class="mr-4">v2.0.0</span>
+      <span class="mr-4">|</span>
+      <span id="keyboard-hint">Press ? for shortcuts</span>
+    </div>
   </footer>
+
+  <!-- Bottom Status Bar -->
+  <div id="status-bar" class="text-brutal-white">
+    <div class="flex items-center gap-4">
+      <span class="status-indicator">
+        <span class="status-dot"></span>
+        <span>SYSTEM ONLINE</span>
+      </span>
+      <span class="hidden sm:inline">CPU: <span id="cpu-usage">2</span>%</span>
+      <span class="hidden md:inline">MEM: <span id="mem-usage">124</span>MB</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="current-time" class="hidden sm:inline">00:00:00</span>
+      <span id="reading-time">~5 min read</span>
+      <button onclick="toggleShortcutsHelp()" class="hover:text-brutal-cyan transition-colors">[?]</button>
+    </div>
+  </div>
 
   <!-- Back to Previous Position Button -->
   <button
@@ -957,6 +1829,9 @@
         professional: true,
         resume: true,
         contact: true,
+        skills: true,
+        games: true,
+        meta: true,
       },
       ui: {
         showComingSoonBanners: true,
@@ -977,6 +1852,13 @@
       },
       resume: {
         downloadUrl: "Sam_Qureshi.pdf",
+      },
+      // =============================================
+      // API ENDPOINTS (Cloudflare Pages Functions)
+      // =============================================
+      apis: {
+        spotify: '/api/spotify',
+        github: '/api/github',
       },
       // =============================================
       // BIO & ABOUT
@@ -1021,7 +1903,7 @@
           degree: "Computer Programming Analysis",
           type: "Advanced Diploma",
           status: "CURRENT",
-          expected: "Apr 2025",
+          expected: "Apr 2026",
           color: "bg-brutal-blue",
         },
         {
@@ -1255,7 +2137,7 @@
                 <div class="w-12 h-12 ${proj.color} brutal-card border-brutal-white flex items-center justify-center text-xl font-bold text-brutal-black">
                   ${index + 1}
                 </div>
-                <div class="mono text-xs opacity-50 text-brutal-white">2024</div>
+                <div class="mono text-xs opacity-50 text-brutal-white">2025</div>
               </div>
 
               ${
@@ -1900,10 +2782,20 @@
             addLine("│  capstone    - Capstone project info    │");
             addLine("│  contact     - Contact information      │");
             addLine("│  links       - Social links             │");
+            addLine("│  github      - Recent GitHub activity   │");
             addLine("│  download resume - Get my resume        │");
             addLine("│  neofetch    - System info (for fun)    │");
             addLine("│  clear       - Clear terminal           │");
             addLine("│  help        - Show this message        │");
+            addLine("├─────────────────────────────────────────┤", "info");
+            addLine("│  SECRET COMMANDS                        │", "info");
+            addLine("│  joke        - Random dev joke          │");
+            addLine("│  hack        - Initiate hack sequence   │");
+            addLine("│  easteregg   - Find the easter egg      │");
+            addLine("│  credits     - Show credits             │");
+            addLine("│  games       - List available games     │");
+            addLine("│  matrix      - Toggle matrix rain       │");
+            addLine("│  theme       - Toggle dark/light mode   │");
             addLine("└─────────────────────────────────────────┘", "info");
             break;
 
@@ -2021,6 +2913,30 @@
             addLine(`  Instagram: ${CONFIG.links.instagram} (${CONFIG.links.instagramLabel})`);
             addLine("");
             addLine("[OK]", "success");
+            break;
+
+          case "github":
+            addLine("Fetching GitHub activity...", "info");
+            fetch(CONFIG.apis.github)
+              .then(r => r.json())
+              .then(data => {
+                if (data.error) {
+                  addLine("ERROR: " + data.message, "error");
+                  return;
+                }
+                addLine("RECENT ACTIVITY:", "highlight");
+                addLine("");
+                data.events?.slice(0, 5).forEach(e => {
+                  addLine(`  [${e.type}] ${e.repo}`);
+                  addLine(`  ${e.message.slice(0, 50)}${e.message.length > 50 ? '...' : ''}`);
+                  addLine("");
+                });
+                addLine(`Stats: ${data.stats?.pushEvents || 0} commits, ${data.stats?.uniqueRepos || 0} repos`, "info");
+                addLine("[OK]", "success");
+              })
+              .catch(err => {
+                addLine("ERROR: Failed to fetch GitHub data", "error");
+              });
             break;
 
           case "download resume":
@@ -2369,6 +3285,1037 @@
       });
     }
 
+    // =============================================
+    // ALL NEW FEATURES IMPLEMENTATION
+    // =============================================
+
+    // System Boot Sequence
+    function runBootSequence() {
+      const overlay = document.getElementById('boot-overlay');
+      if (!overlay) return;
+      
+      // Check if user has seen boot this session
+      if (sessionStorage.getItem('bootCompleted')) {
+        overlay.classList.add('boot-complete');
+        return;
+      }
+
+      const bootLines = [
+        { text: "BIOS DATE 01/30/26 20:28:57", type: "info", delay: 100 },
+        { text: "CPU: AMD RYZEN 9 5900X @ 3.7GHz", type: "normal", delay: 150 },
+        { text: "RAM: 32768MB OK", type: "success", delay: 100 },
+        { text: "DETECTING PRIMARY MASTER... SUCCESS", type: "success", delay: 200 },
+        { text: "DETECTING PRIMARY SLAVE... NONE", type: "warn", delay: 100 },
+        { text: "LOADING KERNEL...", type: "info", delay: 300 },
+        { text: "MOUNTING FILESYSTEMS...", type: "info", delay: 200 },
+        { text: "STARTING SYSTEM SERVICES...", type: "info", delay: 400 },
+        { text: "[ OK ] Started networking.service", type: "success", delay: 100 },
+        { text: "[ OK ] Started portfolio-daemon.service", type: "success", delay: 100 },
+        { text: "[ OK ] Started terminal.service", type: "success", delay: 100 },
+        { text: "[ OK ] Started chess-engine.service", type: "success", delay: 100 },
+        { text: "LOADING CONFIGURATION...", type: "info", delay: 300 },
+        { text: `USER: ${CONFIG.personal.name}`, type: "highlight", delay: 150 },
+        { text: `LOCATION: ${CONFIG.personal.location}`, type: "highlight", delay: 150 },
+        { text: "INITIALIZING UI COMPONENTS...", type: "info", delay: 400 },
+        { text: "MOUNTING VIRTUAL FILESYSTEM... DONE", type: "success", delay: 200 },
+        { text: "", type: "normal", delay: 100 },
+        { text: "██╗  ██╗███████╗██╗     ██╗      ██████╗     ██╗   ██╗██╗██╗     ██╗      ██████╗ ██████╗ ███████╗", type: "success", delay: 50 },
+        { text: "██║  ██║██╔════╝██║     ██║     ██╔═══██╗    ██║   ██║██║██║     ██║     ██╔═══██╗██╔══██╗██╔════╝", type: "success", delay: 50 },
+        { text: "███████║█████╗  ██║     ██║     ██║   ██║    ██║   ██║██║██║     ██║     ██║   ██║██████╔╝███████╗", type: "success", delay: 50 },
+        { text: "██╔══██║██╔══╝  ██║     ██║     ██║   ██║    ╚██╗ ██╔╝██║██║     ██║     ██║   ██║██╔══██╗╚════██║", type: "success", delay: 50 },
+        { text: "██║  ██║███████╗███████╗███████╗╚██████╔╝     ╚████╔╝ ██║███████╗███████╗╚██████╔╝██║  ██║███████║", type: "success", delay: 50 },
+        { text: "╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝ ╚═════╝       ╚═══╝  ╚═╝╚══════╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝", type: "success", delay: 50 },
+        { text: "", type: "normal", delay: 100 },
+        { text: "PORTFOLIO v2.0.0 READY", type: "highlight", delay: 200 },
+        { text: "PRESS ANY KEY TO CONTINUE...", type: "info", delay: 100 }
+      ];
+
+      let currentLine = 0;
+      let cumulativeDelay = 0;
+
+      bootLines.forEach((line) => {
+        cumulativeDelay += line.delay;
+        setTimeout(() => {
+          const div = document.createElement('div');
+          div.className = `boot-line boot-${line.type}`;
+          div.textContent = line.text;
+          overlay.appendChild(div);
+          overlay.scrollTop = overlay.scrollHeight;
+        }, cumulativeDelay);
+      });
+
+      // Complete boot after all lines + 1s wait
+      setTimeout(() => {
+        sessionStorage.setItem('bootCompleted', 'true');
+        overlay.classList.add('boot-complete');
+      }, cumulativeDelay + 1000);
+
+      // Allow skip on any key/click
+      const skipBoot = () => {
+        sessionStorage.setItem('bootCompleted', 'true');
+        overlay.classList.add('boot-complete');
+        document.removeEventListener('keydown', skipBoot);
+        document.removeEventListener('click', skipBoot);
+      };
+      document.addEventListener('keydown', skipBoot);
+      document.addEventListener('click', skipBoot);
+    }
+
+    // Konami Code
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          activateKonami();
+          konamiIndex = 0;
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    function activateKonami() {
+      showToast('🎮 KONAMI CODE ACTIVATED', 'success');
+      // Activate hacker theme
+      document.documentElement.classList.add('konami-active');
+      // Activate matrix rain
+      toggleMatrixRain();
+      // Add green tint
+      document.body.style.filter = 'hue-rotate(90deg)';
+      setTimeout(() => {
+        document.body.style.filter = '';
+      }, 5000);
+    }
+
+    // Matrix Rain Effect
+    let matrixInterval = null;
+    function toggleMatrixRain() {
+      const canvas = document.getElementById('matrix-canvas');
+      if (!canvas) return;
+      
+      canvas.classList.toggle('active');
+      
+      if (canvas.classList.contains('active')) {
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        
+        for (let i = 0; i < columns; i++) {
+          drops[i] = Math.random() * -100;
+        }
+        
+        matrixInterval = setInterval(() => {
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+          ctx.fillStyle = '#30d158';
+          ctx.font = fontSize + 'px monospace';
+          
+          for (let i = 0; i < drops.length; i++) {
+            const text = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+              drops[i] = 0;
+            }
+            drops[i]++;
+          }
+        }, 35);
+      } else {
+        clearInterval(matrixInterval);
+      }
+    }
+
+    // Toggle Scanlines
+    function toggleScanlines() {
+      const scanlines = document.getElementById('scanlines');
+      if (scanlines) scanlines.classList.toggle('active');
+    }
+
+    // Toast Notifications
+    function showToast(message, type = 'info', duration = 3000) {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      
+      const toast = document.createElement('div');
+      toast.className = `system-toast ${type}`;
+      toast.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span>${message}</span>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-4 opacity-60 hover:opacity-100">✕</button>
+        </div>
+      `;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
+    // Copy to Clipboard
+    function copyToClipboard(text, label = 'Text') {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(`${label} copied to clipboard`, 'success');
+      }).catch(() => {
+        showToast('Failed to copy', 'error');
+      });
+    }
+
+    // Periodic Table of Skills
+    function renderPeriodicTable() {
+      const container = document.getElementById('periodic-table');
+      if (!container) return;
+      
+      const elements = [
+        { symbol: 'Sw', name: 'Swift', type: 'language', number: 1 },
+        { symbol: 'C+', name: 'C++', type: 'language', number: 2 },
+        { symbol: 'Ja', name: 'Java', type: 'language', number: 3 },
+        { symbol: 'Ts', name: 'TypeScript', type: 'language', number: 4 },
+        { symbol: 'Py', name: 'Python', type: 'language', number: 5 },
+        { symbol: 'Ui', name: 'SwiftUI', type: 'framework', number: 6 },
+        { symbol: 'R+', name: 'React', type: 'framework', number: 7 },
+        { symbol: 'Nd', name: 'Node.js', type: 'framework', number: 8 },
+        { symbol: 'Ex', name: 'Express', type: 'framework', number: 9 },
+        { symbol: 'Gi', name: 'Git', type: 'tool', number: 10 },
+        { symbol: 'Vs', name: 'VS Code', type: 'tool', number: 11 },
+        { symbol: 'Su', name: 'Supabase', type: 'tool', number: 12 },
+        { symbol: 'iO', name: 'iOS Dev', type: 'domain', number: 13 },
+        { symbol: 'Ce', name: 'Chess AI', type: 'domain', number: 14 },
+        { symbol: 'Cm', name: 'Compilers', type: 'domain', number: 15 },
+        { symbol: 'Fs', name: 'Full Stack', type: 'domain', number: 16 },
+      ];
+      
+      container.innerHTML = elements.map(el => `
+        <div class="periodic-element element-${el.type}" onclick="showToast('${el.name}: ${el.type.toUpperCase()}', 'info')">
+          <span class="number">${el.number}</span>
+          <span class="symbol">${el.symbol}</span>
+          <span class="name">${el.name}</span>
+        </div>
+      `).join('');
+    }
+
+    // Animated Skill Bars
+    function renderSkillBars() {
+      const container = document.getElementById('skill-bars');
+      if (!container) return;
+      
+      container.innerHTML = CONFIG.skills.languages.map(lang => `
+        <div class="skill-item">
+          <div class="flex justify-between mb-1 text-xs mono">
+            <span>${lang.name}</span>
+            <span>${lang.label}</span>
+          </div>
+          <div class="skill-bar-container">
+            <div class="skill-bar" data-level="${lang.level}"></div>
+          </div>
+        </div>
+      `).join('');
+      
+      // Animate when in view
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.skill-bar').forEach(bar => {
+              bar.style.setProperty('--skill-level', bar.dataset.level + '%');
+              bar.classList.add('animate');
+            });
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(container);
+    }
+
+    // Chess Game
+    let chessBoard = [];
+    let selectedSquare = null;
+    let chessMoveCount = 0;
+    
+    function initChessBoard() {
+      // Simple puzzle setup - White to mate in 2
+      chessBoard = [
+        ['', '', '', '♚', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '♛', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '', '', '', '', ''],
+        ['', '', '', '♔', '', '', '', '']
+      ];
+      renderChessBoard();
+    }
+    
+    function renderChessBoard() {
+      const board = document.getElementById('chess-board');
+      if (!board) return;
+      
+      board.innerHTML = '';
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          const square = document.createElement('div');
+          square.className = `chess-square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+          square.dataset.row = row;
+          square.dataset.col = col;
+          square.textContent = chessBoard[row][col];
+          square.onclick = () => handleChessClick(row, col);
+          board.appendChild(square);
+        }
+      }
+    }
+    
+    function handleChessClick(row, col) {
+      const piece = chessBoard[row][col];
+      
+      if (selectedSquare) {
+        // Try to move
+        const [fromRow, fromCol] = selectedSquare;
+        chessBoard[row][col] = chessBoard[fromRow][fromCol];
+        chessBoard[fromRow][fromCol] = '';
+        selectedSquare = null;
+        chessMoveCount++;
+        
+        // Check for mate (simplified - queen to e8)
+        if (row === 0 && col === 4 && piece === '♛') {
+          document.getElementById('chess-status').textContent = 'CHECKMATE! ✓';
+          showToast('Puzzle solved!', 'success');
+        }
+        
+        renderChessBoard();
+        // Highlight last move
+        const squares = document.querySelectorAll('.chess-square');
+        squares[row * 8 + col].classList.add('last-move');
+      } else if (piece && piece !== '♚') {
+        // Select piece
+        selectedSquare = [row, col];
+        const squares = document.querySelectorAll('.chess-square');
+        squares[row * 8 + col].classList.add('selected');
+        
+        // Show valid moves (simplified)
+        if (piece === '♛') {
+          // Highlight row, col, and diagonals
+          for (let i = 0; i < 8; i++) {
+            if (i !== col) squares[row * 8 + i]?.classList.add('valid-move');
+            if (i !== row) squares[i * 8 + col]?.classList.add('valid-move');
+          }
+          for (let i = 1; i < 8; i++) {
+            if (row + i < 8 && col + i < 8) squares[(row + i) * 8 + (col + i)]?.classList.add('valid-move');
+            if (row - i >= 0 && col - i >= 0) squares[(row - i) * 8 + (col - i)]?.classList.add('valid-move');
+            if (row + i < 8 && col - i >= 0) squares[(row + i) * 8 + (col - i)]?.classList.add('valid-move');
+            if (row - i >= 0 && col + i < 8) squares[(row - i) * 8 + (col + i)]?.classList.add('valid-move');
+          }
+        }
+      }
+    }
+    
+    function resetChess() {
+      chessMoveCount = 0;
+      document.getElementById('chess-status').textContent = '';
+      initChessBoard();
+    }
+
+    // Typing Speed Test
+    const typingTexts = [
+      "The quick brown fox jumps over the lazy dog.",
+      "Swift is a powerful and intuitive programming language for iOS.",
+      "Chess is the gymnasium of the mind.",
+      "Code is like humor. When you have to explain it, it's bad.",
+      "First, solve the problem. Then, write the code."
+    ];
+    let typingStartTime = null;
+    let typingTarget = '';
+    let typedChars = 0;
+    let correctChars = 0;
+    let typingInputBuffer = '';
+    let typingGameActive = false;
+    
+    function startTypingGame() {
+      const display = document.getElementById('typing-game');
+      if (!display || typingGameActive) return;
+      
+      typingTarget = typingTexts[Math.floor(Math.random() * typingTexts.length)];
+      typingStartTime = Date.now();
+      typedChars = 0;
+      correctChars = 0;
+      typingInputBuffer = '';
+      typingGameActive = true;
+      
+      renderTypingDisplay();
+      
+      // Add a visible focus indicator
+      display.classList.add('ring-2', 'ring-brutal-cyan');
+      
+      // Global key handler for typing game
+      document.addEventListener('keydown', handleTypingKeydown);
+      document.addEventListener('keyup', handleTypingKeyup);
+    }
+    
+    function handleTypingKeydown(e) {
+      if (!typingGameActive) return;
+      
+      // Ignore modifier keys
+      if (e.ctrlKey || e.altKey || e.metaKey) return;
+      
+      // Handle backspace
+      if (e.key === 'Backspace') {
+        e.preventDefault();
+        if (typingInputBuffer.length > 0) {
+          typingInputBuffer = typingInputBuffer.slice(0, -1);
+          updateTypingGame();
+        }
+        return;
+      }
+      
+      // Ignore special keys
+      if (e.key.length > 1) return;
+      
+      e.preventDefault();
+      
+      // Add character
+      if (typingInputBuffer.length < typingTarget.length) {
+        typingInputBuffer += e.key;
+        updateTypingGame();
+      }
+    }
+    
+    function handleTypingKeyup(e) {
+      if (!typingGameActive) return;
+      
+      // Check if finished
+      if (typingInputBuffer.length >= typingTarget.length) {
+        finishTypingGame();
+      }
+    }
+    
+    function updateTypingGame() {
+      typedChars = typingInputBuffer.length;
+      correctChars = 0;
+      for (let i = 0; i < typingInputBuffer.length; i++) {
+        if (typingInputBuffer[i] === typingTarget[i]) correctChars++;
+      }
+      
+      renderTypingDisplay(typingInputBuffer);
+      updateTypingStats();
+    }
+    
+    function renderTypingDisplay(typed = '') {
+      const display = document.getElementById('typing-game');
+      if (!display) return;
+      
+      display.innerHTML = typingTarget.split('').map((char, i) => {
+        if (i < typed.length) {
+          const isCorrect = typed[i] === char;
+          return `<span class="typing-char ${isCorrect ? 'correct' : 'incorrect'}">${char}</span>`;
+        } else if (i === typed.length) {
+          return `<span class="typing-char current">${char}</span>`;
+        }
+        return `<span class="typing-char">${char}</span>`;
+      }).join('');
+    }
+    
+    function updateTypingStats() {
+      const elapsed = (Date.now() - typingStartTime) / 1000 / 60; // minutes
+      const wpm = Math.round((correctChars / 5) / elapsed) || 0;
+      const accuracy = typedChars > 0 ? Math.round((correctChars / typedChars) * 100) : 0;
+      
+      document.getElementById('typing-wpm').textContent = wpm + ' WPM';
+      document.getElementById('typing-accuracy').textContent = 'Accuracy: ' + accuracy + '%';
+    }
+    
+    function finishTypingGame() {
+      updateTypingStats();
+      typingGameActive = false;
+      
+      const display = document.getElementById('typing-game');
+      if (display) display.classList.remove('ring-2', 'ring-brutal-cyan');
+      
+      // Remove event listeners
+      document.removeEventListener('keydown', handleTypingKeydown);
+      document.removeEventListener('keyup', handleTypingKeyup);
+      
+      showToast('Typing test complete!', 'success');
+    }
+    
+    function resetTypingGame() {
+      typingGameActive = false;
+      typingInputBuffer = '';
+      typingStartTime = null;
+      
+      const display = document.getElementById('typing-game');
+      if (display) {
+        display.classList.remove('ring-2', 'ring-brutal-cyan');
+        display.textContent = 'Click to start typing test...';
+      }
+      
+      document.getElementById('typing-wpm').textContent = '0 WPM';
+      document.getElementById('typing-accuracy').textContent = 'Accuracy: 0%';
+      
+      // Remove event listeners if still attached
+      document.removeEventListener('keydown', handleTypingKeydown);
+      document.removeEventListener('keyup', handleTypingKeyup);
+    }
+
+    // Now Playing - Real Spotify API via Cloudflare Function
+    let nowPlayingInterval = null;
+    
+    async function updateNowPlaying() {
+      const display = document.getElementById('now-playing');
+      if (!display) return;
+      
+      try {
+        const res = await fetch(CONFIG.apis.spotify);
+        const data = await res.json();
+        
+        if (data.error) {
+          display.innerHTML = `<span class="opacity-60">${data.message || 'Spotify not configured'}</span>`;
+          return;
+        }
+        
+        if (!data.isPlaying) {
+          display.innerHTML = '<span class="opacity-60">Not currently playing</span>';
+          return;
+        }
+        
+        // Calculate progress bar width
+        const progressPercent = data.duration > 0 
+          ? Math.round((data.progress / data.duration) * 100) 
+          : 0;
+        
+        display.innerHTML = `
+          <a href="${data.trackUrl || '#'}" target="_blank" rel="noopener" class="hover:underline">
+            ${data.title}
+          </a>
+          <span class="text-sm opacity-60">- ${data.artist}</span>
+        `;
+        
+        // Update progress bar if it exists
+        const progressBar = document.getElementById('now-playing-progress');
+        if (progressBar) {
+          progressBar.style.width = `${progressPercent}%`;
+        }
+        
+      } catch (error) {
+        console.error('Failed to fetch now playing:', error);
+        display.innerHTML = '<span class="opacity-60">Unable to fetch Spotify data</span>';
+      }
+    }
+    
+    function startNowPlayingUpdates() {
+      // Initial fetch
+      updateNowPlaying();
+      // Update every 30 seconds
+      nowPlayingInterval = setInterval(updateNowPlaying, 30000);
+    }
+
+    // Quotes
+    const quotes = [
+      { text: "We are the facilitators of our own creative evolution.", author: "Bill Hicks" },
+      { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+      { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson" },
+      { text: "The best way to predict the future is to implement it.", author: "David Heinemeier Hansson" },
+      { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+      { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" }
+    ];
+    
+    function refreshQuote() {
+      const quoteEl = document.getElementById('daily-quote');
+      const authorEl = document.getElementById('quote-author');
+      if (!quoteEl || !authorEl) return;
+      
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      quoteEl.textContent = `"${quote.text}"`;
+      authorEl.textContent = `— ${quote.author}`;
+    }
+
+    // GitHub Activity Feed
+    async function fetchGitHubActivity() {
+      const container = document.getElementById('github-activity');
+      const statsEl = document.getElementById('github-stats');
+      if (!container) return;
+      
+      try {
+        const res = await fetch(CONFIG.apis.github);
+        const data = await res.json();
+        
+        if (data.error) {
+          container.innerHTML = `<div class="text-sm opacity-60">${data.message || 'GitHub data unavailable'}</div>`;
+          if (statsEl) statsEl.textContent = 'Error loading';
+          return;
+        }
+        
+        // Update stats
+        if (statsEl && data.stats) {
+          statsEl.textContent = `${data.stats.pushEvents} commits • ${data.stats.uniqueRepos} repos`;
+        }
+        
+        // Render activity feed
+        if (data.events && data.events.length > 0) {
+          container.innerHTML = data.events.slice(0, 5).map(event => {
+            let icon = '●';
+            let colorClass = 'text-brutal-white';
+            
+            switch (event.type) {
+              case 'PushEvent':
+                icon = '▲';
+                colorClass = 'text-brutal-green';
+                break;
+              case 'CreateEvent':
+                icon = '+';
+                colorClass = 'text-brutal-yellow';
+                break;
+              case 'PullRequestEvent':
+                icon = '◆';
+                colorClass = 'text-brutal-cyan';
+                break;
+              case 'IssuesEvent':
+                icon = '!';
+                colorClass = 'text-brutal-red';
+                break;
+              case 'WatchEvent':
+                icon = '★';
+                colorClass = 'text-brutal-yellow';
+                break;
+            }
+            
+            const timeAgo = getTimeAgo(event.createdAt);
+            
+            return `
+              <div class="flex items-start gap-3 text-sm p-2 hover:bg-brutal-white/5 rounded transition-colors">
+                <span class="mono ${colorClass} font-bold">${icon}</span>
+                <div class="flex-1 min-w-0">
+                  <div class="truncate">${escapeHtml(event.message)}</div>
+                  <div class="flex items-center gap-2 text-xs opacity-60 mt-1">
+                    <span class="mono">${event.repo}</span>
+                    <span>•</span>
+                    <span>${timeAgo}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          container.innerHTML = '<div class="text-sm opacity-60">No recent activity</div>';
+        }
+        
+      } catch (error) {
+        console.error('Failed to fetch GitHub activity:', error);
+        container.innerHTML = '<div class="text-sm opacity-60">Unable to load GitHub activity</div>';
+        if (statsEl) statsEl.textContent = 'Error';
+      }
+    }
+    
+    function getTimeAgo(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      
+      if (seconds < 60) return 'just now';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    }
+    
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Status Bar Updates
+    function updateStatusBar() {
+      // Update ping
+      const ping = Math.floor(Math.random() * 20) + 8;
+      const pingEl = document.getElementById('ping-display');
+      if (pingEl) pingEl.textContent = ping;
+      
+      // Update time
+      const timeEl = document.getElementById('current-time');
+      if (timeEl) {
+        timeEl.textContent = new Date().toLocaleTimeString();
+      }
+      
+      // Update CPU/MEM
+      const cpuEl = document.getElementById('cpu-usage');
+      const memEl = document.getElementById('mem-usage');
+      if (cpuEl) cpuEl.textContent = Math.floor(Math.random() * 15) + 1;
+      if (memEl) memEl.textContent = Math.floor(Math.random() * 50) + 100;
+      
+      // Update uptime
+      const uptimeEl = document.getElementById('uptime-display');
+      if (uptimeEl) {
+        const seconds = Math.floor((Date.now() - pageLoadTime) / 1000);
+        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        uptimeEl.textContent = `${h}:${m}:${s}`;
+      }
+    }
+
+    // Geolocation
+    function detectLocation() {
+      const locEl = document.getElementById('location-display');
+      if (!locEl) return;
+      
+      fetch('https://ipapi.co/json/')
+        .then(r => r.json())
+        .then(data => {
+          locEl.textContent = `${data.city.toUpperCase()}, ${data.country_code}`;
+        })
+        .catch(() => {
+          locEl.textContent = 'UNKNOWN';
+        });
+    }
+
+    // Visitor Counter
+    function initVisitorCounter() {
+      const counter = document.getElementById('visitor-counter');
+      if (!counter) return;
+      
+      let count = localStorage.getItem('visitorCount') || 1337;
+      count = parseInt(count) + Math.floor(Math.random() * 3);
+      localStorage.setItem('visitorCount', count);
+      counter.textContent = `VISITORS: ${count.toString().padStart(4, '0')}`;
+    }
+
+    // Keyboard Shortcuts
+    let keyBuffer = '';
+    function handleKeyboardShortcuts(e) {
+      // Don't trigger when typing in inputs
+      if (e.target.matches('input, textarea')) return;
+      
+      // Don't trigger when terminal is focused
+      const terminalInput = document.getElementById('terminal-input');
+      if (terminalInput && document.activeElement === terminalInput) return;
+      
+      // Don't trigger when typing game is active
+      if (typingGameActive) return;
+      
+      // Terminal focus
+      if (e.key === '/') {
+        e.preventDefault();
+        const terminalInput = document.getElementById('terminal-input');
+        if (terminalInput) {
+          terminalInput.focus();
+          terminalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+      
+      // Theme toggle
+      if (e.key === 't' || e.key === 'T') {
+        toggleTheme();
+      }
+      
+      // Matrix toggle
+      if (e.key === 'm' || e.key === 'M') {
+        toggleMatrixRain();
+      }
+      
+      // Scanlines toggle
+      if (e.key === 's' || e.key === 'S') {
+        toggleScanlines();
+      }
+      
+      // Help toggle
+      if (e.key === '?') {
+        toggleShortcutsHelp();
+      }
+      
+      // Vim-style navigation
+      if (e.key === 'g') {
+        keyBuffer += 'g';
+        if (keyBuffer === 'gg') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          keyBuffer = '';
+        }
+        setTimeout(() => keyBuffer = '', 500);
+      }
+      
+      if (e.key === 'G') {
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      }
+      
+      if (e.key === 'j') {
+        scrollToSection(1);
+      }
+      
+      if (e.key === 'k') {
+        scrollToSection(-1);
+      }
+      
+      // Close help on any key
+      const help = document.getElementById('shortcuts-help');
+      if (help && help.classList.contains('active') && e.key !== '?') {
+        toggleShortcutsHelp();
+      }
+    }
+    
+    function toggleShortcutsHelp() {
+      const help = document.getElementById('shortcuts-help');
+      if (help) help.classList.toggle('active');
+    }
+    
+    let currentSectionIndex = 0;
+    const sections = ['bio', 'academics', 'capstone', 'professional', 'skills', 'terminal', 'games', 'meta', 'contact'];
+    
+    function scrollToSection(direction) {
+      currentSectionIndex += direction;
+      if (currentSectionIndex < 0) currentSectionIndex = 0;
+      if (currentSectionIndex >= sections.length) currentSectionIndex = sections.length - 1;
+      
+      const section = document.getElementById(sections[currentSectionIndex]);
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Compile Animation
+    function runCompileAnimation() {
+      const overlay = document.getElementById('compile-overlay');
+      const bar = document.getElementById('compile-bar');
+      const log = document.getElementById('compile-log');
+      if (!overlay || !bar || !log) return;
+      
+      overlay.classList.add('active');
+      
+      const steps = [
+        'Compiling styles...',
+        'Optimizing assets...',
+        'Minifying JavaScript...',
+        'Generating PDF...',
+        'Export complete!'
+      ];
+      
+      let progress = 0;
+      steps.forEach((step, i) => {
+        setTimeout(() => {
+          log.innerHTML += `<div>> ${step}</div>`;
+          log.scrollTop = log.scrollHeight;
+          progress = ((i + 1) / steps.length) * 100;
+          bar.style.width = progress + '%';
+          
+          if (i === steps.length - 1) {
+            setTimeout(() => {
+              overlay.classList.remove('active');
+              // Actually trigger download
+              const link = document.createElement('a');
+              link.href = CONFIG.resume.downloadUrl;
+              link.download = '';
+              link.click();
+            }, 500);
+          }
+        }, i * 600);
+      });
+    }
+
+    // Scroll Reveal Animation
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => {
+        observer.observe(el);
+      });
+    }
+
+    // Dynamic Favicon
+    function updateFavicon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const favicon = document.getElementById('dynamic-favicon');
+      if (!favicon) return;
+      
+      const bg = isDark ? '0a0a0a' : 'FFD700';
+      const text = isDark ? 'f5f5f7' : '0a0a0a';
+      favicon.href = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%23${bg}' width='100' height='100'/><text x='50' y='60' font-size='40' text-anchor='middle' fill='%23${text}' font-family='monospace'>SQ</text></svg>`;
+    }
+
+    // Terminal Enhancements
+    function enhanceTerminal() {
+      const terminalInput = document.getElementById('terminal-input');
+      if (!terminalInput) return;
+      
+      // Command history with arrow keys
+      let historyIndex = -1;
+      let commandHistory = [];
+      
+      terminalInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const cmd = terminalInput.value.trim();
+          if (cmd) {
+            commandHistory.push(cmd);
+            historyIndex = commandHistory.length;
+          }
+        }
+        
+        if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          if (historyIndex > 0) {
+            historyIndex--;
+            terminalInput.value = commandHistory[historyIndex];
+          }
+        }
+        
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          if (historyIndex < commandHistory.length - 1) {
+            historyIndex++;
+            terminalInput.value = commandHistory[historyIndex];
+          } else {
+            historyIndex = commandHistory.length;
+            terminalInput.value = '';
+          }
+        }
+        
+        // Tab autocomplete
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const commands = ['help', 'whoami', 'skills', 'education', 'experience', 'projects', 'capstone', 'contact', 'links', 'github', 'download', 'neofetch', 'clear'];
+          const input = terminalInput.value.toLowerCase();
+          const match = commands.find(cmd => cmd.startsWith(input));
+          if (match) {
+            terminalInput.value = match;
+          }
+        }
+      });
+    }
+
+    // Reading Time Calculator
+    function calculateReadingTime() {
+      const text = document.body.innerText;
+      const words = text.trim().split(/\s+/).length;
+      const minutes = Math.ceil(words / 200);
+      const display = document.getElementById('reading-time');
+      if (display) display.textContent = `~${minutes} min read`;
+    }
+
+    // Terminal Secret Commands
+    const secretCommands = {
+      'github': () => {
+        addLine('Fetching GitHub activity...', 'info');
+        fetch(CONFIG.apis.github)
+          .then(r => r.json())
+          .then(data => {
+            if (data.error) {
+              addLine('ERROR: ' + data.message, 'error');
+              return;
+            }
+            addLine('RECENT ACTIVITY:', 'highlight');
+            addLine('');
+            data.events?.slice(0, 5).forEach(e => {
+              addLine(`  [${e.type}] ${e.repo}`);
+              addLine(`  ${e.message.slice(0, 50)}${e.message.length > 50 ? '...' : ''}`);
+              addLine('');
+            });
+            addLine(`Stats: ${data.stats?.pushEvents || 0} commits, ${data.stats?.uniqueRepos || 0} repos`, 'info');
+            addLine('[OK]', 'success');
+          });
+        return true;
+      },
+      'easteregg': () => {
+        addMultiLine(['', '🥚 You found the easter egg!', 'Try the Konami Code: ↑↑↓↓←→←→BA', '']);
+        return true;
+      },
+      'credits': () => {
+        addMultiLine(['', 'CREDITS:', '  Design & Code: Samin Qureshi', '  Fonts: IBM Plex Mono, Space Grotesk', '  Icons: System defaults', '  Inspiration: Brutalist web design', '']);
+        return true;
+      },
+      'joke': () => {
+        const jokes = [
+          'Why do programmers prefer dark mode? Because light attracts bugs.',
+          'Why did the developer go broke? Because he used up all his cache.',
+          'How many programmers does it take to change a light bulb? None, that\'s a hardware problem.',
+          'What do you call a programmer from Finland? Nerdic.',
+          'Why do Java developers wear glasses? Because they don\'t C#.'
+        ];
+        addLine(jokes[Math.floor(Math.random() * jokes.length)]);
+        return true;
+      },
+      'hack': () => {
+        addLine('INITIATING HACK SEQUENCE...', 'highlight');
+        setTimeout(() => addLine('Bypassing mainframe...'), 500);
+        setTimeout(() => addLine('Decrypting passwords...'), 1000);
+        setTimeout(() => addLine('Just kidding! This is a portfolio.'), 1500);
+        setTimeout(() => addLine('[OK]', 'success'), 2000);
+        return true;
+      },
+      'games': () => {
+        addMultiLine(['', 'AVAILABLE GAMES:', '  - Chess Puzzle (section #games)', '  - Typing Speed Test (section #games)', '', 'Navigate there to play!']);
+        return true;
+      },
+      'matrix': () => {
+        toggleMatrixRain();
+        addLine(matrixInterval ? 'Matrix rain activated.' : 'Matrix rain deactivated.');
+        return true;
+      },
+      'scanlines': () => {
+        toggleScanlines();
+        addLine('Scanlines toggled.');
+        return true;
+      },
+      'theme': () => {
+        toggleTheme();
+        addLine('Theme toggled.');
+        return true;
+      },
+      'sudo': () => {
+        addLine('Nice try. This incident will be reported.', 'error');
+        return true;
+      },
+      'rm -rf /': () => {
+        addLine('┌─────────────────────────────────────────┐', 'error');
+        addLine('│  🔥 SYSTEM MELTDOWN INITIATED           │', 'error');
+        addLine('│                                         │');
+        addLine('│  Just kidding! Nothing was deleted.     │');
+        addLine('│  Please be careful with rm -rf          │');
+        addLine('└─────────────────────────────────────────┘', 'error');
+        return true;
+      },
+      '42': () => {
+        addLine('The Answer to the Ultimate Question of Life, the Universe, and Everything.');
+        return true;
+      }
+    };
+
+    // Extend runCommand to include secrets
+    const originalRunCommand = runCommand;
+    runCommand = function(cmd) {
+      const command = cmd.toLowerCase().trim();
+      
+      // Check for secret commands first
+      if (secretCommands[command]) {
+        if (terminalInput) terminalInput.value = '';
+        addLine(cmd, 'command');
+        secretCommands[command]();
+        return;
+      }
+      
+      // Fall back to original
+      originalRunCommand(cmd);
+    };
+
+    // Page Load Time
+    let pageLoadTime = Date.now();
+
+    // =============================================
+    // INITIALIZE ALL NEW FEATURES
+    // =============================================
+    
     // Initialize all modules
     initSectionVisibility();
     initContactModule();
@@ -2384,6 +4331,64 @@
     renderFooter();
     initTheme();
     initBackToPosition();
+    
+    // Initialize new features
+    runBootSequence();
+    renderPeriodicTable();
+    renderSkillBars();
+    initChessBoard();
+    startNowPlayingUpdates();
+    fetchGitHubActivity();
+    refreshQuote();
+    detectLocation();
+    initVisitorCounter();
+    initScrollReveal();
+    enhanceTerminal();
+    calculateReadingTime();
+    updateFavicon();
+    
+    // Event listeners
+    document.addEventListener('keydown', handleKeyboardShortcuts);
+    
+    // Status bar interval
+    setInterval(updateStatusBar, 2000);
+    
+    // Update favicon on theme change
+    const observer = new MutationObserver(updateFavicon);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    
+    // Cursor trail effect (desktop only)
+    if (!window.matchMedia('(pointer: coarse)').matches) {
+      const trails = [];
+      const maxTrails = 10;
+      
+      document.addEventListener('mousemove', (e) => {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        trail.style.left = e.pageX + 'px';
+        trail.style.top = e.pageY + 'px';
+        document.body.appendChild(trail);
+        trails.push(trail);
+        
+        if (trails.length > maxTrails) {
+          const old = trails.shift();
+          old.remove();
+        }
+        
+        setTimeout(() => {
+          trail.style.opacity = '0';
+          setTimeout(() => trail.remove(), 300);
+        }, 100);
+      });
+    }
+    
+    // Add click-to-copy for email
+    document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        copyToClipboard(link.href.replace('mailto:', ''), 'Email');
+      });
+    });
   </script>
 </body>
 </html>
