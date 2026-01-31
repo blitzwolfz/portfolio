@@ -5113,13 +5113,16 @@
         businessCardMode.classList.add('hidden');
         businessCardMode.style.display = 'none';
         document.body.classList.remove('business-card-active');
+        // Ensure scrolling is enabled
         document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
       } else {
         // First time visitor - show business card
         businessCardMode.style.display = 'flex';
         businessCardMode.classList.remove('hidden');
         document.body.classList.add('business-card-active');
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
         
         // Mark as visited for next time
         localStorage.setItem('hasVisitedPortfolio', 'true');
@@ -5137,6 +5140,7 @@
         businessCardMode.classList.remove('hidden');
         document.body.classList.add('business-card-active');
         document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
         
         // Update button text
         if (btn) btn.textContent = 'FULL_SITE →';
@@ -5157,7 +5161,10 @@
       businessCardMode.classList.add('hidden');
       businessCardMode.style.display = 'none';
       document.body.classList.remove('business-card-active');
+      
+      // Restore scrolling on both body and html element
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       
       // Update button text
       if (btn) btn.textContent = 'BUSINESS_CARD 🃏';
