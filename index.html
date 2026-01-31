@@ -61,7 +61,7 @@
       inset: 0;
       background: #0a0a0a;
       z-index: 9999;
-      display: flex;
+      display: none;
       flex-direction: column;
       justify-content: flex-start;
       padding: 2rem;
@@ -685,6 +685,166 @@
       50% { border-color: currentColor }
     }
 
+    /* ============================================
+       BUSINESS CARD MODE
+       ============================================ */
+    #business-card-mode {
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+      display: flex !important;
+      opacity: 1;
+      visibility: visible;
+    }
+    #business-card-mode.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      display: none !important;
+    }
+    
+    /* When business card is active, hide all main content */
+    body.business-card-active nav,
+    body.business-card-active > section,
+    body.business-card-active > footer {
+      display: none !important;
+    }
+    body.business-card-active #status-bar {
+      display: none !important;
+    }
+    
+    /* Ensure business card content is visible - LIGHT MODE BY DEFAULT */
+    .business-card-front *,
+    .business-card-back * {
+      color: #0a0a0a;
+    }
+    
+    .dark .business-card-front *,
+    .dark .business-card-back * {
+      color: #f5f5f7;
+    }
+    
+    /* Explicit text colors for business card */
+    .business-card-front h1,
+    .business-card-front p,
+    .business-card-front a,
+    .business-card-front span,
+    .business-card-back h3,
+    .business-card-back div,
+    .business-card-back span {
+      color: #0a0a0a;
+    }
+    .dark .business-card-front h1,
+    .dark .business-card-front p,
+    .dark .business-card-front a,
+    .dark .business-card-front span,
+    .dark .business-card-back h3,
+    .dark .business-card-back div,
+    .dark .business-card-back span {
+      color: #f5f5f7;
+    }
+    
+    /* Business card links */
+    .business-card-front a {
+      color: #0a0a0a !important;
+    }
+    .dark .business-card-front a {
+      color: #f5f5f7 !important;
+    }
+    
+    .business-card-container {
+      width: 100%;
+      max-width: 400px;
+      height: 560px;
+      perspective: 1000px;
+      cursor: pointer;
+      position: relative;
+      z-index: 201;
+    }
+    @media (max-width: 480px) {
+      .business-card-container {
+        max-width: 320px;
+        height: 480px;
+      }
+    }
+    @media (max-height: 700px) {
+      .business-card-container {
+        height: 450px;
+      }
+    }
+    @media (max-height: 600px) {
+      .business-card-container {
+        height: 400px;
+      }
+    }
+    
+    .business-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 400px;
+      text-align: center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+    }
+    
+    .business-card-container.flipped .business-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .business-card-container.flipped .business-card-inner {
+      transform: rotateY(180deg);
+    }
+    
+    .business-card-front,
+    .business-card-back {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      padding: 24px;
+      background-color: #f5f5f7 !important;
+      color: #0a0a0a !important;
+      border: 3px solid #0a0a0a;
+      box-shadow: 8px 8px 0px 0px #0a0a0a;
+      overflow-y: auto;
+      visibility: visible !important;
+      opacity: 1 !important;
+      display: block !important;
+    }
+    @media (max-width: 480px) {
+      .business-card-front,
+      .business-card-back {
+        padding: 16px;
+      }
+    }
+    
+    .dark .business-card-front,
+    .dark .business-card-back {
+      background-color: #1c1c1e !important;
+      color: #f5f5f7 !important;
+      border-color: #f5f5f7;
+      box-shadow: 8px 8px 0px 0px #f5f5f7;
+    }
+    
+    /* Dark mode for business card mode container */
+    .dark #business-card-mode {
+      background-color: #0a0a0a !important;
+    }
+    
+    .business-card-back {
+      transform: rotateY(180deg);
+    }
+    
+    /* QR code styling */
+    .qr-pattern {
+      display: inline-block;
+      font-family: monospace;
+      line-height: 0.8;
+      letter-spacing: -1px;
+    }
+
     /* === Mobile safety: prevent horizontal scroll + iOS font zoom weirdness === */
     html, body { max-width: 100%; overflow-x: hidden; }
     input, textarea, button { font-size: 16px; } /* iOS: prevents zoom on focus */
@@ -876,12 +1036,196 @@
 
   <!-- EmailJS SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
+  <!-- Immediate business card visibility (prevents flash of blank screen) -->
+  <script>
+    // Show business card immediately if first visit
+    (function() {
+      const hasVisited = localStorage.getItem('hasVisitedPortfolio');
+      if (!hasVisited) {
+        document.documentElement.style.overflow = 'hidden';
+      }
+    })();
+  </script>
+  
+  <!-- Noscript styles for no-JS fallback -->
+  <noscript>
+    <style>
+      /* When JS is disabled, hide everything except business card */
+      body > nav,
+      body > section,
+      body > footer,
+      body > #status-bar,
+      body > #boot-overlay,
+      body > #noise-overlay,
+      body > #scanlines,
+      body > #matrix-canvas,
+      body > #grid-bg,
+      body > #radar-scan,
+      body > #toast-container,
+      body > #compile-overlay,
+      body > #shortcuts-help {
+        display: none !important;
+      }
+      #business-card-mode {
+        display: flex !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        z-index: 100000 !important;
+        position: fixed !important;
+        inset: 0 !important;
+      }
+      #business-card-mode * {
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+      #enter-full-site-btn {
+        display: none !important;
+      }
+      #no-js-message {
+        display: block !important;
+      }
+      /* Force light mode for no-JS */
+      body, .business-card-front, .business-card-back {
+        background-color: #f5f5f7 !important;
+        color: #0a0a0a !important;
+      }
+      .business-card-front, .business-card-back {
+        border-color: #0a0a0a !important;
+        box-shadow: 8px 8px 0px 0px #0a0a0a !important;
+      }
+    </style>
+  </noscript>
 </head>
 
-<body class="bg-brutal-white text-brutal-black dark:bg-brutal-black dark:text-brutal-white">
+<body class="bg-brutal-white text-brutal-black">
 
   <!-- SYSTEM BOOT OVERLAY -->
   <div id="boot-overlay"></div>
+
+  <!-- BUSINESS CARD MODE -->
+  <div id="business-card-mode" class="fixed inset-0 flex items-center justify-center p-4" style="display: flex; z-index: 10000; background-color: #f5f5f7;">
+    <div class="business-card-container">
+      <!-- Card Inner (for flip animation) -->
+      <div id="business-card-inner" class="business-card-inner">
+        <!-- Front of Card -->
+        <div class="business-card-front" style="visibility: visible; opacity: 1;">
+          <div class="flex flex-col items-center text-center" style="min-height: 100%;">
+            <!-- Profile Image -->
+            <div class="w-24 h-24 sm:w-28 sm:h-28 mb-4 overflow-hidden border-[3px] border-brutal-black dark:border-brutal-white bg-brutal-black dark:bg-brutal-white flex items-center justify-center">
+              <img src="headshot.png" alt="Samin Qureshi" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-3xl\'>SQ</span>';">
+            </div>
+            
+            <!-- Name & Title -->
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tighter mb-1" style="color: inherit;">SAMIN QURESHI</h1>
+            <p class="mono text-xs sm:text-sm mb-2" style="color: #0a84ff;">SOFTWARE DEVELOPER</p>
+            <p class="text-[10px] sm:text-xs mb-4 max-w-[200px]" style="opacity: 0.7;">Building chess engines, iOS apps, and code intelligence platforms.</p>
+            
+            <!-- Contact Info -->
+            <div class="space-y-1 mono text-[10px] sm:text-xs mb-4">
+              <a href="mailto:saminm.qureshi@gmail.com" class="block hover:opacity-70 transition-opacity" style="color: inherit; text-decoration: underline;">saminm.qureshi@gmail.com</a>
+              <a href="https://github.com/blitzwolfz" target="_blank" class="block hover:opacity-70 transition-opacity" style="color: inherit; text-decoration: underline;">github.com/blitzwolfz</a>
+              <a href="https://linkedin.com/in/saminqureshi" target="_blank" class="block hover:opacity-70 transition-opacity" style="color: inherit; text-decoration: underline;">linkedin.com/in/saminqureshi</a>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="flex gap-4 text-[10px] mono mt-auto">
+              <span class="px-2 py-1 font-bold" style="background: #FFD700; color: #0a0a0a;">TORONTO</span>
+              <span class="px-2 py-1 font-bold" style="background: #30D158; color: #0a0a0a;">OPEN TO WORK</span>
+            </div>
+            
+            <!-- Flip Hint -->
+            <p class="text-[8px] sm:text-[10px] mt-3 mono" style="opacity: 0.4;">Click card to flip →</p>
+          </div>
+        </div>
+        
+        <!-- Back of Card -->
+        <div class="business-card-back" style="visibility: visible; opacity: 1;">
+          <div class="flex flex-col" style="min-height: 100%;">
+            <h3 class="text-sm font-bold mb-3 mono">SKILLS<span class="text-brutal-cyan">_OVERVIEW</span></h3>
+            
+            <!-- Skills Grid -->
+            <div class="grid grid-cols-2 gap-2 text-[9px] sm:text-[10px] mb-4">
+              <div class="p-2 bg-brutal-blue/10 border border-brutal-blue/30">
+                <div class="font-bold">Swift</div>
+                <div class="opacity-70">Expert • 3+ yrs</div>
+              </div>
+              <div class="p-2 bg-brutal-blue/10 border border-brutal-blue/30">
+                <div class="font-bold">C++</div>
+                <div class="opacity-70">Advanced • 2+ yrs</div>
+              </div>
+              <div class="p-2 bg-brutal-yellow/10 border border-brutal-yellow/30">
+                <div class="font-bold">SwiftUI</div>
+                <div class="opacity-70">Expert • 3+ yrs</div>
+              </div>
+              <div class="p-2 bg-brutal-yellow/10 border border-brutal-yellow/30">
+                <div class="font-bold">React</div>
+                <div class="opacity-70">Proficient • 2+ yrs</div>
+              </div>
+              <div class="p-2 bg-brutal-green/10 border border-brutal-green/30">
+                <div class="font-bold">Git</div>
+                <div class="opacity-70">Advanced • 4+ yrs</div>
+              </div>
+              <div class="p-2 bg-brutal-red/10 border border-brutal-red/30">
+                <div class="font-bold">iOS Dev</div>
+                <div class="opacity-70">Expert • 3+ yrs</div>
+              </div>
+            </div>
+            
+            <!-- Projects -->
+            <h3 class="text-sm font-bold mb-2 mono">FEATURED<span class="text-brutal-yellow">_PROJECTS</span></h3>
+            <div class="space-y-1 text-[9px] sm:text-[10px] mb-4">
+              <div class="flex justify-between">
+                <span class="font-bold">COREX Chess Engine</span>
+                <span class="opacity-70">1800+ Elo</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="font-bold">Serenity+</span>
+                <span class="opacity-70">App Store</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="font-bold">LMNL.app</span>
+                <span class="opacity-70">Capstone</span>
+              </div>
+            </div>
+            
+            <!-- QR Code Placeholder -->
+            <div class="mt-auto flex items-center gap-3">
+              <div class="w-16 h-16 bg-brutal-black dark:bg-brutal-white p-1">
+                <div class="w-full h-full bg-brutal-white dark:bg-brutal-black flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="text-[6px] mono leading-none">
+                      ■■■■■■■<br>
+                      ■ ■ ■ ■<br>
+                      ■■■■■■■<br>
+                      ■ ■ ■ ■<br>
+                      ■■■■■■■
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[8px] sm:text-[9px] mono opacity-70">
+                Scan for<br>full portfolio
+              </div>
+            </div>
+            
+            <!-- Flip Hint -->
+            <p class="text-[8px] sm:text-[10px] opacity-40 mt-3 mono text-center">← Click card to flip</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Enter Full Site Button (only shows with JS) -->
+    <button id="enter-full-site-btn" onclick="exitBusinessCard()" class="fixed bottom-8 left-1/2 -translate-x-1/2 brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-6 py-3 mono font-bold text-sm hover:scale-105 transition-transform hidden" style="z-index: 10001;">
+      ENTER_FULL_SITE →
+    </button>
+    
+    <!-- No JS Message (shown via CSS when JS is disabled) -->
+    <div id="no-js-message" class="fixed bottom-8 left-1/2 -translate-x-1/2 text-center" style="display: none;">
+      <p class="mono text-xs opacity-60">Enable JavaScript for full portfolio experience</p>
+    </div>
+  </div>
 
   <!-- NOISE TEXTURE OVERLAY -->
   <div id="noise-overlay"></div>
@@ -1042,6 +1386,9 @@
           <a href="#contact" class="brutal-card inline-flex justify-center bg-transparent px-6 md:px-8 py-3 mono font-bold">
             CONTACT_
           </a>
+          <button onclick="toggleBusinessCard()" id="business-card-btn" class="brutal-card inline-flex justify-center bg-brutal-yellow text-brutal-black px-6 md:px-8 py-3 mono font-bold">
+            BUSINESS_CARD 🃏
+          </button>
         </div>
       </div>
 
@@ -2760,12 +3107,15 @@
     }
 
     function initTheme() {
-      if (
-        localStorage.theme === "dark" ||
-        (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)
-      ) {
+      // Default to light mode - only use dark if explicitly set
+      if (localStorage.theme === "dark") {
         document.documentElement.classList.add("dark");
         document.getElementById("theme-text").textContent = "LIGHT_MODE";
+      } else {
+        // Ensure light mode is active
+        document.documentElement.classList.remove("dark");
+        document.getElementById("theme-text").textContent = "DARK_MODE";
+        localStorage.theme = "light";
       }
     }
 
@@ -3437,6 +3787,9 @@
         overlay.classList.add('boot-complete');
         return;
       }
+      
+      // Show the overlay
+      overlay.style.display = 'flex';
 
       const bootLines = [
         { text: "BIOS DATE 01/30/26 20:28:57", type: "info", delay: 100 },
@@ -4683,6 +5036,17 @@
       '42': () => {
         addLine('The Answer to the Ultimate Question of Life, the Universe, and Everything.');
         return true;
+      },
+      'businesscard': () => {
+        toggleBusinessCard();
+        addLine('Toggling business card mode...');
+        return true;
+      },
+      'reset': () => {
+        localStorage.removeItem('hasVisitedPortfolio');
+        sessionStorage.removeItem('bootCompleted');
+        addLine('First visit status reset. Refresh to see business card again.');
+        return true;
       }
     };
 
@@ -4707,6 +5071,104 @@
     let pageLoadTime = Date.now();
 
     // =============================================
+    // BUSINESS CARD MODE
+    // =============================================
+    
+    // Check if user has visited before
+    function initBusinessCard() {
+      const businessCardMode = document.getElementById('business-card-mode');
+      const enterFullSiteBtn = document.getElementById('enter-full-site-btn');
+      const businessCardContainer = document.querySelector('.business-card-container');
+      
+      if (!businessCardMode) {
+        console.error('Business card mode element not found');
+        return;
+      }
+      
+      // Show the "Enter Full Site" button (JS is enabled)
+      if (enterFullSiteBtn) {
+        enterFullSiteBtn.classList.remove('hidden');
+      }
+      
+      // Add click handler for card flip
+      if (businessCardContainer) {
+        businessCardContainer.addEventListener('click', function(e) {
+          // Don't flip if clicking on a link
+          if (e.target.tagName === 'A') return;
+          this.classList.toggle('flipped');
+        });
+      }
+      
+      // Check if user has seen the site before
+      const hasVisited = localStorage.getItem('hasVisitedPortfolio');
+      
+      // Ensure light mode by default for first visit
+      if (!localStorage.theme) {
+        localStorage.theme = 'light';
+        document.documentElement.classList.remove('dark');
+      }
+      
+      if (hasVisited) {
+        // User has been here before, hide business card
+        businessCardMode.classList.add('hidden');
+        businessCardMode.style.display = 'none';
+        document.body.classList.remove('business-card-active');
+        document.body.style.overflow = '';
+      } else {
+        // First time visitor - show business card
+        businessCardMode.style.display = 'flex';
+        businessCardMode.classList.remove('hidden');
+        document.body.classList.add('business-card-active');
+        document.body.style.overflow = 'hidden';
+        
+        // Mark as visited for next time
+        localStorage.setItem('hasVisitedPortfolio', 'true');
+      }
+    }
+    
+    function toggleBusinessCard() {
+      const businessCardMode = document.getElementById('business-card-mode');
+      const btn = document.getElementById('business-card-btn');
+      if (!businessCardMode) return;
+      
+      if (businessCardMode.classList.contains('hidden')) {
+        // Show business card
+        businessCardMode.style.display = 'flex';
+        businessCardMode.classList.remove('hidden');
+        document.body.classList.add('business-card-active');
+        document.body.style.overflow = 'hidden';
+        
+        // Update button text
+        if (btn) btn.textContent = 'FULL_SITE →';
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        // Hide business card
+        exitBusinessCard();
+      }
+    }
+    
+    function exitBusinessCard() {
+      const businessCardMode = document.getElementById('business-card-mode');
+      const btn = document.getElementById('business-card-btn');
+      if (!businessCardMode) return;
+      
+      businessCardMode.classList.add('hidden');
+      businessCardMode.style.display = 'none';
+      document.body.classList.remove('business-card-active');
+      document.body.style.overflow = '';
+      
+      // Update button text
+      if (btn) btn.textContent = 'BUSINESS_CARD 🃏';
+      
+      // Start the boot sequence if it hasn't run
+      if (!sessionStorage.getItem('bootCompleted')) {
+        runBootSequence();
+      }
+    }
+
+    // =============================================
     // INITIALIZE ALL NEW FEATURES
     // =============================================
     
@@ -4727,7 +5189,7 @@
     initBackToPosition();
     
     // Initialize new features
-    runBootSequence();
+    initBusinessCard(); // This shows business card first; boot sequence runs after card is dismissed
     renderPeriodicTable();
     renderSkillBars();
     initChessBoard();
