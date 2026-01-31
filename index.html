@@ -257,9 +257,14 @@
        ============================================ */
     .skill-bar-container {
       background: rgba(10, 10, 10, 0.1);
-      height: 8px;
+      height: 6px;
       overflow: hidden;
       position: relative;
+    }
+    @media (min-width: 640px) {
+      .skill-bar-container {
+        height: 8px;
+      }
     }
     .dark .skill-bar-container {
       background: rgba(245, 245, 247, 0.1);
@@ -272,6 +277,16 @@
     }
     .skill-bar.animate {
       width: var(--skill-level);
+    }
+    
+    /* Skill item text sizing */
+    .skill-item .text-xs {
+      font-size: 10px;
+    }
+    @media (min-width: 640px) {
+      .skill-item .text-xs {
+        font-size: 12px;
+      }
     }
 
     /* ============================================
@@ -294,13 +309,28 @@
        ============================================ */
     .typing-game-display {
       font-family: "IBM Plex Mono", monospace;
-      font-size: 18px;
+      font-size: 14px;
       line-height: 1.8;
-      padding: 20px;
+      padding: 12px;
       background: #0a0a0a;
       color: #f5f5f7;
       border: 3px solid #f5f5f7;
-      min-height: 120px;
+      min-height: 100px;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    @media (min-width: 640px) {
+      .typing-game-display {
+        font-size: 16px;
+        padding: 16px;
+        min-height: 120px;
+      }
+    }
+    @media (min-width: 768px) {
+      .typing-game-display {
+        font-size: 18px;
+        padding: 20px;
+      }
     }
     .typing-char {
       position: relative;
@@ -335,8 +365,14 @@
       gap: 0;
       border: 3px solid #0a0a0a;
       width: 100%;
-      max-width: 400px;
+      max-width: 320px;
       aspect-ratio: 1;
+      margin: 0 auto;
+    }
+    @media (min-width: 640px) {
+      #chess-board {
+        max-width: 400px;
+      }
     }
     .dark #chess-board {
       border-color: #f5f5f7;
@@ -346,9 +382,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 32px;
+      font-size: 24px;
       cursor: pointer;
       user-select: none;
+    }
+    @media (min-width: 640px) {
+      .chess-square {
+        font-size: 32px;
+      }
     }
     .chess-square.light {
       background: #f5f5f7;
@@ -371,15 +412,40 @@
     /* ============================================
        PERIODIC TABLE OF SKILLS
        ============================================ */
+    .periodic-table-container {
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: #0a0a0a transparent;
+    }
+    .dark .periodic-table-container {
+      scrollbar-color: #f5f5f7 transparent;
+    }
+    .periodic-table-container::-webkit-scrollbar {
+      height: 6px;
+    }
+    .periodic-table-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .periodic-table-container::-webkit-scrollbar-thumb {
+      background: #0a0a0a;
+      border-radius: 3px;
+    }
+    .dark .periodic-table-container::-webkit-scrollbar-thumb {
+      background: #f5f5f7;
+    }
     .periodic-table {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 8px;
+      grid-template-columns: repeat(8, minmax(70px, 1fr));
+      gap: 6px;
       font-family: "IBM Plex Mono", monospace;
+      min-width: 600px;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 640px) {
       .periodic-table {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(8, minmax(60px, 1fr));
+        gap: 4px;
+        min-width: 520px;
       }
     }
     .periodic-element {
@@ -389,28 +455,81 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px;
-      font-size: 10px;
+      padding: 6px 4px;
+      font-size: 9px;
       transition: all 0.2s ease;
       cursor: pointer;
+      position: relative;
+      min-height: 70px;
+    }
+    @media (min-width: 640px) {
+      .periodic-element {
+        padding: 8px;
+        font-size: 10px;
+        min-height: 80px;
+      }
     }
     .periodic-element:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       z-index: 10;
+      box-shadow: 4px 4px 0px 0px currentColor;
+    }
+    .periodic-element .number {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      font-size: 8px;
+      opacity: 0.6;
+    }
+    @media (min-width: 640px) {
+      .periodic-element .number {
+        top: 4px;
+        left: 6px;
+        font-size: 10px;
+      }
     }
     .periodic-element .symbol {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
+      margin-top: 4px;
+    }
+    @media (min-width: 640px) {
+      .periodic-element .symbol {
+        font-size: 18px;
+      }
     }
     .periodic-element .name {
-      font-size: 8px;
+      font-size: 7px;
       text-align: center;
       margin-top: 2px;
+      line-height: 1.2;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .element-language { background: rgba(10, 132, 255, 0.2); border-color: #0a84ff; }
-    .element-framework { background: rgba(255, 215, 0, 0.2); border-color: #ffd700; }
-    .element-tool { background: rgba(48, 209, 88, 0.2); border-color: #30d158; }
-    .element-domain { background: rgba(255, 69, 58, 0.2); border-color: #ff453a; }
+    @media (min-width: 640px) {
+      .periodic-element .name {
+        font-size: 8px;
+      }
+    }
+    .element-language { background: rgba(10, 132, 255, 0.2); border-color: #0a84ff; color: #0a84ff; }
+    .dark .element-language { color: #64d2ff; }
+    .element-framework { background: rgba(255, 215, 0, 0.2); border-color: #ffd700; color: #b39500; }
+    .dark .element-framework { color: #ffd700; }
+    .element-tool { background: rgba(48, 209, 88, 0.2); border-color: #30d158; color: #30d158; }
+    .dark .element-tool { color: #30d158; }
+    .element-domain { background: rgba(255, 69, 58, 0.2); border-color: #ff453a; color: #ff453a; }
+    .dark .element-domain { color: #ff453a; }
+    
+    /* Skill Modal */
+    #skill-modal.active {
+      display: flex;
+    }
+    #skill-modal-header.element-language { background: rgba(10, 132, 255, 0.2); }
+    #skill-modal-header.element-framework { background: rgba(255, 215, 0, 0.2); }
+    #skill-modal-header.element-tool { background: rgba(48, 209, 88, 0.2); }
+    #skill-modal-header.element-domain { background: rgba(255, 69, 58, 0.2); }
 
     /* ============================================
        SYSTEM TOAST NOTIFICATIONS
@@ -1487,22 +1606,39 @@
   <!-- SECTION: PERIODIC TABLE OF SKILLS             -->
   <!-- ============================================== -->
   <section id="skills" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
-    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
-      SKILL<span class="text-brutal-cyan">_MATRIX</span>
-      <span class="mono text-sm font-normal opacity-60 ml-4">[PERIODIC TABLE]</span>
-    </h2>
+    <div class="mb-8 md:mb-12">
+      <h2 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
+        SKILL<span class="text-brutal-cyan">_MATRIX</span>
+      </h2>
+      <p class="mono text-xs sm:text-sm opacity-60 mt-2">[PERIODIC TABLE]</p>
+    </div>
 
     <!-- Periodic Table of Skills -->
-    <div class="brutal-card bg-white dark:bg-brutal-dark p-6 mb-8">
-      <h3 class="text-lg font-bold mb-4 tracking-tight">PERIODIC<span class="text-brutal-yellow">_TABLE.OF</span>_SKILLS</h3>
-      <div class="periodic-table" id="periodic-table">
-        <!-- Populated by JS -->
+    <div class="brutal-card bg-white dark:bg-brutal-dark p-4 sm:p-6 mb-8">
+      <h3 class="text-base sm:text-lg font-bold mb-4 tracking-tight">PERIODIC<span class="text-brutal-yellow">_TABLE.OF</span>_SKILLS</h3>
+      <div class="periodic-table-container overflow-x-auto pb-2">
+        <div class="periodic-table" id="periodic-table">
+          <!-- Populated by JS -->
+        </div>
       </div>
-      <div class="flex flex-wrap gap-4 mt-6 text-xs mono">
-        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-blue/20 border border-brutal-blue"></span> Languages</span>
-        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-yellow/20 border border-brutal-yellow"></span> Frameworks</span>
-        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-green/20 border border-brutal-green"></span> Tools</span>
-        <span class="flex items-center gap-2"><span class="w-3 h-3 bg-brutal-red/20 border border-brutal-red"></span> Domains</span>
+      <div class="flex flex-wrap gap-2 sm:gap-4 mt-4 sm:mt-6 text-[10px] sm:text-xs mono">
+        <span class="flex items-center gap-1 sm:gap-2"><span class="w-2 h-2 sm:w-3 sm:h-3 bg-brutal-blue/20 border border-brutal-blue"></span> Languages</span>
+        <span class="flex items-center gap-1 sm:gap-2"><span class="w-2 h-2 sm:w-3 sm:h-3 bg-brutal-yellow/20 border border-brutal-yellow"></span> Frameworks</span>
+        <span class="flex items-center gap-1 sm:gap-2"><span class="w-2 h-2 sm:w-3 sm:h-3 bg-brutal-green/20 border border-brutal-green"></span> Tools</span>
+        <span class="flex items-center gap-1 sm:gap-2"><span class="w-2 h-2 sm:w-3 sm:h-3 bg-brutal-red/20 border border-brutal-red"></span> Domains</span>
+      </div>
+    </div>
+
+    <!-- Skill Detail Modal -->
+    <div id="skill-modal" class="fixed inset-0 z-[100] bg-black/80 hidden items-center justify-center p-4" onclick="closeSkillModal()">
+      <div class="brutal-card bg-white dark:bg-brutal-dark max-w-md w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+        <div id="skill-modal-header" class="px-4 py-3 border-b-[3px] border-brutal-black dark:border-brutal-white flex items-center justify-between">
+          <span class="mono text-sm font-bold">SKILL_DETAILS.JSON</span>
+          <button onclick="closeSkillModal()" class="w-8 h-8 brutal-card bg-brutal-red text-white flex items-center justify-center text-lg font-bold hover:opacity-80">✕</button>
+        </div>
+        <div id="skill-modal-content" class="p-4 sm:p-6">
+          <!-- Populated by JS -->
+        </div>
       </div>
     </div>
 
@@ -3474,36 +3610,256 @@
     }
 
     // Periodic Table of Skills
+    const skillElements = [
+      { 
+        symbol: 'Sw', name: 'Swift', type: 'language', number: 1, 
+        level: 'Expert', years: '3+', 
+        description: 'Primary language for iOS development. Built multiple apps including Serenity+ and LMNL.',
+        projects: ['Serenity+', 'LMNL.app', 'Personal Tools'],
+        related: ['SwiftUI', 'UIKit', 'Core Data']
+      },
+      { 
+        symbol: 'C+', name: 'C++', type: 'language', number: 2, 
+        level: 'Advanced', years: '2+', 
+        description: 'Used for performance-critical applications including chess engine development.',
+        projects: ['Chess Engine', 'Algorithm Optimization'],
+        related: ['Bitboards', 'Zobrist Hashing', 'GPU Acceleration']
+      },
+      { 
+        symbol: 'Ja', name: 'Java', type: 'language', number: 3, 
+        level: 'Advanced', years: '3+', 
+        description: 'Academic and enterprise development. Used for Gomoku AI and payroll systems.',
+        projects: ['Gomoku Bot', 'HR Payroll System', 'Employee Management'],
+        related: ['JavaFX', 'Spring', 'OOP Design']
+      },
+      { 
+        symbol: 'Ts', name: 'TypeScript', type: 'language', number: 4, 
+        level: 'Proficient', years: '2+', 
+        description: 'Full-stack web development with type safety.',
+        projects: ['This Portfolio', 'LMNL Backend', 'Web Apps'],
+        related: ['React', 'Node.js', 'Express']
+      },
+      { 
+        symbol: 'Py', name: 'Python', type: 'language', number: 5, 
+        level: 'Intermediate', years: '2+', 
+        description: 'Scripting, automation, and academic projects.',
+        projects: ['Monster Fighting Game', 'Data Processing', 'Automation Scripts'],
+        related: ['TUI', 'OOP', 'Scripting']
+      },
+      { 
+        symbol: 'C#', name: 'C#', type: 'language', number: 6, 
+        level: 'Proficient', years: '1+', 
+        description: '.NET development for inventory and management systems.',
+        projects: ['Inventory Management', '.NET Applications'],
+        related: ['.NET', 'ASP.NET', 'SQL Server']
+      },
+      { 
+        symbol: 'Ui', name: 'SwiftUI', type: 'framework', number: 7, 
+        level: 'Expert', years: '3+', 
+        description: 'Modern declarative UI framework for Apple platforms.',
+        projects: ['Serenity+', 'LMNL iOS', 'Prototypes'],
+        related: ['Swift', 'Combine', 'Core Data']
+      },
+      { 
+        symbol: 'R+', name: 'React', type: 'framework', number: 8, 
+        level: 'Proficient', years: '2+', 
+        description: 'Component-based frontend development.',
+        projects: ['LMNL Web', 'Dashboards', 'Interactive UIs'],
+        related: ['TypeScript', 'Next.js', 'Tailwind']
+      },
+      { 
+        symbol: 'Nd', name: 'Node.js', type: 'framework', number: 9, 
+        level: 'Proficient', years: '2+', 
+        description: 'Server-side JavaScript runtime for backend services.',
+        projects: ['LMNL Backend', 'APIs', 'Real-time Services'],
+        related: ['Express', 'WebSocket', 'REST APIs']
+      },
+      { 
+        symbol: 'Ex', name: 'Express', type: 'framework', number: 10, 
+        level: 'Proficient', years: '2+', 
+        description: 'Minimalist web framework for Node.js.',
+        projects: ['REST APIs', 'Backend Services', 'Middleware'],
+        related: ['Node.js', 'MongoDB', 'Authentication']
+      },
+      { 
+        symbol: 'Gi', name: 'Git', type: 'tool', number: 11, 
+        level: 'Advanced', years: '4+', 
+        description: 'Version control and collaborative development.',
+        projects: ['All Projects', 'Open Source', 'Team Collaboration'],
+        related: ['GitHub', 'GitFlow', 'CI/CD']
+      },
+      { 
+        symbol: 'Vs', name: 'VS Code', type: 'tool', number: 12, 
+        level: 'Expert', years: '4+', 
+        description: 'Primary code editor with extensive customization.',
+        projects: ['Everything!', 'Extensions', 'Themes'],
+        related: ['Extensions', 'Debugger', 'Terminal']
+      },
+      { 
+        symbol: 'Su', name: 'Supabase', type: 'tool', number: 13, 
+        level: 'Proficient', years: '1+', 
+        description: 'Firebase alternative with PostgreSQL backend.',
+        projects: ['LMNL.app', 'Authentication', 'Real-time DB'],
+        related: ['PostgreSQL', 'Auth', 'Real-time']
+      },
+      { 
+        symbol: 'Xc', name: 'Xcode', type: 'tool', number: 14, 
+        level: 'Expert', years: '3+', 
+        description: 'Apple IDE for iOS/macOS development.',
+        projects: ['Serenity+', 'LMNL', 'Metal Shaders'],
+        related: ['Simulator', 'Debugger', 'Instruments']
+      },
+      { 
+        symbol: 'iO', name: 'iOS Dev', type: 'domain', number: 15, 
+        level: 'Expert', years: '3+', 
+        description: 'End-to-end iOS app development and App Store deployment.',
+        projects: ['Serenity+', 'LMNL.app', 'Personal Apps'],
+        related: ['UIKit', 'SwiftUI', 'App Store']
+      },
+      { 
+        symbol: 'Ce', name: 'Chess AI', type: 'domain', number: 16, 
+        level: 'Advanced', years: '2+', 
+        description: 'Game engine development with AI opponents. 1800+ Elo rating.',
+        projects: ['COREX Engine', 'Gomoku Bot', 'AI Research'],
+        related: ['Minimax', 'Bitboards', 'GPU Compute']
+      },
+      { 
+        symbol: 'Cm', name: 'Compilers', type: 'domain', number: 17, 
+        level: 'Intermediate', years: '1+', 
+        description: 'Language design and compiler construction.',
+        projects: ['Custom Language', 'LLVM', 'Parser Design'],
+        related: ['LLVM', 'Parser', 'AST']
+      },
+      { 
+        symbol: 'Fs', name: 'Full Stack', type: 'domain', number: 18, 
+        level: 'Proficient', years: '2+', 
+        description: 'End-to-end web application development.',
+        projects: ['LMNL.app', 'This Portfolio', 'Web Services'],
+        related: ['Frontend', 'Backend', 'Databases']
+      },
+      { 
+        symbol: 'Me', name: 'Metal', type: 'domain', number: 19, 
+        level: 'Intermediate', years: '1+', 
+        description: 'GPU programming and shaders for iOS.',
+        projects: ['Shader Experiments', 'GPU Compute', 'Graphics'],
+        related: ['Shaders', 'GPU', 'Graphics']
+      },
+      { 
+        symbol: 'Db', name: 'Databases', type: 'domain', number: 20, 
+        level: 'Proficient', years: '3+', 
+        description: 'SQL and NoSQL database design and optimization.',
+        projects: ['LMNL Backend', 'Supabase', 'PostgreSQL'],
+        related: ['SQL', 'PostgreSQL', 'MongoDB']
+      },
+      { 
+        symbol: 'Al', name: 'AI/ML', type: 'domain', number: 21, 
+        level: 'Intermediate', years: '1+', 
+        description: 'Machine learning and artificial intelligence.',
+        projects: ['Code Intelligence', 'LLM Integration', 'Neural Nets'],
+        related: ['Core ML', 'LLMs', 'Python']
+      },
+      { 
+        symbol: 'Os', name: 'Systems', type: 'domain', number: 22, 
+        level: 'Intermediate', years: '1+', 
+        description: 'Low-level systems programming and OS concepts.',
+        projects: ['OS Concepts', 'Memory Management', 'Low-level'],
+        related: ['C', 'Assembly', 'Kernel']
+      },
+      { 
+        symbol: 'Cs', name: 'Core ML', type: 'tool', number: 23, 
+        level: 'Intermediate', years: '1+', 
+        description: 'Apple machine learning framework for on-device inference.',
+        projects: ['On-device AI', 'Model Integration', 'iOS ML'],
+        related: ['iOS', 'Swift', 'Neural Networks']
+      },
+      { 
+        symbol: 'Gh', name: 'GitHub', type: 'tool', number: 24, 
+        level: 'Advanced', years: '4+', 
+        description: 'Collaboration, CI/CD, and project management.',
+        projects: ['Open Source', 'Portfolio', 'Team Projects'],
+        related: ['Actions', 'Pages', 'Collaboration']
+      },
+    ];
+    
     function renderPeriodicTable() {
       const container = document.getElementById('periodic-table');
       if (!container) return;
       
-      const elements = [
-        { symbol: 'Sw', name: 'Swift', type: 'language', number: 1 },
-        { symbol: 'C+', name: 'C++', type: 'language', number: 2 },
-        { symbol: 'Ja', name: 'Java', type: 'language', number: 3 },
-        { symbol: 'Ts', name: 'TypeScript', type: 'language', number: 4 },
-        { symbol: 'Py', name: 'Python', type: 'language', number: 5 },
-        { symbol: 'Ui', name: 'SwiftUI', type: 'framework', number: 6 },
-        { symbol: 'R+', name: 'React', type: 'framework', number: 7 },
-        { symbol: 'Nd', name: 'Node.js', type: 'framework', number: 8 },
-        { symbol: 'Ex', name: 'Express', type: 'framework', number: 9 },
-        { symbol: 'Gi', name: 'Git', type: 'tool', number: 10 },
-        { symbol: 'Vs', name: 'VS Code', type: 'tool', number: 11 },
-        { symbol: 'Su', name: 'Supabase', type: 'tool', number: 12 },
-        { symbol: 'iO', name: 'iOS Dev', type: 'domain', number: 13 },
-        { symbol: 'Ce', name: 'Chess AI', type: 'domain', number: 14 },
-        { symbol: 'Cm', name: 'Compilers', type: 'domain', number: 15 },
-        { symbol: 'Fs', name: 'Full Stack', type: 'domain', number: 16 },
-      ];
-      
-      container.innerHTML = elements.map(el => `
-        <div class="periodic-element element-${el.type}" onclick="showToast('${el.name}: ${el.type.toUpperCase()}', 'info')">
+      container.innerHTML = skillElements.map(el => `
+        <div class="periodic-element element-${el.type}" onclick="openSkillModal(${el.number})">
           <span class="number">${el.number}</span>
           <span class="symbol">${el.symbol}</span>
-          <span class="name">${el.name}</span>
+          <span class="name" title="${el.name}">${el.name}</span>
         </div>
       `).join('');
+    }
+    
+    function openSkillModal(number) {
+      const skill = skillElements.find(s => s.number === number);
+      if (!skill) return;
+      
+      const modal = document.getElementById('skill-modal');
+      const header = document.getElementById('skill-modal-header');
+      const content = document.getElementById('skill-modal-content');
+      
+      if (!modal || !content) return;
+      
+      // Set header color based on type
+      header.className = `px-4 py-3 border-b-[3px] border-brutal-black dark:border-brutal-white flex items-center justify-between element-${skill.type}`;
+      
+      // Type label
+      const typeLabels = {
+        language: 'PROGRAMMING LANGUAGE',
+        framework: 'FRAMEWORK / LIBRARY',
+        tool: 'DEVELOPMENT TOOL',
+        domain: 'KNOWLEDGE DOMAIN'
+      };
+      
+      content.innerHTML = `
+        <div class="text-center mb-6">
+          <div class="inline-block brutal-card element-${skill.type} px-6 py-4 mb-4">
+            <div class="text-4xl font-bold">${skill.symbol}</div>
+            <div class="text-xs mono mt-1">${typeLabels[skill.type]}</div>
+          </div>
+          <h3 class="text-2xl font-bold">${skill.name}</h3>
+          <div class="flex justify-center gap-4 mt-2 text-sm mono">
+            <span class="px-2 py-1 bg-brutal-black/10 dark:bg-brutal-white/10 rounded">${skill.level}</span>
+            <span class="px-2 py-1 bg-brutal-black/10 dark:bg-brutal-white/10 rounded">${skill.years}</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4 text-sm">
+          <div>
+            <h4 class="font-bold mb-1 mono text-xs opacity-60 uppercase">Description</h4>
+            <p>${skill.description}</p>
+          </div>
+          
+          <div>
+            <h4 class="font-bold mb-2 mono text-xs opacity-60 uppercase">Projects</h4>
+            <div class="flex flex-wrap gap-2">
+              ${skill.projects.map(p => `<span class="px-2 py-1 brutal-card bg-brutal-black/5 dark:bg-brutal-white/10 text-xs">${p}</span>`).join('')}
+            </div>
+          </div>
+          
+          <div>
+            <h4 class="font-bold mb-2 mono text-xs opacity-60 uppercase">Related</h4>
+            <div class="flex flex-wrap gap-2">
+              ${skill.related.map(r => `<span class="px-2 py-1 text-xs border border-brutal-black/20 dark:border-brutal-white/20 rounded">${r}</span>`).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+      
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSkillModal() {
+      const modal = document.getElementById('skill-modal');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
     }
 
     // Animated Skill Bars
@@ -4022,6 +4378,13 @@
     // Keyboard Shortcuts
     let keyBuffer = '';
     function handleKeyboardShortcuts(e) {
+      // Close skill modal on Escape
+      const skillModal = document.getElementById('skill-modal');
+      if (e.key === 'Escape' && skillModal && skillModal.classList.contains('active')) {
+        closeSkillModal();
+        return;
+      }
+      
       // Don't trigger when typing in inputs
       if (e.target.matches('input, textarea')) return;
       
@@ -4031,6 +4394,9 @@
       
       // Don't trigger when typing game is active
       if (typingGameActive) return;
+      
+      // Don't trigger when skill modal is open
+      if (skillModal && skillModal.classList.contains('active')) return;
       
       // Terminal focus
       if (e.key === '/') {
