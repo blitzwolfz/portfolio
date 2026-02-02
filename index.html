@@ -686,6 +686,66 @@
     }
 
     /* ============================================
+       NAVIGATION DROPDOWN MENUS
+       ============================================ */
+    .nav-dropdown {
+      position: relative;
+    }
+    .nav-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      background: #f5f5f7;
+      border: 3px solid #0a0a0a;
+      box-shadow: 4px 4px 0px 0px #0a0a0a;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.15s ease;
+      z-index: 100;
+      margin-top: 8px;
+    }
+    .dark .nav-dropdown-menu {
+      background: #1c1c1e;
+      border-color: #f5f5f7;
+      box-shadow: 4px 4px 0px 0px #f5f5f7;
+    }
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown.active .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .nav-dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      border-bottom: 2px solid #0a0a0a;
+      transition: all 0.1s ease;
+      font-size: 12px;
+    }
+    .dark .nav-dropdown-item {
+      border-bottom-color: #f5f5f7;
+    }
+    .nav-dropdown-item:last-child {
+      border-bottom: none;
+    }
+    .nav-dropdown-item:hover {
+      background: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .dark .nav-dropdown-item:hover {
+      background: #f5f5f7;
+      color: #0a0a0a;
+    }
+    .nav-dropdown-toggle::after {
+      content: "▼";
+      font-size: 8px;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* ============================================
        BUSINESS CARD MODE
        ============================================ */
     #business-card-mode {
@@ -1306,16 +1366,45 @@
       </div>
 
       <!-- Desktop links -->
-      <div class="hidden xl:flex gap-4 mono text-sm font-bold">
-        <a href="#bio" class="hover:text-brutal-cyan transition-colors">[BIO]</a>
-        <a href="#academics" class="hover:text-brutal-blue transition-colors">[ACADEMICS]</a>
-        <a href="#capstone" class="hover:text-brutal-green transition-colors">[CAPSTONE]</a>
-        <a href="#professional" class="hover:text-brutal-red transition-colors">[PROFESSIONAL]</a>
-        <a href="#skills" class="hover:text-brutal-yellow transition-colors">[SKILLS]</a>
-        <a href="#terminal" class="hover:text-brutal-cyan transition-colors">[TERMINAL]</a>
-        <a href="#games" class="hover:text-brutal-green transition-colors">[GAMES]</a>
-        <a href="#meta" class="hover:text-brutal-blue transition-colors">[META]</a>
-        <a href="#contact" class="hover:text-brutal-yellow transition-colors">[CONTACT]</a>
+      <div class="hidden xl:flex gap-6 mono text-sm font-bold items-center">
+        <!-- About Dropdown -->
+        <div class="nav-dropdown">
+          <a href="#bio" class="nav-dropdown-toggle hover:text-brutal-cyan transition-colors">[ABOUT]</a>
+          <div class="nav-dropdown-menu">
+            <a href="#bio" class="nav-dropdown-item hover:text-brutal-cyan">[BIO]</a>
+            <a href="#resume" class="nav-dropdown-item hover:text-brutal-yellow">[RESUME]</a>
+          </div>
+        </div>
+
+        <!-- Work Dropdown -->
+        <div class="nav-dropdown">
+          <a href="#professional" class="nav-dropdown-toggle hover:text-brutal-red transition-colors">[WORK]</a>
+          <div class="nav-dropdown-menu">
+            <a href="#professional" class="nav-dropdown-item hover:text-brutal-red">[PROFESSIONAL]</a>
+            <a href="#academics" class="nav-dropdown-item hover:text-brutal-blue">[ACADEMICS]</a>
+            <a href="#capstone" class="nav-dropdown-item hover:text-brutal-green">[CAPSTONE]</a>
+            <a href="#sole-proprietorship" class="nav-dropdown-item hover:text-brutal-red">[BUSINESS]</a>
+          </div>
+        </div>
+
+        <!-- Tech Dropdown -->
+        <div class="nav-dropdown">
+          <a href="#skills" class="nav-dropdown-toggle hover:text-brutal-yellow transition-colors">[TECH]</a>
+          <div class="nav-dropdown-menu">
+            <a href="#skills" class="nav-dropdown-item hover:text-brutal-yellow">[SKILLS]</a>
+            <a href="#terminal" class="nav-dropdown-item hover:text-brutal-cyan">[TERMINAL]</a>
+            <a href="#games" class="nav-dropdown-item hover:text-brutal-green">[GAMES]</a>
+          </div>
+        </div>
+
+        <!-- Connect Dropdown -->
+        <div class="nav-dropdown">
+          <a href="#meta" class="nav-dropdown-toggle hover:text-brutal-blue transition-colors">[CONNECT]</a>
+          <div class="nav-dropdown-menu">
+            <a href="#meta" class="nav-dropdown-item hover:text-brutal-blue">[META]</a>
+            <a href="#contact" class="nav-dropdown-item hover:text-brutal-yellow">[CONTACT]</a>
+          </div>
+        </div>
       </div>
 
       <!-- Mobile actions -->
@@ -1336,17 +1425,50 @@
     </div>
 
     <!-- Mobile menu panel -->
-    <div id="mobile-menu" class="lg:hidden hidden border-t-[3px] border-brutal-black dark:border-brutal-white px-4 py-4 bg-brutal-white dark:bg-brutal-black">
-      <div class="flex flex-col gap-3 mono font-bold text-sm">
-        <a href="#bio" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[BIO]</a>
-        <a href="#academics" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[ACADEMICS]</a>
-        <a href="#capstone" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CAPSTONE]</a>
-        <a href="#professional" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[PROFESSIONAL]</a>
-        <a href="#skills" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[SKILLS]</a>
-        <a href="#terminal" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[TERMINAL]</a>
-        <a href="#games" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[GAMES]</a>
-        <a href="#meta" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[META]</a>
-        <a href="#contact" onclick="closeMobileMenu()" class="brutal-card bg-transparent px-4 py-3">[CONTACT]</a>
+    <div id="mobile-menu" class="lg:hidden hidden border-t-[3px] border-brutal-black dark:border-brutal-white px-4 py-4 bg-brutal-white dark:bg-brutal-black max-h-[70vh] overflow-y-auto">
+      <div class="flex flex-col gap-2 mono font-bold text-sm">
+        <!-- About Group -->
+        <button onclick="toggleMobileSubmenu('mobile-about')" class="brutal-card bg-transparent px-4 py-3 flex justify-between items-center">
+          <span>[ABOUT]</span>
+          <span id="mobile-about-arrow">▼</span>
+        </button>
+        <div id="mobile-about" class="hidden pl-4 flex-col gap-2">
+          <a href="#bio" onclick="closeMobileMenu()" class="brutal-card bg-brutal-cyan/10 px-4 py-2 text-xs">[BIO]</a>
+          <a href="#resume" onclick="closeMobileMenu()" class="brutal-card bg-brutal-yellow/10 px-4 py-2 text-xs">[RESUME]</a>
+        </div>
+
+        <!-- Work Group -->
+        <button onclick="toggleMobileSubmenu('mobile-work')" class="brutal-card bg-transparent px-4 py-3 flex justify-between items-center">
+          <span>[WORK]</span>
+          <span id="mobile-work-arrow">▼</span>
+        </button>
+        <div id="mobile-work" class="hidden pl-4 flex-col gap-2">
+          <a href="#professional" onclick="closeMobileMenu()" class="brutal-card bg-brutal-red/10 px-4 py-2 text-xs">[PROFESSIONAL]</a>
+          <a href="#academics" onclick="closeMobileMenu()" class="brutal-card bg-brutal-blue/10 px-4 py-2 text-xs">[ACADEMICS]</a>
+          <a href="#capstone" onclick="closeMobileMenu()" class="brutal-card bg-brutal-green/10 px-4 py-2 text-xs">[CAPSTONE]</a>
+          <a href="#sole-proprietorship" onclick="closeMobileMenu()" class="brutal-card bg-brutal-red/10 px-4 py-2 text-xs">[BUSINESS]</a>
+        </div>
+
+        <!-- Tech Group -->
+        <button onclick="toggleMobileSubmenu('mobile-tech')" class="brutal-card bg-transparent px-4 py-3 flex justify-between items-center">
+          <span>[TECH]</span>
+          <span id="mobile-tech-arrow">▼</span>
+        </button>
+        <div id="mobile-tech" class="hidden pl-4 flex-col gap-2">
+          <a href="#skills" onclick="closeMobileMenu()" class="brutal-card bg-brutal-yellow/10 px-4 py-2 text-xs">[SKILLS]</a>
+          <a href="#terminal" onclick="closeMobileMenu()" class="brutal-card bg-brutal-cyan/10 px-4 py-2 text-xs">[TERMINAL]</a>
+          <a href="#games" onclick="closeMobileMenu()" class="brutal-card bg-brutal-green/10 px-4 py-2 text-xs">[GAMES]</a>
+        </div>
+
+        <!-- Connect Group -->
+        <button onclick="toggleMobileSubmenu('mobile-connect')" class="brutal-card bg-transparent px-4 py-3 flex justify-between items-center">
+          <span>[CONNECT]</span>
+          <span id="mobile-connect-arrow">▼</span>
+        </button>
+        <div id="mobile-connect" class="hidden pl-4 flex-col gap-2">
+          <a href="#meta" onclick="closeMobileMenu()" class="brutal-card bg-brutal-blue/10 px-4 py-2 text-xs">[META]</a>
+          <a href="#contact" onclick="closeMobileMenu()" class="brutal-card bg-brutal-yellow/10 px-4 py-2 text-xs">[CONTACT]</a>
+        </div>
       </div>
     </div>
   </nav>
@@ -1373,7 +1495,7 @@
           SOFTWARE<br />
           <span class="text-brutal-blue dark:text-brutal-cyan">DEVELOPER</span>
         </h1>
-
+ 
         <p class="mono text-base md:text-lg leading-relaxed max-w-xl border-l-4 border-brutal-red pl-4">
           Building chess engines, programming languages, and Swift apps.
           Low-level performance meets high-level caffeine addiction.
@@ -1387,7 +1509,7 @@
             CONTACT_
           </a>
           <button onclick="toggleBusinessCard()" id="business-card-btn" class="brutal-card inline-flex justify-center bg-brutal-yellow text-brutal-black px-6 md:px-8 py-3 mono font-bold">
-            BUSINESS_CARD 🃏
+            BUSINESS_CARD
           </button>
         </div>
       </div>
@@ -1461,13 +1583,13 @@
         <blockquote class="text-lg md:text-xl leading-relaxed mb-4 border-l-4 border-brutal-cyan pl-4 italic">
           "We are the facilitators of our own creative evolution"
         </blockquote>
-        <p class="text-sm opacity-60 mb-6">— Bill Hicks</p>
+        <p class="text-sm opacity-60 mb-6">- Bill Hicks</p>
         <div class="space-y-4 text-sm md:text-base leading-relaxed">
           <p>
-            I believe software development is more than writing code—it's about solving real problems that impact people's lives. My journey from building chess engines to mental health applications reflects my core belief: technology should serve humanity, not the other way around.
+            I believe software development is more than writing code, it's about solving real problems  that impact people's lives. My journey from building chess engines to mental health applications reflects my core belief: technology should serve humanity, not the other way around.
           </p>
           <p>
-            Currently pursuing my education while co-founding an AI startup, I'm driven by the intersection of low-level performance optimization and user-centric design. My experience with Swift, C++, and systems programming has taught me that the best solutions often emerge from understanding problems at their deepest level. Looking ahead, I aspire to build technology that makes a meaningful difference—whether that's through accessible mental health tools, intelligent code assistance, or innovations yet to be imagined.
+            Currently pursuing my education while co-founding an AI startup, I'm driven by the intersection of low-level performance optimization and user-centric design. My experience with Swift, C++, and systems programming has taught me that the best solutions often emerge from understanding problems at their deepest level. Looking ahead, I aspire to build technology that makes a meaningful difference - whether that's through accessible mental health tools, intelligent code assistance, or innovations yet to be imagined.
           </p>
         </div>
       </div>
@@ -1499,6 +1621,17 @@
           <button onclick="toggleCoverLetter()" class="brutal-card bg-brutal-black text-white px-4 py-2 mono font-bold text-xs mt-2">
             VIEW_TEMPLATE →
           </button>
+        </div>
+
+        <!-- Sole Proprietorship Card -->
+        <div class="brutal-card bg-brutal-red text-white p-6">
+          <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
+            BUSINESS<span class="text-brutal-yellow">_ENTITY.REG</span>
+          </h3>
+          <p class="text-sm opacity-80 mb-4">Operating as a sole proprietorship for app operations and independent contracting work.</p>
+          <a href="#sole-proprietorship" class="brutal-card inline-block bg-brutal-white text-brutal-black px-4 py-2 mono font-bold text-xs hover:opacity-80 transition-opacity">
+            VIEW_DETAILS →
+          </a>
         </div>
 
         <!-- Quick Stats -->
@@ -1538,7 +1671,7 @@
             I am writing to express my interest in the Software Engineer position at [Company Name]. As a developer with hands-on experience in Swift, C++, Java, and full-stack development, combined with my current role as CTO at an AI startup, I am confident in my ability to contribute meaningfully to your team.
           </p>
           <p>
-            My technical background spans from building a 1800+ Elo chess engine with GPU acceleration to publishing Serenity+, a mental health application on the App Store. This range demonstrates my ability to work across the stack—from low-level bitboard optimizations to polished user interfaces with SwiftUI.
+            My technical background spans from building a 1800+ Elo chess engine with GPU acceleration to publishing Serenity+, a mental health application on the App Store. This range demonstrates my ability to work across the stack - from low-level bitboard optimizations to polished user interfaces with SwiftUI.
           </p>
           <p>
             Currently, I am completing my Advanced Diploma in Computer Programming Analysis at George Brown College, with plans to pursue a Bachelor of Computing at the University of Guelph starting September 2026. This academic foundation, combined with my practical experience at Toronto Metropolitan University and my startup work, has prepared me for the challenges of professional software development.
@@ -1552,6 +1685,111 @@
       </div>
     </div>
   </section>
+
+  <section id="professional" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+    <div class="max-w-6xl mx-auto">
+      <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
+        PROFESSIONAL<span class="text-brutal-red">_SUMMARY</span>
+      </h2>
+
+          <!-- Work Experience Subsection -->
+      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        WORK<span class="text-brutal-yellow">_EXPERIENCE.JSON</span>
+      </h3>
+      <div class="space-y-6 mb-12" id="work-container"></div>
+
+      <!-- Professional Work Samples (Projects) -->
+      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        PROJECT<span class="text-brutal-cyan">_SAMPLES.EXE</span>
+        <!-- <span class="mono text-xs font-normal opacity-60 ml-2">[2-3]</span> -->
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12" id="projects-grid"></div>
+
+      <!-- Volunteer / Community Service -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        VOLUNTEER<span class="text-brutal-green">_SERVICE.SH</span>
+      </h3> -->
+      <!-- <div id="volunteer-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"> -->
+        <!-- Placeholder items -->
+        <!-- <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold text-lg mb-2">[Volunteer Organization]</h4>
+          <p class="text-sm opacity-70 mb-2">[Role / Contribution]</p>
+          <p class="mono text-xs opacity-50">[Date Range]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold text-lg mb-2">[Community Project]</h4>
+          <p class="text-sm opacity-70 mb-2">[Description of involvement]</p>
+          <p class="mono text-xs opacity-50">Update CONFIG.volunteer</p>
+        </div> -->
+      <!-- </div> -->
+
+      <!-- Letters of Recommendation -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        RECOMMENDATION<span class="text-brutal-blue">_LETTERS.PDF</span>
+      </h3>
+      <div id="recommendations-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Recommender Name]</h4>
+          <p class="text-sm opacity-70">[Title / Organization]</p>
+          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Recommender Name]</h4>
+          <p class="text-sm opacity-70">[Title / Organization]</p>
+          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <h4 class="font-bold mb-2">[Add More...]</h4>
+          <p class="text-sm opacity-70">Update CONFIG.recommendations</p>
+        </div>
+      </div> -->
+
+      <!-- Awards and Recognition -->
+      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
+        AWARDS<span class="text-brutal-red">_RECOGNITION.TXT</span>
+      </h3>
+      <div id="awards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-yellow brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">★</span>
+          </div>
+          <h4 class="font-bold">[Award Name]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-red brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-white font-bold text-lg">▲</span>
+          </div>
+          <h4 class="font-bold">[Recognition]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-cyan brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">◆</span>
+          </div>
+          <h4 class="font-bold">[Achievement]</h4>
+          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
+        </div>
+        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
+          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
+          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-green brutal-card border-brutal-white flex items-center justify-center">
+            <span class="text-brutal-black font-bold text-lg">+</span>
+          </div>
+          <h4 class="font-bold">[Add More]</h4>
+          <p class="mono text-xs opacity-50 mt-1">CONFIG.awards</p>
+        </div>
+      </div> -->
+    </div>
+  </section>
+
 
   <!-- ============================================== -->
   <!-- INTERACTIVE TERMINAL                          -->
@@ -1767,109 +2005,6 @@
   <!-- ============================================== -->
   <!-- SECTION 4: PROFESSIONAL SUMMARY               -->
   <!-- ============================================== -->
-  <section id="professional" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
-        PROFESSIONAL<span class="text-brutal-red">_SUMMARY</span>
-      </h2>
-
-          <!-- Work Experience Subsection -->
-      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        WORK<span class="text-brutal-yellow">_EXPERIENCE.JSON</span>
-      </h3>
-      <div class="space-y-6 mb-12" id="work-container"></div>
-
-      <!-- Professional Work Samples (Projects) -->
-      <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        PROJECT<span class="text-brutal-cyan">_SAMPLES.EXE</span>
-        <!-- <span class="mono text-xs font-normal opacity-60 ml-2">[2-3]</span> -->
-      </h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12" id="projects-grid"></div>
-
-      <!-- Volunteer / Community Service -->
-      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        VOLUNTEER<span class="text-brutal-green">_SERVICE.SH</span>
-      </h3> -->
-      <!-- <div id="volunteer-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12"> -->
-        <!-- Placeholder items -->
-        <!-- <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <h4 class="font-bold text-lg mb-2">[Volunteer Organization]</h4>
-          <p class="text-sm opacity-70 mb-2">[Role / Contribution]</p>
-          <p class="mono text-xs opacity-50">[Date Range]</p>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <h4 class="font-bold text-lg mb-2">[Community Project]</h4>
-          <p class="text-sm opacity-70 mb-2">[Description of involvement]</p>
-          <p class="mono text-xs opacity-50">Update CONFIG.volunteer</p>
-        </div> -->
-      <!-- </div> -->
-
-      <!-- Letters of Recommendation -->
-      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        RECOMMENDATION<span class="text-brutal-blue">_LETTERS.PDF</span>
-      </h3>
-      <div id="recommendations-container" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <h4 class="font-bold mb-2">[Recommender Name]</h4>
-          <p class="text-sm opacity-70">[Title / Organization]</p>
-          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <h4 class="font-bold mb-2">[Recommender Name]</h4>
-          <p class="text-sm opacity-70">[Title / Organization]</p>
-          <button class="brutal-card bg-brutal-blue/30 text-white px-3 py-2 mono text-xs font-bold mt-3 opacity-50">VIEW_LETTER</button>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-5 opacity-60">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <h4 class="font-bold mb-2">[Add More...]</h4>
-          <p class="text-sm opacity-70">Update CONFIG.recommendations</p>
-        </div>
-      </div> -->
-
-      <!-- Awards and Recognition -->
-      <!-- <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        AWARDS<span class="text-brutal-red">_RECOGNITION.TXT</span>
-      </h3>
-      <div id="awards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-yellow brutal-card border-brutal-white flex items-center justify-center">
-            <span class="text-brutal-black font-bold text-lg">★</span>
-          </div>
-          <h4 class="font-bold">[Award Name]</h4>
-          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-red brutal-card border-brutal-white flex items-center justify-center">
-            <span class="text-white font-bold text-lg">▲</span>
-          </div>
-          <h4 class="font-bold">[Recognition]</h4>
-          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-cyan brutal-card border-brutal-white flex items-center justify-center">
-            <span class="text-brutal-black font-bold text-lg">◆</span>
-          </div>
-          <h4 class="font-bold">[Achievement]</h4>
-          <p class="mono text-xs opacity-50 mt-1">[Year]</p>
-        </div>
-        <div class="brutal-card bg-brutal-dark border-brutal-white/30 p-4 opacity-60 text-center">
-          <div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>
-          <div class="w-10 h-10 mx-auto mb-2 bg-brutal-green brutal-card border-brutal-white flex items-center justify-center">
-            <span class="text-brutal-black font-bold text-lg">+</span>
-          </div>
-          <h4 class="font-bold">[Add More]</h4>
-          <p class="mono text-xs opacity-50 mt-1">CONFIG.awards</p>
-        </div>
-      </div> -->
-    </div>
-  </section>
 
     <!-- Resume (server-hosted only) -->
   <section id="resume" class="py-16 md:py-20 px-4 md:px-8 max-w-4xl mx-auto">
@@ -2094,7 +2229,7 @@
         <blockquote id="daily-quote" class="text-lg italic mb-4 border-l-4 border-brutal-yellow pl-4">
           "Loading wisdom..."
         </blockquote>
-        <p id="quote-author" class="text-sm opacity-80 text-right">— System</p>
+        <p id="quote-author" class="text-sm opacity-80 text-right">- System</p>
         <button onclick="refreshQuote()" class="mt-4 brutal-card bg-brutal-white text-brutal-black px-3 py-1 mono text-xs font-bold">REFRESH</button>
       </div>
     </div>
@@ -2202,6 +2337,115 @@
         </div>
         <a href="https://github.com/blitzwolfz/portfolio" target="_blank" rel="noopener" class="brutal-card bg-brutal-white text-brutal-black px-6 py-3 mono font-bold text-sm whitespace-nowrap">
           FORK_ON_GITHUB →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================== -->
+  <!-- SECTION: SOLE PROPRIETORSHIP                  -->
+  <!-- ============================================== -->
+  <section id="sole-proprietorship" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+    <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
+      SOLE<span class="text-brutal-red">_PROPRIETORSHIP</span>
+    </h2>
+    <p class="mono text-sm opacity-60 mb-10 md:mb-12">Business entity for app operations & contracting</p>
+
+    <!-- Coming Soon Banner (controlled by CONFIG) -->
+    <div id="sole-prop-coming-soon" class="hidden mb-8 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase glitch-wrap">
+      <div class="glitch-blocks"></div>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 relative z-10">
+        <span class="glitch-badge">⚠ COMING_SOON</span>
+        <span class="opacity-80">FULL_SERVICE_LAUNCH_PENDING</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- About the Business -->
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">
+          BUSINESS<span class="text-brutal-red">_OVERVIEW.MD</span>
+        </h3>
+        <p class="text-sm leading-relaxed opacity-90 mb-4">
+          Operating as an independent sole proprietorship to manage the operational side of my app development work and independent contracting. This entity handles the business infrastructure; App Store revenue, client payments, contracts, and project accounting.
+        </p>
+        <p class="text-sm leading-relaxed opacity-90">
+          From publishing apps like Serenity+ to taking on development contracts, this structure keeps everything organized and professional. It's the backend that keeps my development work running smoothly.
+        </p>
+      </div>
+
+      <!-- What This Enables -->
+      <div class="brutal-card bg-brutal-yellow text-brutal-black p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">
+          OPERATIONS<span class="text-brutal-blue">_SUPPORTED.JSON</span>
+        </h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex items-start gap-3">
+            <span class="text-brutal-red font-bold">→</span>
+            <div>
+              <span class="font-bold">App Store Operations</span>
+              <p class="opacity-70 text-xs mt-0.5">Managing revenue from published apps like Serenity+</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-brutal-red font-bold">→</span>
+            <div>
+              <span class="font-bold">Contractor Work</span>
+              <p class="opacity-70 text-xs mt-0.5">Handling contracts and payments for development projects</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-brutal-red font-bold">→</span>
+            <div>
+              <span class="font-bold">Project Accounting</span>
+              <p class="opacity-70 text-xs mt-0.5">Tracking income, expenses, and tax obligations</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-brutal-red font-bold">→</span>
+            <div>
+              <span class="font-bold">Client Relations</span>
+              <p class="opacity-70 text-xs mt-0.5">Professional invoicing and contract management</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current Status -->
+      <div class="brutal-card bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">
+          OPERATIONS<span class="text-brutal-green">_STATUS.LOG</span>
+        </h3>
+        <div class="space-y-3 text-sm mono">
+          <div class="flex justify-between items-center">
+            <span class="opacity-60">ENTITY_TYPE</span>
+            <span class="font-bold text-brutal-green">Sole Proprietorship</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="opacity-60">STATUS</span>
+            <span class="font-bold text-brutal-yellow">PENDING</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="opacity-60">PRIMARY_USE</span>
+            <span class="font-bold">App Finances & Contracts</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="opacity-60">LOCATION</span>
+            <span class="font-bold">Ontario, Canada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contracting Inquiries -->
+      <div class="brutal-card bg-brutal-blue text-white p-6">
+        <h3 class="text-lg font-bold mb-4 tracking-tight">
+          CONTRACTING<span class="text-brutal-yellow">_INQUIRIES.TXT</span>
+        </h3>
+        <p class="text-sm opacity-90 mb-4">
+          Looking for iOS development help or backend work? I'm available for contract projects. Reach out to discuss your requirements.
+        </p>
+        <a href="#contact" class="brutal-card inline-block bg-brutal-white text-brutal-black px-4 py-2 mono font-bold text-sm hover:opacity-80 transition-opacity">
+          INITIATE_CONTACT →
         </a>
       </div>
     </div>
@@ -2316,6 +2560,7 @@
         skills: true,
         games: true,
         meta: true,
+        soleProprietorship: true,  // Toggle sole proprietorship section visibility
       },
       ui: {
         showComingSoonBanners: true,
@@ -2324,6 +2569,7 @@
         // true => glitch "COMING_SOON" and download disabled
         // false => download enabled (as long as downloadUrl is set)
         showResumeUnavailableBanner: false,
+        showSoleProprietorshipComingSoon: true,  // Toggle "Coming Soon" banner for sole proprietorship
       },
       // =============================================
       // EMAILJS CONFIGURATION
@@ -2473,7 +2719,7 @@
         {
           company: "STEALTH AI STARTUP",
           role: "CO-FOUNDER & CTO",
-          period: "2025 — PRESENT",
+          period: "2025 - PRESENT",
           description:
             "Building next-gen code intelligence platform with JavaScript + Java + LLMs. Focus on real world usability for business owners.",
           tech: ["JAVASCRIPT", "JAVA", "LLMS"],
@@ -2482,7 +2728,7 @@
         {
           company: "TORONTO METROPOLITAN UNIVERSITY",
           role: "HARDWARE & SOFTWARE INTERN",
-          period: "2022 — 2023",
+          period: "2022 - 2023",
           description: "Maintained database systems and supported hardware infrastructure.",
           tech: ["SQL", "EXCEL", "APPLE ECOSYSTEM"],
           color: "bg-brutal-green",
@@ -3129,6 +3375,42 @@
       const menu = document.getElementById("mobile-menu");
       if (!menu) return;
       menu.classList.add("hidden");
+      // Close all submenus
+      ['mobile-about', 'mobile-work', 'mobile-tech', 'mobile-connect'].forEach(id => {
+        const submenu = document.getElementById(id);
+        const arrow = document.getElementById(id + '-arrow');
+        if (submenu) submenu.classList.add('hidden');
+        if (arrow) arrow.textContent = '▼';
+      });
+    }
+
+    function toggleMobileSubmenu(id) {
+      const submenu = document.getElementById(id);
+      const arrow = document.getElementById(id + '-arrow');
+      if (!submenu) return;
+      
+      const isHidden = submenu.classList.contains('hidden');
+      
+      // Close all other submenus
+      ['mobile-about', 'mobile-work', 'mobile-tech', 'mobile-connect'].forEach(otherId => {
+        if (otherId !== id) {
+          const other = document.getElementById(otherId);
+          const otherArrow = document.getElementById(otherId + '-arrow');
+          if (other) other.classList.add('hidden');
+          if (otherArrow) otherArrow.textContent = '▼';
+        }
+      });
+      
+      // Toggle this submenu
+      if (isHidden) {
+        submenu.classList.remove('hidden');
+        submenu.classList.add('flex');
+        if (arrow) arrow.textContent = '▲';
+      } else {
+        submenu.classList.add('hidden');
+        submenu.classList.remove('flex');
+        if (arrow) arrow.textContent = '▼';
+      }
     }
 
     // =============================================
@@ -3725,6 +4007,20 @@
       }
     }
 
+    // Initialize sole proprietorship section (show/hide coming soon banner)
+    function initSoleProprietorship() {
+      const banner = document.getElementById("sole-prop-coming-soon");
+      if (!banner) return;
+
+      const showComingSoon = CONFIG.ui?.showSoleProprietorshipComingSoon ?? true;
+
+      if (showComingSoon) {
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+    }
+
     // Hide disabled sections based on CONFIG.sections
     function initSectionVisibility() {
       const sectionMap = {
@@ -3735,6 +4031,7 @@
         professional: 'professional',
         resume: 'resume',
         contact: 'contact',
+        soleProprietorship: 'sole-proprietorship',
       };
 
       Object.entries(CONFIG.sections).forEach(([key, enabled]) => {
@@ -3748,9 +4045,24 @@
       });
 
       // Also hide nav links for disabled sections
+      const navLinkToConfigMap = {
+        'bio': 'bio',
+        'terminal': 'terminal',
+        'academics': 'academics',
+        'capstone': 'capstone',
+        'professional': 'professional',
+        'resume': 'resume',
+        'contact': 'contact',
+        'skills': 'skills',
+        'games': 'games',
+        'meta': 'meta',
+        'sole-proprietorship': 'soleProprietorship',
+      };
+      
       document.querySelectorAll('nav a[href^="#"]').forEach(link => {
         const href = link.getAttribute('href').replace('#', '');
-        if (CONFIG.sections[href] === false) {
+        const configKey = navLinkToConfigMap[href];
+        if (configKey && CONFIG.sections[configKey] === false) {
           link.style.display = 'none';
           // Also hide the bullet/separator before or after if it exists
           const nextSibling = link.nextElementSibling;
@@ -4571,7 +4883,7 @@
       
       const quote = quotes[Math.floor(Math.random() * quotes.length)];
       quoteEl.textContent = `"${quote.text}"`;
-      authorEl.textContent = `— ${quote.author}`;
+      authorEl.textContent = `- ${quote.author}`;
     }
 
     // GitHub Activity Feed
@@ -5167,7 +5479,7 @@
       document.documentElement.style.overflow = '';
       
       // Update button text
-      if (btn) btn.textContent = 'BUSINESS_CARD 🃏';
+      if (btn) btn.textContent = 'BUSINESS_CARD';
       
       // Start the boot sequence if it hasn't run
       if (!sessionStorage.getItem('bootCompleted')) {
@@ -5183,6 +5495,7 @@
     initSectionVisibility();
     initContactModule();
     initResumeModule();
+    initSoleProprietorship();
     initBioResumeLink();
     renderProfileImage();
     renderWork();
