@@ -52,6 +52,33 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
     .mono { font-family: "IBM Plex Mono", monospace; }
+    .dark body {
+      background-color: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .dark .brutal-card {
+      color: #f5f5f7;
+    }
+    .dark .bg-brutal-dark,
+    .dark .bg-brutal-black {
+      color: #f5f5f7;
+    }
+    .dark .bg-brutal-white,
+    .dark .bg-white {
+      color: #0a0a0a;
+    }
+    .dark body {
+      background-color: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .dark .bg-brutal-dark,
+    .dark .bg-brutal-black {
+      color: #f5f5f7;
+    }
+    .dark .bg-brutal-white,
+    .dark .bg-white {
+      color: #0a0a0a;
+    }
 
     /* ============================================
        SYSTEM BOOT OVERLAY
@@ -1409,10 +1436,6 @@
 
       <!-- Mobile actions -->
       <div class="flex items-center gap-2 md:gap-3">
-        <button onclick="toggleTheme()" class="brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-3 md:px-4 py-2 mono font-bold text-xs md:text-sm">
-          <span id="theme-text">DARK_MODE</span>
-        </button>
-
         <!-- Mobile menu button -->
         <button
           onclick="toggleMobileMenu()"
@@ -3353,14 +3376,15 @@
     }
 
     function initTheme() {
+      const themeText = document.getElementById("theme-text");
       // Default to light mode - only use dark if explicitly set
       if (localStorage.theme === "dark") {
         document.documentElement.classList.add("dark");
-        document.getElementById("theme-text").textContent = "LIGHT_MODE";
+        if (themeText) themeText.textContent = "LIGHT_MODE";
       } else {
         // Ensure light mode is active
         document.documentElement.classList.remove("dark");
-        document.getElementById("theme-text").textContent = "DARK_MODE";
+        if (themeText) themeText.textContent = "DARK_MODE";
         localStorage.theme = "light";
       }
     }
