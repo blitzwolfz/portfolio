@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;500;700&family=Rock+Salt&display=swap" rel="stylesheet" />
 
   <script>
     tailwind.config = {
@@ -57,18 +57,6 @@
       color: #f5f5f7;
     }
     .dark .brutal-card {
-      color: #f5f5f7;
-    }
-    .dark .bg-brutal-dark,
-    .dark .bg-brutal-black {
-      color: #f5f5f7;
-    }
-    .dark .bg-brutal-white,
-    .dark .bg-white {
-      color: #0a0a0a;
-    }
-    .dark body {
-      background-color: #0a0a0a;
       color: #f5f5f7;
     }
     .dark .bg-brutal-dark,
@@ -648,44 +636,6 @@
     }
 
     /* ============================================
-       KEYBOARD SHORTCUTS HELP
-       ============================================ */
-    #shortcuts-help {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 200;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    #shortcuts-help.active {
-      display: flex;
-    }
-    .shortcuts-panel {
-      background: #0a0a0a;
-      border: 3px solid #f5f5f7;
-      padding: 24px;
-      max-width: 500px;
-      width: 100%;
-      color: #f5f5f7;
-    }
-    .shortcut-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(245, 245, 247, 0.2);
-    }
-    .shortcut-key {
-      background: rgba(245, 245, 247, 0.2);
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 12px;
-    }
-
-    /* ============================================
        SCROLL-TRIGGERED ANIMATIONS
        ============================================ */
     .reveal-on-scroll {
@@ -876,11 +826,7 @@
     .business-card-container.flipped .business-card-inner {
       transform: rotateY(180deg);
     }
-    
-    .business-card-container.flipped .business-card-inner {
-      transform: rotateY(180deg);
-    }
-    
+
     .business-card-front,
     .business-card-back {
       position: absolute;
@@ -998,6 +944,166 @@
     .dark ::-webkit-scrollbar-track { background: #1c1c1e; border-left: 2px solid #f5f5f7; }
     ::-webkit-scrollbar-thumb { background: #0a0a0a; border: 2px solid #f5f5f7; }
     .dark ::-webkit-scrollbar-thumb { background: #f5f5f7; border: 2px solid #1c1c1e; }
+
+    /* Manuscript ruler scrollbar */
+    .manuscript ::-webkit-scrollbar { width: 14px; }
+    .manuscript ::-webkit-scrollbar-track {
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(28, 79, 156, 0.35),
+          rgba(28, 79, 156, 0.35) 2px,
+          transparent 2px,
+          transparent 12px
+        ),
+        #f8f8f4;
+      border-left: 2px solid rgba(28, 79, 156, 0.6);
+    }
+    .manuscript ::-webkit-scrollbar-thumb {
+      background: #0f3a77;
+      border: 2px solid #f8f8f4;
+      box-shadow: inset 0 0 0 1px rgba(28, 79, 156, 0.3);
+    }
+    .manuscript * {
+      scrollbar-color: #0f3a77 #f8f8f4;
+      scrollbar-width: thin;
+    }
+
+    /* ── Custom Ruler Scrollbar ── */
+    @media (min-width: 769px) {
+      /* Hide native scrollbar on desktop */
+      html::-webkit-scrollbar { display: none; }
+      html { scrollbar-width: none; -ms-overflow-style: none; }
+
+      #custom-ruler {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 24px;
+        height: 100vh;
+        z-index: 99999;
+        background-color: var(--paper, #f8f8f4);
+        border-left: 2px solid var(--blueprint, #1c4f9c);
+        box-sizing: border-box;
+        overflow: visible;
+        /* Three layers of tick marks:
+           Layer 1 – major ticks  every 50px, 11px wide
+           Layer 2 – medium ticks every 25px,  7px wide
+           Layer 3 – fine ticks   every 10px,  4px wide */
+        background-image:
+          repeating-linear-gradient(
+            to bottom,
+            var(--blueprint-ink, #0f3a77) 0px,
+            var(--blueprint-ink, #0f3a77) 1px,
+            transparent 1px,
+            transparent 50px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            var(--blueprint, #1c4f9c) 0px,
+            var(--blueprint, #1c4f9c) 1px,
+            transparent 1px,
+            transparent 25px
+          ),
+          repeating-linear-gradient(
+            to bottom,
+            rgba(28, 79, 156, 0.45) 0px,
+            rgba(28, 79, 156, 0.45) 1px,
+            transparent 1px,
+            transparent 10px
+          );
+        background-size:
+          11px 100%,
+          7px 100%,
+          4px 100%;
+        background-position: 0 0;
+        background-repeat: no-repeat;
+      }
+
+      .ruler-label {
+        position: absolute;
+        left: 13px;
+        font-family: 'Courier New', monospace;
+        font-size: 8px;
+        color: var(--blueprint-ink, #0f3a77);
+        line-height: 1;
+        transform: translateY(-50%);
+        user-select: none;
+        pointer-events: none;
+      }
+
+      #ruler-thumb {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background: rgba(28, 79, 156, 0.38);
+        border-left: 3px solid var(--blueprint-ink, #0f3a77);
+        border-radius: 0 4px 4px 0;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+        cursor: grab;
+        transition: background 0.15s, box-shadow 0.15s;
+        z-index: 1;
+        box-sizing: border-box;
+      }
+      #ruler-thumb:hover,
+      #ruler-thumb.dragging {
+        background: rgba(28, 79, 156, 0.55);
+        box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.35);
+        cursor: grabbing;
+      }
+      /* Arrow pointer protruding left into the page */
+      #ruler-thumb::before {
+        content: '';
+        position: absolute;
+        left: -7px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 7px solid transparent;
+        border-right-color: var(--blueprint-ink, #0f3a77);
+      }
+      /* Live scroll-percentage label */
+      #ruler-percent {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-family: 'Courier New', monospace;
+        font-size: 7px;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        z-index: 2;
+      }
+    }
+
+    /* Hide ruler on mobile */
+    @media (max-width: 768px) {
+      #custom-ruler { display: none; }
+    }
+
+    /* Hide ruler when business card overlay is active */
+    .business-card-active #custom-ruler {
+      display: none;
+    }
+
+    /* ── Highlighter (Ctrl + drag to mark, Ctrl + click mark to erase) ── */
+    body.ctrl-highlight-mode,
+    body.ctrl-highlight-mode * {
+      cursor: crosshair !important;
+    }
+    .highlight-mark {
+      background: rgba(255, 235, 100, 0.45);
+      border-radius: 2px;
+      padding: 1px 0;
+      -webkit-box-decoration-break: clone;
+      box-decoration-break: clone;
+    }
+    .highlight-mark:hover {
+      background: rgba(255, 215, 60, 0.6);
+      outline: 1px dashed rgba(180, 150, 0, 0.7);
+      outline-offset: 1px;
+    }
 
     /* Hide scrollbar for wireframes horizontal scroll */
     .scrollbar-hide {
@@ -1117,6 +1223,1076 @@
         animation: none !important;
       }
     }
+
+    .spec-accent {
+      display: inline-block;
+      width: 44px;
+      height: 7px;
+      border-radius: 3px;
+      border: 1.5px solid rgba(10, 10, 10, 0.35);
+      box-shadow: 1px 1px 0 rgba(10, 10, 10, 0.2);
+      transform: rotate(-2deg);
+    }
+    .manuscript .spec-accent {
+      border-color: rgba(28, 79, 156, 0.4);
+      box-shadow: 1px 1px 0 rgba(43, 46, 52, 0.18);
+    }
+
+    /* ============================================
+       TECHNICAL ENGINEERING MANUSCRIPT THEME
+       ============================================ */
+    .manuscript {
+      --paper: #f8f8f4;
+      --graphite: #2b2e34;
+      --blueprint: #1c4f9c;
+      --blueprint-ink: #0f3a77;
+      --grid-light: rgba(28, 79, 156, 0.10);
+      --grid-dark: rgba(28, 79, 156, 0.22);
+      --marker-yellow: #f1d14b;
+      --marker-red: #e06666;
+      --marker-green: #72c48b;
+      --marker-blue: #5aa7d8;
+      color: var(--graphite);
+      background-color: var(--paper);
+    }
+
+    .manuscript,
+    .manuscript body {
+      background-color: var(--paper);
+      color: var(--graphite);
+      font-family: "IBM Plex Mono", monospace;
+      overflow-x: hidden;
+    }
+    .manuscript * { box-sizing: border-box; }
+    .manuscript body {
+      background-image:
+        radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        radial-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+      background-size: 3px 3px, 5px 5px;
+      background-position: 0 0, 2px 2px;
+    }
+    .manuscript body {
+      background-image:
+        radial-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        radial-gradient(rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+      background-size: 3px 3px, 5px 5px;
+      background-position: 0 0, 2px 2px;
+    }
+
+    .manuscript h1,
+    .manuscript h2,
+    .manuscript h3,
+    .manuscript h4,
+    .manuscript h5 {
+      font-family: "Rock Salt", cursive;
+      letter-spacing: 0.03em;
+      text-transform: none;
+    }
+    .manuscript h1 { font-size: clamp(22px, 4.8vw, 52px) !important; line-height: 1.05; }
+    .manuscript h2 { font-size: clamp(20px, 4.2vw, 40px) !important; line-height: 1.1; }
+    .manuscript h3 { font-size: clamp(16px, 3.2vw, 28px) !important; line-height: 1.15; }
+    .manuscript h4 { font-size: clamp(14px, 2.6vw, 22px) !important; line-height: 1.2; }
+    .manuscript #games h3,
+    .manuscript #games h2 {
+      font-size: clamp(16px, 2.6vw, 22px) !important;
+      line-height: 1.1;
+    }
+    .manuscript #games .text-xl,
+    .manuscript #games .text-2xl {
+      font-size: clamp(16px, 2.6vw, 22px) !important;
+    }
+    .manuscript .brutal-card h2,
+    .manuscript .brutal-card h3 {
+      font-size: clamp(16px, 2.4vw, 22px) !important;
+      line-height: 1.08;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .manuscript .brutal-card h3 span,
+    .manuscript .brutal-card h2 span {
+      display: inline;
+      white-space: normal;
+    }
+    .manuscript #sole-proprietorship h2,
+    .manuscript #sole-proprietorship h3 {
+      font-size: clamp(16px, 2.8vw, 24px) !important;
+      line-height: 1.08;
+    }
+    .manuscript #sole-proprietorship .text-lg,
+    .manuscript #sole-proprietorship .text-xl,
+    .manuscript #sole-proprietorship .text-2xl {
+      font-size: clamp(15px, 2.4vw, 22px) !important;
+    }
+    .manuscript #bio h2,
+    .manuscript #bio h3 {
+      font-size: clamp(16px, 2.9vw, 24px) !important;
+      line-height: 1.08;
+    }
+    .manuscript #bio .text-lg,
+    .manuscript #bio .text-xl,
+    .manuscript #bio .text-2xl {
+      font-size: clamp(15px, 2.4vw, 22px) !important;
+    }
+
+    .manuscript #grid-bg {
+      opacity: 1;
+      z-index: 0;
+      background-image:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(28, 79, 156, 0.18),
+          rgba(28, 79, 156, 0.18) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        linear-gradient(90deg, rgba(217, 60, 60, 0.45) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(28, 79, 156, 0.12) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(28, 79, 156, 0.12) 1px, transparent 1px);
+      background-size: 100% 28px, 100% 100%, 28px 28px, 28px 28px;
+      background-position: 0 0, 120px 0, 0 0, 0 0;
+    }
+
+    .manuscript body::before {
+      content: "";
+      position: fixed;
+      left: 92px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(217, 60, 60, 0.55);
+      z-index: 1;
+    }
+    .manuscript body::after {
+      content: "";
+      position: fixed;
+      left: 24px;
+      top: 80px;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(43, 46, 52, 0.4);
+      border-radius: 50%;
+      box-shadow:
+        0 120px 0 rgba(43, 46, 52, 0.35),
+        0 240px 0 rgba(43, 46, 52, 0.35),
+        0 360px 0 rgba(43, 46, 52, 0.35),
+        0 480px 0 rgba(43, 46, 52, 0.35);
+      background: radial-gradient(circle at 50% 50%, rgba(248, 248, 244, 0.8) 0%, rgba(248, 248, 244, 0.8) 45%, transparent 46%);
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    .manuscript .coffee-stain,
+    .manuscript .coffee-stain::before,
+    .manuscript .coffee-stain::after {
+      content: "";
+      position: fixed;
+      border-radius: 50%;
+      border: 2px solid rgba(140, 90, 40, 0.18);
+      box-shadow: inset 0 0 20px rgba(140, 90, 40, 0.08);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .manuscript .coffee-stain {
+      top: 18%;
+      right: 6%;
+      width: 140px;
+      height: 140px;
+      opacity: 0.75;
+    }
+    .manuscript .coffee-stain::before {
+      top: 14px;
+      left: 18px;
+      width: 90px;
+      height: 90px;
+      border-width: 1.5px;
+      opacity: 0.35;
+    }
+    .manuscript .coffee-stain::after {
+      bottom: 18px;
+      right: 14px;
+      width: 52px;
+      height: 52px;
+      border-width: 1px;
+      opacity: 0.25;
+    }
+    .manuscript .coffee-stain.secondary {
+      bottom: 10%;
+      left: 22%;
+      width: 110px;
+      height: 110px;
+      opacity: 0.7;
+    }
+
+    .manuscript #noise-overlay { opacity: 0.02; }
+    .manuscript #scanlines,
+    .manuscript #matrix-canvas,
+    .manuscript #radar-scan { display: none; }
+
+    .manuscript #manuscript-coordinates,
+    .manuscript #math-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .manuscript #manuscript-coordinates {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--blueprint);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+    }
+    .manuscript #manuscript-coordinates .x-axis span {
+      position: absolute;
+      top: 10px;
+      transform: translateX(-50%);
+    }
+    .manuscript #manuscript-coordinates .y-axis span {
+      position: absolute;
+      left: 10px;
+      transform: translateY(-50%);
+    }
+
+    .manuscript #math-overlay {
+      font-family: "IBM Plex Mono", monospace;
+      color: var(--blueprint);
+      opacity: 0.12;
+      mix-blend-mode: multiply;
+    }
+    .manuscript #math-overlay .formula {
+      position: absolute;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .manuscript section {
+      position: relative;
+      background: rgba(248, 248, 244, 0.92);
+      color: var(--graphite);
+      border: 1.5px solid var(--graphite);
+      box-shadow: 6px 6px 0 rgba(43, 46, 52, 0.18);
+      margin: 70px 16px 70px 140px;
+      padding: 42px 36px 46px 36px;
+      max-width: 1140px;
+      width: calc(100% - 170px);
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      column-gap: 24px;
+      overflow: visible;
+      z-index: 2;
+    }
+    @media (max-width: 900px) {
+      .manuscript section {
+        margin: 60px 20px 60px 96px;
+        grid-template-columns: 88px 1fr;
+        padding: 36px 26px 40px 26px;
+        width: calc(100% - 116px);
+      }
+      .manuscript body::before { left: 72px; }
+      .manuscript body::after { left: 16px; }
+      .manuscript #grid-bg { background-position: 0 0, 88px 0, 0 0, 0 0; }
+    }
+    @media (max-width: 640px) {
+      .manuscript section {
+        margin: 48px 16px 48px 70px;
+        grid-template-columns: 70px 1fr;
+        width: calc(100% - 80px);
+      }
+      .manuscript body::before { left: 60px; }
+      .manuscript #grid-bg { background-position: 0 0, 70px 0, 0 0, 0 0; }
+    }
+    .manuscript section > * {
+      grid-column: 2;
+    }
+    .manuscript section::before {
+      content: "X:" attr(data-x) "  Y:" attr(data-y);
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      grid-column: 1;
+      justify-self: start;
+      margin-left: 10px;
+      background: var(--paper);
+      padding: 2px 8px;
+      border: 1px solid var(--blueprint);
+      font-size: 10px;
+      color: var(--blueprint);
+      letter-spacing: 0.12em;
+    }
+    .manuscript section::after {
+      content: "";
+      position: absolute;
+      top: -12px;
+      left: 8%;
+      width: 160px;
+      height: 26px;
+      background: rgba(240, 230, 180, 0.75);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      transform: rotate(-4deg);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.18);
+      opacity: 0.9;
+    }
+    .manuscript section:nth-of-type(odd) { transform: rotate(-0.2deg); }
+    .manuscript section:nth-of-type(even) { transform: rotate(0.2deg); }
+
+    .manuscript nav,
+    .manuscript footer,
+    .manuscript #status-bar,
+    .manuscript .fixed.top-0 {
+      background: var(--paper) !important;
+      color: var(--graphite) !important;
+      border-color: var(--graphite) !important;
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.15);
+      z-index: 5;
+    }
+    .manuscript nav {
+      left: 96px !important;
+      right: 12px !important;
+      width: auto !important;
+    }
+    .manuscript .fixed.top-0 {
+      left: 96px !important;
+      right: 12px !important;
+      width: auto !important;
+    }
+    .manuscript #status-bar {
+      left: 96px !important;
+      right: 12px !important;
+      width: auto !important;
+    }
+    .manuscript footer {
+      margin: 40px 40px 40px 140px;
+    }
+    @media (max-width: 900px) {
+      .manuscript nav,
+      .manuscript .fixed.top-0,
+      .manuscript #status-bar {
+        left: 72px !important;
+        right: 12px !important;
+      }
+      .manuscript footer {
+        margin: 32px 20px 32px 96px;
+      }
+    }
+    @media (max-width: 640px) {
+      .manuscript nav,
+      .manuscript .fixed.top-0,
+      .manuscript #status-bar {
+        left: 60px !important;
+        right: 8px !important;
+      }
+      .manuscript footer {
+        margin: 28px 16px 28px 70px;
+      }
+    }
+
+    .manuscript .brutal-card {
+      background: rgba(248, 248, 244, 0.9);
+      color: var(--graphite);
+      border: 1.5px solid var(--graphite);
+      box-shadow: 3px 3px 0 rgba(43, 46, 52, 0.2);
+      border-radius: 2px;
+      box-sizing: border-box;
+      max-width: 100%;
+      overflow: hidden;
+      background-image:
+        linear-gradient(0deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0)),
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.02) 2px, transparent 2px, transparent 6px);
+    }
+    .manuscript .brutal-card * {
+      max-width: 100%;
+      min-width: 0;
+    }
+    .manuscript .tape-patch {
+      overflow: visible;
+    }
+    .manuscript .brutal-card:hover:not(.sticky-note) { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(43, 46, 52, 0.25); }
+
+    .manuscript .bg-brutal-black,
+    .manuscript .bg-brutal-dark,
+    .manuscript .bg-brutal-white,
+    .manuscript .bg-white {
+      background: var(--paper) !important;
+      color: var(--graphite) !important;
+    }
+
+    .manuscript .bg-brutal-blue,
+    .manuscript .bg-brutal-cyan,
+    .manuscript .bg-brutal-green,
+    .manuscript .bg-brutal-yellow,
+    .manuscript .bg-brutal-red {
+      background: linear-gradient(
+        100deg,
+        rgba(90, 167, 216, 0.35),
+        rgba(90, 167, 216, 0.55) 45%,
+        rgba(90, 167, 216, 0.25)
+      ) !important;
+      background-image:
+        linear-gradient(100deg, rgba(90, 167, 216, 0.35), rgba(90, 167, 216, 0.55) 45%, rgba(90, 167, 216, 0.25)),
+        repeating-linear-gradient(120deg, rgba(15, 58, 119, 0.08), rgba(15, 58, 119, 0.08) 3px, transparent 3px, transparent 9px);
+      color: var(--graphite) !important;
+      border-color: var(--blueprint) !important;
+    }
+    .manuscript .bg-brutal-yellow {
+      background: linear-gradient(100deg, rgba(241, 209, 75, 0.35), rgba(241, 209, 75, 0.55) 45%, rgba(241, 209, 75, 0.25)) !important;
+      background-image:
+        linear-gradient(100deg, rgba(241, 209, 75, 0.35), rgba(241, 209, 75, 0.55) 45%, rgba(241, 209, 75, 0.25)),
+        repeating-linear-gradient(120deg, rgba(120, 90, 20, 0.1), rgba(120, 90, 20, 0.1) 3px, transparent 3px, transparent 9px);
+    }
+    .manuscript .bg-brutal-red {
+      background: linear-gradient(100deg, rgba(224, 102, 102, 0.35), rgba(224, 102, 102, 0.55) 45%, rgba(224, 102, 102, 0.25)) !important;
+      background-image:
+        linear-gradient(100deg, rgba(224, 102, 102, 0.35), rgba(224, 102, 102, 0.55) 45%, rgba(224, 102, 102, 0.25)),
+        repeating-linear-gradient(120deg, rgba(120, 30, 30, 0.1), rgba(120, 30, 30, 0.1) 3px, transparent 3px, transparent 9px);
+    }
+    .manuscript .bg-brutal-green {
+      background: linear-gradient(100deg, rgba(114, 196, 139, 0.35), rgba(114, 196, 139, 0.55) 45%, rgba(114, 196, 139, 0.25)) !important;
+      background-image:
+        linear-gradient(100deg, rgba(114, 196, 139, 0.35), rgba(114, 196, 139, 0.55) 45%, rgba(114, 196, 139, 0.25)),
+        repeating-linear-gradient(120deg, rgba(25, 80, 40, 0.1), rgba(25, 80, 40, 0.1) 3px, transparent 3px, transparent 9px);
+    }
+
+    .manuscript .text-brutal-blue,
+    .manuscript .text-brutal-cyan,
+    .manuscript .text-brutal-green,
+    .manuscript .text-brutal-yellow,
+    .manuscript .text-brutal-red,
+    .manuscript .text-brutal-white {
+      color: var(--blueprint-ink) !important;
+      text-shadow: 0.5px 0.5px 0 rgba(15, 58, 119, 0.25);
+    }
+
+    .manuscript .spec-card {
+      background: rgba(248, 248, 244, 0.95) !important;
+      color: var(--graphite) !important;
+      overflow: visible;
+      position: relative;
+    }
+    .manuscript .spec-card .tape-banner {
+      position: absolute;
+      left: -12%;
+      width: 124%;
+      top: 52px;
+      z-index: 3;
+      transform: rotate(-3deg);
+    }
+    .manuscript .spec-card h3,
+    .manuscript .spec-card p,
+    .manuscript .spec-card span {
+      color: var(--graphite) !important;
+    }
+    .manuscript .spec-card [class*="text-brutal-white"] {
+      color: var(--graphite) !important;
+    }
+
+    .manuscript a.brutal-card,
+    .manuscript button.brutal-card {
+      background: var(--paper) !important;
+      color: var(--blueprint-ink) !important;
+      border: 1.5px solid var(--blueprint) !important;
+      letter-spacing: 0.08em;
+    }
+    .manuscript input,
+    .manuscript textarea {
+      background: rgba(248, 248, 244, 0.85) !important;
+      color: var(--graphite) !important;
+      border: 1.5px solid var(--blueprint) !important;
+      box-shadow: inset 0 0 0 1px rgba(28, 79, 156, 0.1);
+    }
+
+    .manuscript .ascii-banner { color: var(--blueprint-ink); }
+
+    .manuscript .spec-card {
+      position: relative;
+    }
+    .manuscript .spec-card .spec-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--blueprint-ink);
+      border-bottom: 1px dashed var(--blueprint);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .manuscript .schematic-frame {
+      position: relative;
+      border: 1.5px solid var(--blueprint);
+      background: #ffffff;
+      box-shadow: 0 0 0 2px rgba(28, 79, 156, 0.08);
+    }
+    .manuscript .schematic-frame::after {
+      content: "";
+      position: absolute;
+      top: 16px;
+      right: -42px;
+      width: 36px;
+      height: 1px;
+      background: var(--blueprint);
+    }
+    .manuscript .schematic-callout {
+      position: absolute;
+      top: 8px;
+      right: -120px;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: var(--blueprint-ink);
+    }
+    .manuscript .schematic-callout::before {
+      content: "";
+      position: absolute;
+      left: -38px;
+      top: 6px;
+      width: 32px;
+      height: 1px;
+      background: var(--blueprint);
+    }
+    .manuscript .tape-banner {
+      position: relative;
+      padding: 12px 16px !important;
+      background: rgba(240, 230, 180, 0.85) !important;
+      color: var(--graphite) !important;
+      border: 1px solid rgba(160, 140, 80, 0.5) !important;
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.2);
+      letter-spacing: 0.1em;
+      width: 116%;
+      margin-left: -8%;
+      transform: rotate(-3deg);
+    }
+    .manuscript .tape-banner.hidden { display: none !important; }
+    .manuscript .tape-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .manuscript .tape-banner::before,
+    .manuscript .tape-banner::after {
+      width: 72px;
+    }
+    .manuscript .tape-banner::before,
+    .manuscript .tape-banner::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      width: 56px;
+      height: 18px;
+      background: rgba(240, 230, 180, 0.8);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.15);
+      transform: rotate(-4deg);
+      opacity: 0.9;
+    }
+    .manuscript .tape-banner::before { left: 12px; }
+    .manuscript .tape-banner::after { right: 12px; transform: rotate(3deg); }
+
+    .manuscript .tape-patch {
+      position: relative;
+    }
+    .manuscript .tape-patch::after {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: -6px;
+      width: 110px;
+      height: 26px;
+      background: rgba(240, 230, 180, 0.75);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      transform: rotate(-2deg);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.18);
+    }
+    .manuscript .tape-patch::before {
+      content: "";
+      position: absolute;
+      top: -16px;
+      right: -10px;
+      width: 90px;
+      height: 24px;
+      background: rgba(240, 230, 180, 0.7);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      transform: rotate(3deg);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.16);
+    }
+
+    .manuscript .profile-photo-tape {
+      position: relative;
+      display: inline-block;
+      overflow: visible;
+    }
+    .manuscript .profile-photo-frame {
+      position: relative;
+      z-index: 1;
+    }
+    .manuscript .profile-photo-tape::before,
+    .manuscript .profile-photo-tape::after,
+    .manuscript .profile-photo-tape .photo-tape-strip {
+      content: "";
+      position: absolute;
+      background: rgba(240, 230, 180, 0.78);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.16);
+      opacity: 0.9;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .manuscript .profile-photo-tape::before {
+      top: -14px;
+      left: -8px;
+      width: 96px;
+      height: 24px;
+      transform: rotate(-12deg);
+    }
+    .manuscript .profile-photo-tape::after {
+      top: -16px;
+      right: -10px;
+      width: 90px;
+      height: 22px;
+      transform: rotate(11deg);
+    }
+    .manuscript .profile-photo-tape .photo-tape-bottom-left {
+      bottom: -14px;
+      left: -6px;
+      width: 88px;
+      height: 22px;
+      transform: rotate(8deg);
+    }
+    .manuscript .profile-photo-tape .photo-tape-bottom-right {
+      bottom: -12px;
+      right: -8px;
+      width: 94px;
+      height: 22px;
+      transform: rotate(-10deg);
+    }
+
+    .manuscript .sticky-note {
+      position: relative;
+      overflow: visible;
+      --sticky-tilt: 0deg;
+      transform: rotate(var(--sticky-tilt));
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 246, 176, 0.98),
+        rgba(255, 234, 140, 0.94)
+      ) !important;
+      background-image:
+        linear-gradient(180deg, rgba(255, 246, 176, 0.98), rgba(255, 234, 140, 0.94)),
+        repeating-linear-gradient(0deg, rgba(120, 90, 20, 0.06), rgba(120, 90, 20, 0.06) 1px, transparent 1px, transparent 6px);
+      border: 1.5px solid rgba(120, 90, 20, 0.6) !important;
+      box-shadow: 6px 6px 0 rgba(43, 46, 52, 0.22);
+    }
+    .manuscript .sticky-note:hover {
+      box-shadow: 8px 8px 0 rgba(43, 46, 52, 0.22);
+    }
+    .manuscript .sticky-note::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 26px;
+      height: 26px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.7) 48%,
+        rgba(120, 90, 20, 0.25) 50%,
+        rgba(120, 90, 20, 0.25) 100%
+      );
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      box-shadow: -1px 1px 0 rgba(120, 90, 20, 0.25);
+    }
+    .manuscript .sticky-note.tilt-left { --sticky-tilt: -1.6deg; }
+    .manuscript .sticky-note.tilt-right { --sticky-tilt: 1.3deg; }
+    .manuscript .sticky-note-animate {
+      animation: sticky-float 6s ease-in-out infinite;
+      will-change: transform;
+    }
+    .manuscript .sticky-note-animate:nth-child(3n) { animation-duration: 6.6s; }
+    .manuscript .sticky-note-animate:nth-child(4n) { animation-duration: 5.4s; }
+    #skill-modal.active .sticky-note-animate {
+      animation: sticky-pop 0.25s ease-out, sticky-float 6s ease-in-out 0.15s infinite;
+    }
+    @keyframes sticky-float {
+      0%, 100% { transform: rotate(var(--sticky-tilt)) translateY(0); }
+      50% { transform: rotate(calc(var(--sticky-tilt) + 0.8deg)) translateY(-6px); }
+    }
+    @keyframes sticky-pop {
+      0% { transform: rotate(var(--sticky-tilt)) scale(0.96); opacity: 0; }
+      100% { transform: rotate(var(--sticky-tilt)) scale(1); opacity: 1; }
+    }
+    }
+
+    .manuscript .pen-stroke {
+      font-family: "Rock Salt", cursive;
+      font-size: clamp(28px, 6vw, 56px);
+      color: rgba(15, 58, 119, 0.9);
+      letter-spacing: 0.06em;
+      position: relative;
+      display: inline-block;
+      padding-bottom: 6px;
+    }
+    .manuscript .pen-stroke::after {
+      content: "";
+      position: absolute;
+      left: -6px;
+      bottom: 0;
+      width: calc(100% + 12px);
+      height: 4px;
+      background: rgba(15, 58, 119, 0.4);
+      transform: rotate(-1deg);
+      border-radius: 2px;
+    }
+
+    .manuscript #now-playing-art {
+      border: 1.5px solid var(--blueprint) !important;
+      background: #ffffff !important;
+    }
+
+    .manuscript .status-dot {
+      background: var(--blueprint);
+      outline: 1px dashed var(--graphite);
+      box-shadow: 0 0 0 2px rgba(28, 79, 156, 0.12);
+    }
+    .manuscript .visitor-counter {
+      background: transparent;
+      color: var(--blueprint-ink);
+      border-color: var(--blueprint);
+      border-width: 1px;
+    }
+
+    .manuscript .terminal-window,
+    .manuscript .terminal-header {
+      background: var(--paper) !important;
+      color: var(--graphite) !important;
+      border-color: var(--graphite) !important;
+    }
+    .manuscript .terminal-prompt,
+    .manuscript .terminal-success {
+      color: var(--blueprint-ink) !important;
+    }
+    .manuscript #terminal-input {
+      color: var(--graphite);
+    }
+
+    .manuscript .marquee-container {
+      background: rgba(28, 79, 156, 0.08);
+    }
+    .manuscript .marquee-track { color: var(--blueprint-ink); }
+
+    .manuscript #boot-overlay,
+    .manuscript #compile-overlay {
+      background: var(--paper);
+      color: var(--graphite);
+    }
+    .manuscript .glitch-blocks,
+    .manuscript .glitch-badge {
+      display: none !important;
+    }
+
+    .manuscript .business-card-front,
+    .manuscript .business-card-back {
+      background-color: var(--paper) !important;
+      color: var(--graphite) !important;
+      border: 2px solid var(--graphite) !important;
+      box-shadow: 8px 8px 0 rgba(43, 46, 52, 0.2) !important;
+      font-family: "IBM Plex Mono", monospace !important;
+      position: absolute;
+    }
+    .manuscript .business-card-back > div {
+      min-height: 100%;
+    }
+    .manuscript .business-card-front::after,
+    .manuscript .business-card-back::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      right: 24px;
+      width: 80px;
+      height: 22px;
+      background: rgba(240, 230, 180, 0.75);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      transform: rotate(2deg);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.18);
+    }
+    .manuscript .business-card-front h1,
+    .manuscript .business-card-back h3 {
+      letter-spacing: 0.08em;
+    }
+    .manuscript .business-card-front .mono,
+    .manuscript .business-card-back .mono {
+      color: var(--blueprint-ink) !important;
+    }
+    .manuscript #business-card-mode {
+      background-color: var(--paper) !important;
+      background-image:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(28, 79, 156, 0.14),
+          rgba(28, 79, 156, 0.14) 1px,
+          transparent 1px,
+          transparent 26px
+        );
+      padding: 24px;
+      padding-bottom: 48px;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 16px;
+    }
+    .manuscript .business-card-container {
+      height: 480px;
+      max-height: 70vh;
+      margin-bottom: 0;
+    }
+    .manuscript .business-card-front,
+    .manuscript .business-card-back {
+      height: 100%;
+    }
+    .manuscript #enter-full-site-btn {
+      background: var(--paper) !important;
+      color: var(--blueprint-ink) !important;
+      border: 1.5px solid var(--blueprint) !important;
+      position: static !important;
+      transform: none !important;
+      margin-top: 8px !important;
+    }
+    .manuscript #enter-full-site-btn:hover {
+      transform: translate(-2px, -2px) !important;
+      box-shadow: 4px 4px 0 rgba(43, 46, 52, 0.25) !important;
+    }
+    @media (max-height: 900px) {
+      .manuscript .business-card-container {
+        height: 430px;
+        max-height: 60vh;
+      }
+      .manuscript #business-card-mode {
+        padding-top: 16px;
+        padding-bottom: 24px;
+      }
+    }
+
+    .manuscript nav {
+      font-family: "IBM Plex Mono", monospace;
+      letter-spacing: 0.08em;
+      border: 1.5px solid var(--graphite) !important;
+      box-shadow: 4px 4px 0 rgba(43, 46, 52, 0.15);
+      position: fixed !important;
+      background: rgba(248, 248, 244, 0.95) !important;
+    }
+    .manuscript nav::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 22px;
+      width: 120px;
+      height: 22px;
+      background: rgba(240, 230, 180, 0.8);
+      border: 1px solid rgba(160, 140, 80, 0.45);
+      transform: rotate(-1.5deg);
+      box-shadow: 0 2px 0 rgba(43, 46, 52, 0.18);
+    }
+    .manuscript nav a {
+      color: var(--blueprint-ink) !important;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .manuscript .nav-dropdown-menu {
+      background: rgba(248, 248, 244, 0.98) !important;
+      border-color: var(--graphite) !important;
+      box-shadow: 3px 3px 0 rgba(43, 46, 52, 0.18) !important;
+    }
+
+    .manuscript .periodic-table-container,
+    .manuscript .periodic-table {
+      background: transparent;
+    }
+    .manuscript .periodic-element {
+      border: 1.5px solid var(--graphite);
+      background: rgba(248, 248, 244, 0.9);
+      color: var(--graphite);
+      box-shadow: 2px 2px 0 rgba(43, 46, 52, 0.18);
+    }
+    .manuscript .periodic-element:hover {
+      box-shadow: 4px 4px 0 rgba(43, 46, 52, 0.2);
+    }
+    .manuscript .element-language,
+    .manuscript .element-framework,
+    .manuscript .element-tool,
+    .manuscript .element-domain {
+      background: rgba(248, 248, 244, 0.9) !important;
+      color: var(--graphite) !important;
+      border-color: var(--graphite) !important;
+    }
+    .manuscript .periodic-element.element-language {
+      background-color: rgba(248, 248, 244, 0.9) !important;
+      background-image: repeating-linear-gradient(120deg, rgba(90, 167, 216, 0.35), rgba(90, 167, 216, 0.35) 4px, transparent 4px, transparent 10px) !important;
+    }
+    .manuscript .periodic-element.element-framework {
+      background-color: rgba(248, 248, 244, 0.9) !important;
+      background-image: repeating-linear-gradient(120deg, rgba(241, 209, 75, 0.4), rgba(241, 209, 75, 0.4) 4px, transparent 4px, transparent 10px) !important;
+    }
+    .manuscript .periodic-element.element-tool {
+      background-color: rgba(248, 248, 244, 0.9) !important;
+      background-image: repeating-linear-gradient(120deg, rgba(114, 196, 139, 0.4), rgba(114, 196, 139, 0.4) 4px, transparent 4px, transparent 10px) !important;
+    }
+    .manuscript .periodic-element.element-domain {
+      background-color: rgba(248, 248, 244, 0.9) !important;
+      background-image: repeating-linear-gradient(120deg, rgba(224, 102, 102, 0.4), rgba(224, 102, 102, 0.4) 4px, transparent 4px, transparent 10px) !important;
+    }
+    .manuscript #skills span[class*="bg-brutal-blue"] {
+      background: repeating-linear-gradient(120deg, rgba(90, 167, 216, 0.5), rgba(90, 167, 216, 0.5) 3px, transparent 3px, transparent 8px) !important;
+      border-color: var(--graphite) !important;
+    }
+    .manuscript #skills span[class*="bg-brutal-yellow"] {
+      background: repeating-linear-gradient(120deg, rgba(241, 209, 75, 0.6), rgba(241, 209, 75, 0.6) 3px, transparent 3px, transparent 8px) !important;
+      border-color: var(--graphite) !important;
+    }
+    .manuscript #skills span[class*="bg-brutal-green"] {
+      background: repeating-linear-gradient(120deg, rgba(114, 196, 139, 0.6), rgba(114, 196, 139, 0.6) 3px, transparent 3px, transparent 8px) !important;
+      border-color: var(--graphite) !important;
+    }
+    .manuscript #skills span[class*="bg-brutal-red"] {
+      background: repeating-linear-gradient(120deg, rgba(224, 102, 102, 0.6), rgba(224, 102, 102, 0.6) 3px, transparent 3px, transparent 8px) !important;
+      border-color: var(--graphite) !important;
+    }
+
+    .manuscript #draft-text {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      color: rgba(28, 79, 156, 0.025);
+      font-size: 40px;
+      line-height: 1.2;
+      font-family: "IBM Plex Mono", monospace;
+      letter-spacing: 0.12em;
+      transform: rotate(-2deg);
+      padding: 80px 120px;
+    }
+
+    @media (max-width: 640px) {
+      .manuscript .schematic-callout {
+        right: 8px;
+        top: 8px;
+        background: rgba(248, 248, 244, 0.9);
+        padding: 2px 6px;
+        border: 1px solid rgba(28, 79, 156, 0.3);
+      }
+      .manuscript .schematic-callout::before { display: none; }
+      .manuscript .coffee-stain,
+      .manuscript .coffee-stain.secondary { display: none; }
+    }
+
+    /* ============================================
+       MANUSCRIPT CLEAN REBUILD OVERRIDES
+       ============================================ */
+    .manuscript body {
+      background-color: #f8f8f4 !important;
+    }
+    .manuscript section {
+      display: block !important;
+      width: min(1080px, calc(100% - 64px)) !important;
+      margin: 64px auto !important;
+      padding: 40px 32px !important;
+      overflow: visible !important;
+    }
+    .manuscript section::before {
+      position: absolute !important;
+      top: -14px !important;
+      left: 18px !important;
+      grid-column: auto !important;
+      margin-left: 0 !important;
+    }
+    .manuscript section > * {
+      grid-column: auto !important;
+    }
+    .manuscript nav,
+    .manuscript .fixed.top-0,
+    .manuscript #status-bar,
+    .manuscript footer {
+      left: 24px !important;
+      right: 24px !important;
+      width: auto !important;
+    }
+    .manuscript nav {
+      top: 64px !important;
+    }
+    .manuscript section:first-of-type {
+      margin-top: 140px !important;
+    }
+
+    .manuscript h1 { font-size: clamp(22px, 4vw, 46px) !important; }
+    .manuscript h2 { font-size: clamp(20px, 3.6vw, 38px) !important; }
+    .manuscript h3 { font-size: clamp(16px, 2.6vw, 24px) !important; }
+    .manuscript h4 { font-size: clamp(14px, 2.2vw, 20px) !important; }
+    .manuscript .text-4xl,
+    .manuscript .text-5xl,
+    .manuscript .text-6xl,
+    .manuscript .text-7xl,
+    .manuscript .text-8xl {
+      font-size: clamp(22px, 4vw, 46px) !important;
+    }
+    .manuscript .text-2xl,
+    .manuscript .text-3xl {
+      font-size: clamp(18px, 3vw, 28px) !important;
+    }
+
+    .manuscript .brutal-card {
+      overflow: visible !important;
+      background: rgba(248, 248, 244, 0.96) !important;
+    }
+    .manuscript .tape-banner {
+      width: 124% !important;
+      margin-left: -12% !important;
+      transform: rotate(-4deg) !important;
+    }
+    .manuscript section::after {
+      width: 180px !important;
+      left: 12% !important;
+      transform: rotate(-5deg) !important;
+    }
+
+    .manuscript #business-card-mode {
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 12px !important;
+    }
+    .manuscript .business-card-container {
+      height: 520px !important;
+      max-height: 520px !important;
+    }
+    .manuscript .business-card-inner {
+      height: 520px !important;
+    }
+    .manuscript .business-card-front,
+    .manuscript .business-card-back {
+      height: 520px !important;
+      overflow: hidden !important;
+    }
+    .manuscript #business-card-mode *::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
+    .manuscript #enter-full-site-btn {
+      position: static !important;
+      margin-top: 12px !important;
+    }
+
+    .manuscript #draft-text {
+      color: rgba(28, 79, 156, 0.02) !important;
+      font-size: 34px !important;
+    }
+
+    @media (max-width: 900px) {
+      .manuscript section { width: min(900px, calc(100% - 48px)) !important; }
+      .manuscript nav,
+      .manuscript .fixed.top-0,
+      .manuscript #status-bar,
+      .manuscript footer { left: 16px !important; right: 16px !important; }
+    }
+    @media (max-width: 640px) {
+      .manuscript section { width: calc(100% - 32px) !important; margin: 48px auto !important; padding: 28px 20px !important; }
+      .manuscript nav { top: 56px !important; }
+    }
   </style>
 
   <!-- Removed <base target="_blank" /> so in-page links don't open new tabs. -->
@@ -1150,8 +2326,7 @@
       body > #grid-bg,
       body > #radar-scan,
       body > #toast-container,
-      body > #compile-overlay,
-      body > #shortcuts-help {
+      body > #compile-overlay {
         display: none !important;
       }
       #business-card-mode {
@@ -1185,7 +2360,7 @@
   </noscript>
 </head>
 
-<body class="bg-brutal-white text-brutal-black">
+<body class="manuscript bg-brutal-white text-brutal-black">
 
   <!-- SYSTEM BOOT OVERLAY -->
   <div id="boot-overlay"></div>
@@ -1196,10 +2371,11 @@
       <!-- Card Inner (for flip animation) -->
       <div id="business-card-inner" class="business-card-inner">
         <!-- Front of Card -->
-        <div class="business-card-front" style="visibility: visible; opacity: 1;">
+        <div class="business-card-front">
           <div class="flex flex-col items-center text-center" style="min-height: 100%;">
             <!-- Profile Image -->
-            <div class="w-24 h-24 sm:w-28 sm:h-28 mb-4 overflow-hidden border-[3px] border-brutal-black dark:border-brutal-white bg-brutal-black dark:bg-brutal-white flex items-center justify-center">
+            <div class="w-24 h-24 sm:w-28 sm:h-28 mb-4 overflow-hidden border-[3px] border-brutal-black dark:border-brutal-white bg-brutal-black dark:bg-brutal-white flex items-center justify-center schematic-frame">
+              <span class="schematic-callout">ID PHOTO</span>
               <img src="headshot.png" alt="Samin Qureshi" class="w-full h-full object-cover" onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-3xl\'>SQ</span>';">
             </div>
             
@@ -1227,7 +2403,7 @@
         </div>
         
         <!-- Back of Card -->
-        <div class="business-card-back" style="visibility: visible; opacity: 1;">
+        <div class="business-card-back">
           <div class="flex flex-col" style="min-height: 100%;">
             <h3 class="text-sm font-bold mb-3 mono">SKILLS<span class="text-brutal-cyan">_OVERVIEW</span></h3>
             
@@ -1304,7 +2480,7 @@
     </div>
     
     <!-- Enter Full Site Button (only shows with JS) -->
-    <button id="enter-full-site-btn" onclick="exitBusinessCard()" class="fixed bottom-8 left-1/2 -translate-x-1/2 brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-6 py-3 mono font-bold text-sm hover:scale-105 transition-transform hidden" style="z-index: 10001;">
+    <button id="enter-full-site-btn" onclick="exitBusinessCard()" class="fixed bottom-8 left-0 right-0 mx-auto brutal-card bg-brutal-black dark:bg-brutal-white text-brutal-white dark:text-brutal-black px-6 py-3 mono font-bold text-sm hidden" style="z-index: 10001; width: fit-content;">
       ENTER_FULL_SITE →
     </button>
     
@@ -1326,6 +2502,47 @@
   <!-- DYNAMIC GRID BACKGROUND -->
   <div id="grid-bg"></div>
 
+  <!-- COFFEE STAINS -->
+  <div class="coffee-stain"></div>
+  <div class="coffee-stain secondary"></div>
+
+  <!-- MANUSCRIPT COORDINATE MARKERS -->
+  <div id="manuscript-coordinates">
+    <div class="x-axis">
+      <span style="left: 10%;">X10</span>
+      <span style="left: 30%;">X30</span>
+      <span style="left: 50%;">X50</span>
+      <span style="left: 70%;">X70</span>
+      <span style="left: 90%;">X90</span>
+    </div>
+    <div class="y-axis">
+      <span style="top: 15%;">Y15</span>
+      <span style="top: 35%;">Y35</span>
+      <span style="top: 55%;">Y55</span>
+      <span style="top: 75%;">Y75</span>
+      <span style="top: 95%;">Y95</span>
+    </div>
+  </div>
+
+  <!-- MATHEMATICAL OVERLAY -->
+  <div id="math-overlay">
+    <span class="formula" style="top: 8%; left: 12%;">∫₀^∞ e^{-x²} dx = √π / 2</span>
+    <span class="formula" style="top: 22%; left: 62%;">y = mx + b</span>
+    <span class="formula" style="top: 36%; left: 18%;">∇·F = 0</span>
+    <span class="formula" style="top: 48%; left: 66%;">tan θ = opposite / adjacent</span>
+    <span class="formula" style="top: 64%; left: 10%;">x² + y² = r²</span>
+    <span class="formula" style="top: 78%; left: 58%;">∮ C F · dr</span>
+    <span class="formula" style="top: 86%; left: 22%;">lim x→0 sin x / x = 1</span>
+    <span class="formula" style="top: 14%; left: 40%;">f(x)=ax²+bx+c</span>
+  </div>
+
+  <!-- DRAFT TEXT BACKGROUND -->
+  <div id="draft-text">
+    TECHNICAL PROOF • REV 2.1 • ARCHITECT NOTES • WORKING DRAFT • SCALE 1:1 •
+    <br>ASSEMBLY DIAGRAM • FIELD TEST • UNIT CHECK • CALCULATION PASS •
+    <br>REVISION LOG • STRUCTURAL GRID • MATERIAL NOTES • HAND VERIFIED •
+  </div>
+
   <!-- RADAR SCAN EFFECT -->
   <div id="radar-scan"></div>
 
@@ -1339,29 +2556,6 @@
       <div class="compile-progress-bar" id="compile-bar"></div>
     </div>
     <div class="compile-log mono" id="compile-log"></div>
-  </div>
-
-  <!-- KEYBOARD SHORTCUTS HELP -->
-  <div id="shortcuts-help" onclick="toggleShortcutsHelp()">
-    <div class="shortcuts-panel" onclick="event.stopPropagation()">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold">KEYBOARD SHORTCUTS</h3>
-        <button onclick="toggleShortcutsHelp()" class="text-brutal-red font-bold">✕</button>
-      </div>
-      <div class="space-y-2 text-sm">
-        <div class="shortcut-row"><span>Help / Shortcuts</span><span class="shortcut-key">?</span></div>
-        <div class="shortcut-row"><span>Focus Terminal</span><span class="shortcut-key">/</span></div>
-        <div class="shortcut-row"><span>Toggle Theme</span><span class="shortcut-key">t</span></div>
-        <div class="shortcut-row"><span>Toggle Matrix</span><span class="shortcut-key">m</span></div>
-        <div class="shortcut-row"><span>Toggle Scanlines</span><span class="shortcut-key">s</span></div>
-        <div class="shortcut-row"><span>Scroll to Top</span><span class="shortcut-key">g + g</span></div>
-        <div class="shortcut-row"><span>Scroll to Bottom</span><span class="shortcut-key">G</span></div>
-        <div class="shortcut-row"><span>Next Section</span><span class="shortcut-key">j</span></div>
-        <div class="shortcut-row"><span>Previous Section</span><span class="shortcut-key">k</span></div>
-        <div class="shortcut-row"><span>Konami Code</span><span class="shortcut-key">↑↑↓↓←→←→BA</span></div>
-      </div>
-      <p class="mt-4 text-xs opacity-60">Press any key to close</p>
-    </div>
   </div>
 
   <!-- Connection Status Bar (Top) -->
@@ -1497,22 +2691,15 @@
   </nav>
 
   <!-- Hero -->
-  <section class="pt-36 md:pt-40 pb-16 md:pb-20 px-4 md:px-8 min-h-[92vh] md:min-h-screen flex flex-col justify-center max-w-7xl mx-auto">
+  <section data-x="00" data-y="00" class="pt-36 md:pt-40 pb-16 md:pb-20 px-4 md:px-8 min-h-[92vh] md:min-h-screen flex flex-col justify-center max-w-7xl mx-auto">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start">
       <div class="space-y-6 md:space-y-8">
         <div class="inline-block bg-brutal-yellow text-brutal-green px-4 py-2 mono text-xs md:text-sm font-bold transform -rotate-1 brutal-card border-[3px]">
           █ AVAILABLE FOR HIRE
         </div>
 
-        <!-- ASCII Art Banner -->
-        <div class="ascii-banner mb-6 hidden md:block">
-███████╗ █████╗ ███╗   ███╗██╗███╗   ██╗
-██╔════╝██╔══██╗████╗ ████║██║████╗  ██║
-███████╗███████║██╔████╔██║██║██╔██╗ ██║
-╚════██║██╔══██║██║╚██╔╝██║██║██║╚██╗██║
-███████║██║  ██║██║ ╚═╝ ██║██║██║ ╚████║
-╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝
-        </div>
+        <!-- Pen Stroke Signature -->
+        <div class="pen-stroke mb-6 hidden md:block">SAMIN QURESHI</div>
 
         <h1 class="text-5xl sm:text-6xl md:text-8xl font-bold leading-[0.92] tracking-tighter reveal-on-scroll">
           SOFTWARE<br />
@@ -1538,17 +2725,17 @@
       </div>
 
       <div class="space-y-4 lg:pt-20">
-        <div class="brutal-card bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black p-5 md:p-6">
+        <div class="brutal-card bg-brutal-black text-brutal-white dark:bg-brutal-white dark:text-brutal-black p-5 md:p-6 tape-patch">
           <div class="mono text-[11px] md:text-xs uppercase opacity-60 mb-2">CHESS BOT ELO Rating</div>
           <div class="text-4xl md:text-5xl font-bold">1867</div>
         </div>
 
-        <div class="brutal-card bg-brutal-white dark:bg-brutal-dark p-5 md:p-6 md:ml-8">
+        <div class="brutal-card bg-brutal-white dark:bg-brutal-dark p-5 md:p-6 md:ml-8 tape-patch">
           <div class="mono text-[11px] md:text-xs uppercase text-brutal-gray mb-2">Lines of Code</div>
           <div class="text-4xl md:text-5xl font-bold text-brutal-red">150K+</div>
         </div>
 
-        <div class="brutal-card bg-brutal-blue text-white p-5 md:p-6 md:ml-4">
+        <div class="brutal-card bg-brutal-blue text-white p-5 md:p-6 md:ml-4 tape-patch">
           <div class="mono text-[11px] md:text-xs uppercase opacity-80 mb-2">Currently</div>
           <div class="text-xl md:text-2xl font-bold">Optimizing Bitboards</div>
         </div>
@@ -1573,7 +2760,7 @@
   <!-- ============================================== -->
   <!-- SECTION 1: PERSONAL DATA BIO                  -->
   <!-- ============================================== -->
-  <section id="bio" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <section id="bio" data-x="08" data-y="12" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
       PERSONAL<span class="text-brutal-cyan">_BIO</span>
     </h2>
@@ -1599,7 +2786,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
       <!-- Philosophy / Career Statement -->
-      <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8">
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8 tape-patch sticky-note tilt-left">
         <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
           PHILOSOPHY<span class="text-brutal-cyan">_STATEMENT.MD</span>
         </h3>
@@ -1612,7 +2799,7 @@
             I believe software development is more than writing code, it's about solving real problems  that impact people's lives. My journey from building chess engines to mental health applications reflects my core belief: technology should serve humanity, not the other way around.
           </p>
           <p>
-            Currently pursuing my education while co-founding an AI startup, I'm driven by the intersection of low-level performance optimization and user-centric design. My experience with Swift, C++, and systems programming has taught me that the best solutions often emerge from understanding problems at their deepest level. Looking ahead, I aspire to build technology that makes a meaningful difference - whether that's through accessible mental health tools, intelligent code assistance, or innovations yet to be imagined.
+            Currently pursuing my education while co-founding an AI startup, I'm driven by the intersection of low-level performance optimization and user-centric design. My experience with Swift, C++, and systems programming has taught me that the best solutions often emerge from understanding problems at their deepest level. Looking ahead, I aspire to build technology that makes a meaningful difference, whether that's through accessible mental health tools, intelligent code assistance, or innovations yet to be imagined.
           </p>
         </div>
       </div>
@@ -1620,7 +2807,7 @@
       <!-- Resume & Cover Letter -->
       <div class="space-y-6">
         <!-- Resume Card -->
-        <div class="brutal-card bg-brutal-blue text-white p-6">
+          <div class="brutal-card bg-brutal-blue text-white p-6 tape-patch sticky-note tilt-right">
           <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
             RESUME<span class="text-brutal-yellow">_FILE.PDF</span>
           </h3>
@@ -1636,7 +2823,7 @@
         </div>
 
         <!-- Cover Letter Card -->
-        <div class="brutal-card bg-brutal-green text-brutal-black p-6">
+        <div class="brutal-card bg-brutal-green text-brutal-black p-6 tape-patch sticky-note tilt-left">
           <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
             COVER<span class="text-brutal-blue">_LETTER.TXT</span>
           </h3>
@@ -1647,7 +2834,7 @@
         </div>
 
         <!-- Sole Proprietorship Card -->
-        <div class="brutal-card bg-brutal-red text-white p-6">
+        <div class="brutal-card bg-brutal-red text-white p-6 tape-patch">
           <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
             BUSINESS<span class="text-brutal-yellow">_ENTITY.REG</span>
           </h3>
@@ -1681,6 +2868,21 @@
       </div>
     </div>
 
+    <!-- Design origin -->
+    <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8 tape-patch mt-6">
+      <h3 class="text-base md:text-lg font-bold mb-4 tracking-tight">
+        DESIGN<span class="text-brutal-cyan">_ORIGIN.MD</span>
+      </h3>
+      <div class="space-y-3 text-sm md:text-base leading-relaxed">
+        <p>
+          This site's aesthetic isn't accidental. The graph-paper grids, blueprint ink, ruler margins, precise geometric spacing, it's an ode to an earlier chapter: a serious attempt at studying mathematics that I never got to finish.
+        </p>
+        <p>
+          Illness ended that pursuit before it could run its course. But the way mathematics taught me to see the world, in structures, patterns, and careful arrangements, stayed. Every tick mark on this ruler, every aligned grid line, every deliberate spacing on this page is a quiet way of carrying that forward. Not as something lost, but as something that still shapes how I think and build.
+        </p>
+      </div>
+    </div>
+
     <!-- Cover Letter Modal -->
     <div id="cover-letter-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
       <div class="brutal-card bg-white dark:bg-brutal-dark max-w-3xl w-full max-h-[80vh] overflow-y-auto">
@@ -1709,7 +2911,7 @@
     </div>
   </section>
 
-  <section id="professional" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+  <section id="professional" data-x="14" data-y="22" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
         PROFESSIONAL<span class="text-brutal-red">_SUMMARY</span>
@@ -1723,7 +2925,7 @@
 
       <!-- Professional Work Samples (Projects) -->
       <h3 class="text-xl md:text-2xl font-bold mb-6 tracking-tight">
-        PROJECT<span class="text-brutal-cyan">_SAMPLES.EXE</span>
+        TECHNICAL<span class="text-brutal-cyan">_SPECS.DOC</span>
         <!-- <span class="mono text-xs font-normal opacity-60 ml-2">[2-3]</span> -->
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12" id="projects-grid"></div>
@@ -1817,7 +3019,7 @@
   <!-- ============================================== -->
   <!-- INTERACTIVE TERMINAL                          -->
   <!-- ============================================== -->
-  <section id="terminal" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+  <section id="terminal" data-x="18" data-y="30" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
     <div class="max-w-4xl mx-auto">
       <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tighter">
         INTERACTIVE<span class="text-brutal-green">_TERMINAL.SH</span>
@@ -1909,7 +3111,7 @@
   <!-- ============================================== -->
   <!-- SECTION 2: ACADEMIC CREDENTIALS               -->
   <!-- ============================================== -->
-  <section id="academics" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+  <section id="academics" data-x="22" data-y="38" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
         ACADEMIC<span class="text-brutal-blue">_CREDENTIALS</span>
@@ -1959,7 +3161,7 @@
   <!-- ============================================== -->
   <!-- SECTION 3: CAPSTONE PROJECT                   -->
   <!-- ============================================== -->
-  <section id="capstone" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <section id="capstone" data-x="28" data-y="46" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
       CAPSTONE<span class="text-brutal-green">_PROJECT</span>
     </h2>
@@ -2030,12 +3232,12 @@
   <!-- ============================================== -->
 
     <!-- Resume (server-hosted only) -->
-  <section id="resume" class="py-16 md:py-20 px-4 md:px-8 max-w-4xl mx-auto">
+  <section id="resume" data-x="34" data-y="52" class="py-16 md:py-20 px-4 md:px-8 max-w-4xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tighter">
       RESUME<span class="text-brutal-yellow">_MODULE</span>
     </h2>
 
-    <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8">
+    <div class="brutal-card bg-white dark:bg-brutal-dark p-6 md:p-8 tape-patch">
       <div class="flex flex-col gap-4">
         <div>
           <div class="mono text-xs uppercase opacity-60 mb-2">SERVER HOSTED</div>
@@ -2075,7 +3277,7 @@
       <!-- Glitch banner -->
       <div
         id="resume-unavailable-banner"
-        class="hidden mt-6 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase glitch-wrap"
+        class="hidden mt-6 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase tape-banner"
       >
         <div class="glitch-blocks"></div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 relative z-10">
@@ -2110,7 +3312,7 @@
   <!-- ============================================== -->
   <!-- SECTION: PERIODIC TABLE OF SKILLS             -->
   <!-- ============================================== -->
-  <section id="skills" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <section id="skills" data-x="40" data-y="60" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <div class="mb-8 md:mb-12">
       <h2 class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter">
         SKILL<span class="text-brutal-cyan">_MATRIX</span>
@@ -2136,7 +3338,7 @@
 
     <!-- Skill Detail Modal -->
     <div id="skill-modal" class="fixed inset-0 z-[100] bg-black/80 hidden items-center justify-center p-4" onclick="closeSkillModal()">
-      <div class="brutal-card bg-white dark:bg-brutal-dark max-w-md w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+      <div class="brutal-card bg-white dark:bg-brutal-dark max-w-md w-full max-h-[90vh] overflow-y-auto sticky-note sticky-note-animate tilt-right" onclick="event.stopPropagation()">
         <div id="skill-modal-header" class="px-4 py-3 border-b-[3px] border-brutal-black dark:border-brutal-white flex items-center justify-between">
           <span class="mono text-sm font-bold">SKILL_DETAILS.JSON</span>
           <button onclick="closeSkillModal()" class="w-8 h-8 brutal-card bg-brutal-red text-white flex items-center justify-center text-lg font-bold hover:opacity-80">✕</button>
@@ -2159,7 +3361,7 @@
   <!-- ============================================== -->
   <!-- SECTION: GAMES & INTERACTIVE                  -->
   <!-- ============================================== -->
-  <section id="games" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
+  <section id="games" data-x="46" data-y="68" class="py-16 md:py-20 px-4 md:px-8 bg-brutal-black text-brutal-white border-y-[3px] border-brutal-black dark:border-brutal-white">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
         INTERACTIVE<span class="text-brutal-green">_GAMES</span>
@@ -2203,7 +3405,8 @@
       <!-- Now Playing Widget -->
       <div class="mt-8 brutal-card bg-brutal-green text-brutal-black p-6">
         <div class="flex items-center gap-4">
-          <div id="now-playing-art" class="w-16 h-16 bg-brutal-black brutal-card flex items-center justify-center overflow-hidden">
+          <div id="now-playing-art" class="w-16 h-16 bg-brutal-black brutal-card flex items-center justify-center overflow-hidden schematic-frame">
+            <span class="schematic-callout">SCHEMATIC AUDIO</span>
             <img id="now-playing-img" src="" alt="Album Art" class="w-full h-full object-cover hidden">
             <span id="now-playing-icon" class="text-2xl">🎵</span>
           </div>
@@ -2223,7 +3426,7 @@
   <!-- ============================================== -->
   <!-- SECTION: META / COLOPHON / CHANGELOG          -->
   <!-- ============================================== -->
-  <section id="meta" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <section id="meta" data-x="52" data-y="76" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-10 md:mb-12 tracking-tighter">
       META<span class="text-brutal-blue">_DATA</span>
     </h2>
@@ -2247,7 +3450,7 @@
       </div>
 
       <!-- Quote of the Day -->
-      <div class="brutal-card bg-brutal-blue text-white p-6">
+      <div class="brutal-card bg-brutal-blue text-white p-6 tape-patch">
         <h3 class="text-lg font-bold mb-4 tracking-tight">QUOTE<span class="text-brutal-yellow">_OF_DAY.RND</span></h3>
         <blockquote id="daily-quote" class="text-lg italic mb-4 border-l-4 border-brutal-yellow pl-4">
           "Loading wisdom..."
@@ -2368,14 +3571,14 @@
   <!-- ============================================== -->
   <!-- SECTION: SOLE PROPRIETORSHIP                  -->
   <!-- ============================================== -->
-  <section id="sole-proprietorship" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
+  <section id="sole-proprietorship" data-x="60" data-y="84" class="py-16 md:py-20 px-4 md:px-8 max-w-6xl mx-auto">
     <h2 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-4 tracking-tighter">
       SOLE<span class="text-brutal-red">_PROPRIETORSHIP</span>
     </h2>
     <p class="mono text-sm opacity-60 mb-10 md:mb-12">Business entity for app operations & contracting</p>
 
     <!-- Coming Soon Banner (controlled by CONFIG) -->
-    <div id="sole-prop-coming-soon" class="hidden mb-8 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase glitch-wrap">
+    <div id="sole-prop-coming-soon" class="hidden mb-8 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase tape-banner">
       <div class="glitch-blocks"></div>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 relative z-10">
         <span class="glitch-badge">⚠ COMING_SOON</span>
@@ -2475,13 +3678,13 @@
   </section>
 
   <!-- Contact -->
-  <section id="contact" class="py-16 md:py-20 px-4 md:px-8 max-w-2xl mx-auto">
-    <div class="brutal-card bg-brutal-yellow p-6 md:p-8 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+  <section id="contact" data-x="68" data-y="92" class="py-16 md:py-20 px-4 md:px-8 max-w-2xl mx-auto">
+    <div class="brutal-card bg-brutal-yellow p-6 md:p-8 transform rotate-1 hover:rotate-0 transition-transform duration-300 tape-patch">
       <h2 class="text-3xl md:text-4xl font-bold mb-6 text-brutal-black">INITIATE_CONTACT</h2>
 
       <div
         id="contact-unavailable-banner"
-        class="hidden mb-6 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase glitch-wrap"
+        class="hidden mb-6 brutal-card border-brutal-black bg-brutal-black text-brutal-white px-4 py-3 mono font-bold uppercase tape-banner"
       >
         <div class="glitch-blocks"></div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 relative z-10">
@@ -2530,8 +3733,6 @@
     <p id="footer-location">TORONTO / REMOTE</p>
     <div class="mt-4 text-xs opacity-50">
       <span class="mr-4">v2.0.0</span>
-      <span class="mr-4">|</span>
-      <span id="keyboard-hint">Press ? for shortcuts</span>
     </div>
   </footer>
 
@@ -2548,7 +3749,6 @@
     <div class="flex items-center gap-4">
       <span id="current-time" class="hidden sm:inline">00:00:00</span>
       <span id="reading-time">~5 min read</span>
-      <button onclick="toggleShortcutsHelp()" class="hover:text-brutal-cyan transition-colors">[?]</button>
     </div>
   </div>
 
@@ -2680,7 +3880,7 @@
         role: "Back-end & Database Developer",
         teamSize: "Group Project",
         status: "In Development",
-        timeline: "W25 Semester",
+        timeline: "W26 Semester",
         tech: ["Expo", "React Native", "Supabase", "PostgreSQL"],
         description: "LMNL.app is a mobile application designed to combat the growing problem of social media addiction. By providing users with tools to monitor, limit, and reflect on their social media usage, LMNL empowers people to reclaim their time and mental well-being.",
         vision: "To create a healthier relationship between users and their devices by providing intuitive tools that encourage mindful technology use without completely disconnecting from the digital world.",
@@ -2759,22 +3959,43 @@
       ],
       projects: [
         {
+          name: "Roster - iOS & Android App",
+          description:
+            "Build your own roster of contacts with next gen features like AI-powered scanning, smart grouping, and seamless syncing across devices.",
+          tech: ["REACT NATIVE", "ON-DEVICE AI", "OCR"],
+          color: "bg-brutal-red",
+          live: false,
+          href: "https://github.com/blitzwolfz",
+          period: "2026-PRESENT",
+        },
+        {
+          name: "Brutal Weather - iOS & Android App",
+          description: "Brutalist styled weather app with multi source data, offline caching, and AI-generated roasts",
+          tech: ["REACT NATIVE", "ON-DEVICE AI", "WEATHER APIS"],
+          color: "bg-brutal-blue",
+          live: true,
+          href: "https://brutalweather.com/",
+          period: "2026-PRESENT",
+        },
+        {
           name: "COREX - C++ CHESS ENGINE",
           description:
             "Blazing fast 1800+ Elo engine with GPU acceleration for position evaluation. UCI protocol support.",
           tech: ["C++", "ZOBRIST HASHING", "BITBOARDS"],
-          color: "bg-brutal-red",
-          live: false,
-          href: "https://github.com/blitzwolfz",
+          color: "bg-brutal-green",
+          live: true,
+          href: "https://lichess.org/@/cwood-corex",
+          period: "2025-PRESENT",
         },
         {
-          name: "SERENITY+",
+          name: "SERENITY+ - iOS App",
           description:
             "Mental Health App and Lifestyle Tracker. SwiftUI frontend with Core Data persistence and Combine architecture.",
           tech: ["SWIFT", "CORE DATA", "SWIFTUI"],
           color: "bg-brutal-yellow",
           live: true,
           href: "https://apps.apple.com/us/app/serenityplus/id6754047372",
+          period: "2025-PRESENT",
         },
       ],
       // =============================================
@@ -2885,19 +4106,28 @@
           const isComingSoon = proj.live === false;
           const showBanner = CONFIG.ui?.showComingSoonBanners && isComingSoon;
 
+          const tiltClass = index % 2 === 0 ? "tilt-left" : "tilt-right";
+          const animDelay = (index % 6) * 0.08;
           return `
-            <div class="brutal-card bg-brutal-dark border-brutal-white p-5 md:p-6 h-full flex flex-col">
+            <div class="brutal-card bg-brutal-dark border-brutal-white p-5 md:p-6 h-full flex flex-col spec-card sticky-note sticky-note-animate ${tiltClass}" style="animation-delay: ${animDelay}s;">
+              <div class="spec-header">
+                <div class="flex items-center gap-2">
+                  <span>TECHNICAL_SPEC</span>
+                  <span class="spec-accent ${proj.color}"></span>
+                </div>
+                <span>SPEC-${String(index + 1).padStart(2, "0")}</span>
+              </div>
               <div class="flex justify-between items-start mb-5 md:mb-6">
                 <div class="w-12 h-12 ${proj.color} brutal-card border-brutal-white flex items-center justify-center text-xl font-bold text-brutal-black">
                   ${index + 1}
                 </div>
-                <div class="mono text-xs opacity-50 text-brutal-white">2025</div>
+                <div class="mono text-xs opacity-50 text-brutal-white">${proj.period}</div>
               </div>
 
               ${
                 showBanner
                   ? `
-                    <div class="mb-4 brutal-card border-brutal-white bg-brutal-yellow text-brutal-black px-3 py-2 mono text-[11px] md:text-xs font-bold uppercase flex items-center justify-between gap-3">
+                    <div class="mb-4 brutal-card border-brutal-white bg-brutal-yellow text-brutal-black px-3 py-2 mono text-[11px] md:text-xs font-bold uppercase flex items-center justify-between gap-3 tape-banner">
                       <span>⚠ COMING_SOON</span>
                       <span class="opacity-70">LINK_DISABLED</span>
                     </div>
@@ -2980,27 +4210,36 @@
       if (container) {
         const hasImage = CONFIG.bio.profileImage && CONFIG.bio.profileImage.trim() !== '';
 
-        if (hasImage) {
-          container.innerHTML = `
-            <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white overflow-hidden w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-white dark:bg-brutal-dark">
-              <img
-                src="${CONFIG.bio.profileImage}"
-                alt="${CONFIG.personal.name}"
-                class="w-full h-full object-cover"
-                onerror="this.parentElement.innerHTML = createProfilePlaceholder()"
-              >
-            </div>
-          `;
-        } else {
-          container.innerHTML = `
-            <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-black dark:bg-brutal-white flex items-center justify-center">
-              <div class="text-center">
-                <div class="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-white dark:text-brutal-black">${CONFIG.personal.name.split(' ').map(n => n[0]).join('')}</div>
-                <div class="mono text-xs text-brutal-white/50 dark:text-brutal-black/50 mt-2">PROFILE.IMG</div>
+      if (hasImage) {
+        container.innerHTML = `
+            <div class="profile-photo-tape">
+              <span class="photo-tape-strip photo-tape-bottom-left"></span>
+              <span class="photo-tape-strip photo-tape-bottom-right"></span>
+              <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white overflow-hidden w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-white dark:bg-brutal-dark schematic-frame profile-photo-frame">
+                <span class="schematic-callout">SCHEMATIC A</span>
+                <img
+                  src="${CONFIG.bio.profileImage}"
+                  alt="${CONFIG.personal.name}"
+                  class="w-full h-full object-cover"
+                  onerror="this.parentElement.innerHTML = createProfilePlaceholder()"
+                >
               </div>
             </div>
           `;
-        }
+      } else {
+        container.innerHTML = `
+            <div class="profile-photo-tape">
+              <span class="photo-tape-strip photo-tape-bottom-left"></span>
+              <span class="photo-tape-strip photo-tape-bottom-right"></span>
+              <div class="brutal-card border-[3px] border-brutal-black dark:border-brutal-white w-44 h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-brutal-black dark:bg-brutal-white flex items-center justify-center profile-photo-frame">
+                <div class="text-center">
+                  <div class="text-5xl md:text-6xl lg:text-7xl font-bold text-brutal-white dark:text-brutal-black">${CONFIG.personal.name.split(' ').map(n => n[0]).join('')}</div>
+                  <div class="mono text-xs text-brutal-white/50 dark:text-brutal-black/50 mt-2">PROFILE.IMG</div>
+                </div>
+              </div>
+            </div>
+          `;
+      }
       }
     }
 
@@ -3030,7 +4269,7 @@
       // If no wireframes, show 4 placeholders
       if (wireframes.length === 0) {
         container.innerHTML = placeholderLabels.map(label => `
-          <div class="brutal-card bg-brutal-black border-brutal-white/30 flex-shrink-0 w-40 md:w-48 flex items-center justify-center opacity-60" style="aspect-ratio: 9/16;">
+          <div class="brutal-card bg-brutal-black border-brutal-white/30 flex-shrink-0 w-40 md:w-48 flex items-center justify-center opacity-60 schematic-frame" style="aspect-ratio: 9/16;">
             <div class="text-center mono text-xs">
               <div class="w-10 h-10 mx-auto mb-2 border-2 border-brutal-white/30 flex items-center justify-center">
                 <span class="text-brutal-white/30 text-lg">+</span>
@@ -3056,8 +4295,9 @@
           const src = getImagePath(wf);
           const label = typeof wf === 'string' ? '' : (wf.label || '');
           return `
-            <div class="brutal-card bg-brutal-black border-brutal-white overflow-hidden group cursor-pointer flex-shrink-0 w-40 md:w-48" style="aspect-ratio: 9/16;" data-wf-index="${index}" onclick="openWireframeByIndex(${index})">
-              <div class="w-full h-full relative">
+            <div class="brutal-card bg-brutal-black border-brutal-white overflow-hidden group cursor-pointer flex-shrink-0 w-40 md:w-48 schematic-card" style="aspect-ratio: 9/16;" data-wf-index="${index}" onclick="openWireframeByIndex(${index})">
+              <div class="w-full h-full relative schematic-frame">
+                <div class="schematic-callout">SCHEMATIC ${String(index + 1).padStart(2, "0")}</div>
                 <img
                   src="${encodeURI(src)}"
                   alt="${label || 'Wireframe'}"
@@ -3175,7 +4415,8 @@
 
       // Header
       header.innerHTML = `
-        <div class="brutal-card bg-brutal-green text-brutal-black p-6 md:p-8">
+        <div class="brutal-card bg-brutal-green text-brutal-black p-6 md:p-8 schematic-frame">
+          <span class="schematic-callout">SYSTEM OVERVIEW</span>
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h3 class="text-3xl md:text-4xl font-bold">${cap.name}</h3>
@@ -3310,8 +4551,10 @@
       container.innerHTML = CONFIG.academicSamples
         .map((sample, index) => {
           const isPlaceholder = sample.placeholder === true;
+          const tiltClass = index % 2 === 0 ? "tilt-left" : "tilt-right";
+          const animDelay = (index % 6) * 0.1;
           return `
-            <div class="brutal-card bg-brutal-dark border-brutal-white p-5 ${isPlaceholder ? 'opacity-60' : ''}">
+            <div class="brutal-card bg-brutal-dark border-brutal-white p-5 sticky-note sticky-note-animate ${tiltClass} ${isPlaceholder ? 'opacity-70' : ''}" style="animation-delay: ${animDelay}s;">
               ${isPlaceholder ? '<div class="mono text-xs uppercase mb-2 text-brutal-yellow">PLACEHOLDER</div>' : ''}
               <div class="flex items-start justify-between mb-3">
                 <div class="w-8 h-8 bg-brutal-cyan brutal-card border-brutal-white flex items-center justify-center text-sm font-bold text-brutal-black">
@@ -5064,104 +6307,13 @@
       counter.textContent = `VISITORS: ${count.toString().padStart(4, '0')}`;
     }
 
-    // Keyboard Shortcuts
-    let keyBuffer = '';
-    function handleKeyboardShortcuts(e) {
-      // Close skill modal on Escape
-      const skillModal = document.getElementById('skill-modal');
-      if (e.key === 'Escape' && skillModal && skillModal.classList.contains('active')) {
-        closeSkillModal();
-        return;
+    // Close skill modal on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const skillModal = document.getElementById('skill-modal');
+        if (skillModal && skillModal.classList.contains('active')) closeSkillModal();
       }
-      
-      // Don't trigger when typing in inputs
-      if (e.target.matches('input, textarea')) return;
-      
-      // Don't trigger when terminal is focused
-      const terminalInput = document.getElementById('terminal-input');
-      if (terminalInput && document.activeElement === terminalInput) return;
-      
-      // Don't trigger when typing game is active
-      if (typingGameActive) return;
-      
-      // Don't trigger when skill modal is open
-      if (skillModal && skillModal.classList.contains('active')) return;
-      
-      // Terminal focus
-      if (e.key === '/') {
-        e.preventDefault();
-        const terminalInput = document.getElementById('terminal-input');
-        if (terminalInput) {
-          terminalInput.focus();
-          terminalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }
-      
-      // Theme toggle
-      if (e.key === 't' || e.key === 'T') {
-        toggleTheme();
-      }
-      
-      // Matrix toggle
-      if (e.key === 'm' || e.key === 'M') {
-        toggleMatrixRain();
-      }
-      
-      // Scanlines toggle
-      if (e.key === 's' || e.key === 'S') {
-        toggleScanlines();
-      }
-      
-      // Help toggle
-      if (e.key === '?') {
-        toggleShortcutsHelp();
-      }
-      
-      // Vim-style navigation
-      if (e.key === 'g') {
-        keyBuffer += 'g';
-        if (keyBuffer === 'gg') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-          keyBuffer = '';
-        }
-        setTimeout(() => keyBuffer = '', 500);
-      }
-      
-      if (e.key === 'G') {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      }
-      
-      if (e.key === 'j') {
-        scrollToSection(1);
-      }
-      
-      if (e.key === 'k') {
-        scrollToSection(-1);
-      }
-      
-      // Close help on any key
-      const help = document.getElementById('shortcuts-help');
-      if (help && help.classList.contains('active') && e.key !== '?') {
-        toggleShortcutsHelp();
-      }
-    }
-    
-    function toggleShortcutsHelp() {
-      const help = document.getElementById('shortcuts-help');
-      if (help) help.classList.toggle('active');
-    }
-    
-    let currentSectionIndex = 0;
-    const sections = ['bio', 'academics', 'capstone', 'professional', 'skills', 'terminal', 'games', 'meta', 'contact'];
-    
-    function scrollToSection(direction) {
-      currentSectionIndex += direction;
-      if (currentSectionIndex < 0) currentSectionIndex = 0;
-      if (currentSectionIndex >= sections.length) currentSectionIndex = sections.length - 1;
-      
-      const section = document.getElementById(sections[currentSectionIndex]);
-      if (section) section.scrollIntoView({ behavior: 'smooth' });
-    }
+    });
 
     // Compile Animation
     function runCompileAnimation() {
@@ -5477,10 +6629,14 @@
         document.body.classList.add('business-card-active');
         document.body.style.overflow = 'hidden';
         document.documentElement.style.overflow = 'hidden';
-        
+
+        // Reset flip state so card always opens front-side
+        const container = businessCardMode.querySelector('.business-card-container');
+        if (container) container.classList.remove('flipped');
+
         // Update button text
         if (btn) btn.textContent = 'FULL_SITE →';
-        
+
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -5509,6 +6665,168 @@
       if (!sessionStorage.getItem('bootCompleted')) {
         runBootSequence();
       }
+    }
+
+    // =============================================
+    // HIGHLIGHTER (Ctrl + drag)
+    // =============================================
+    function initHighlighter() {
+      // Track modifier state ourselves (more reliable than checking event.metaKey/ctrlKey)
+      let modHeld = false;
+
+      // Support both Ctrl and Command (Meta) on all platforms
+      const isModKey = (key) => key === 'Control' || key === 'Meta';
+      const isModEvent = (e) => e.ctrlKey || e.metaKey;
+
+      // Mod key held → crosshair cursor
+      document.addEventListener('keydown', (e) => {
+        if (isModKey(e.key)) {
+          modHeld = true;
+          document.body.classList.add('ctrl-highlight-mode');
+        }
+      });
+      document.addEventListener('keyup', (e) => {
+        if (isModKey(e.key)) {
+          modHeld = false;
+          document.body.classList.remove('ctrl-highlight-mode');
+        }
+      });
+      window.addEventListener('blur', () => {
+        modHeld = false;
+        document.body.classList.remove('ctrl-highlight-mode');
+      });
+
+      // Block mod+click from opening links in a new tab
+      document.addEventListener('mousedown', (e) => {
+        if ((modHeld || isModEvent(e)) && e.target.closest('a')) e.preventDefault();
+      });
+
+      document.addEventListener('mouseup', (e) => {
+        // Use tracked state OR event state (belt and suspenders)
+        if (!modHeld && !isModEvent(e)) return;
+
+        const selection = window.getSelection();
+
+        // Collapsed (click, no drag) → toggle off an existing highlight
+        if (!selection || selection.isCollapsed) {
+          const mark = e.target.closest('.highlight-mark');
+          if (mark) {
+            const parent = mark.parentNode;
+            while (mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+            parent.removeChild(mark);
+            parent.normalize();
+          }
+          return;
+        }
+
+        // Non-collapsed selection → wrap in a highlight mark
+        const range = selection.getRangeAt(0);
+        const mark = document.createElement('mark');
+        mark.className = 'highlight-mark';
+        try {
+          range.surroundContents(mark);
+        } catch (ex) {
+          const fragment = range.extractContents();
+          mark.appendChild(fragment);
+          range.insertNode(mark);
+        }
+        selection.removeAllRanges();
+      });
+    }
+
+    // =============================================
+    // CUSTOM RULER SCROLLBAR
+    // =============================================
+    function initRuler() {
+      const ruler = document.getElementById('custom-ruler');
+      const thumb = document.getElementById('ruler-thumb');
+      if (!ruler || !thumb) return;
+
+      // Add number labels at 10 % increments (10–90)
+      for (let i = 1; i <= 9; i++) {
+        const label = document.createElement('span');
+        label.className = 'ruler-label';
+        label.style.top = (i * 10) + '%';
+        label.textContent = i * 10;
+        ruler.appendChild(label);
+      }
+
+      // ── Thumb sizing & positioning ──
+      function updateThumb() {
+        const docH   = document.documentElement.scrollHeight;
+        const winH   = window.innerHeight;
+        const scrollY = window.scrollY;
+        const rulerH = ruler.clientHeight; // == winH
+
+        // Thumb height is at least 40 px so it stays grabbable
+        const ratio    = winH / docH;
+        const thumbH   = Math.max(40, rulerH * ratio);
+        const maxTravel = rulerH - thumbH;
+        const scrollMax = docH - winH;
+        const top      = scrollMax > 0 ? (scrollY / scrollMax) * maxTravel : 0;
+
+        thumb.style.height = thumbH + 'px';
+        thumb.style.top    = top    + 'px';
+
+        const percentEl = document.getElementById('ruler-percent');
+        if (percentEl) percentEl.textContent = Math.round(scrollMax > 0 ? (scrollY / scrollMax) * 100 : 0) + '%';
+      }
+      updateThumb();
+      window.addEventListener('scroll',  updateThumb, { passive: true });
+      window.addEventListener('resize',  updateThumb);
+
+      // ── Drag the thumb ──
+      let dragging = false, dragStartY = 0, dragStartScroll = 0;
+
+      thumb.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        dragging = true;
+        thumb.classList.add('dragging');
+        dragStartY     = e.clientY;
+        dragStartScroll = window.scrollY;
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        const docH      = document.documentElement.scrollHeight;
+        const winH      = window.innerHeight;
+        const rulerH    = ruler.clientHeight;
+        const ratio     = winH / docH;
+        const thumbH    = Math.max(40, rulerH * ratio);
+        const maxTravel = rulerH - thumbH;
+        const scrollMax = docH - winH;
+
+        const deltaY      = e.clientY - dragStartY;
+        const scrollDelta = (deltaY / maxTravel) * scrollMax;
+        window.scrollTo(0, dragStartScroll + scrollDelta);
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        thumb.classList.remove('dragging');
+      });
+
+      // ── Click on ruler track → jump ──
+      ruler.addEventListener('mousedown', (e) => {
+        if (e.target === thumb) return; // let thumb drag handle it
+        const rect    = ruler.getBoundingClientRect();
+        const clickY  = e.clientY - rect.top;          // px from ruler top
+        const docH    = document.documentElement.scrollHeight;
+        const winH    = window.innerHeight;
+        const rulerH  = ruler.clientHeight;
+        const ratio   = winH / docH;
+        const thumbH  = Math.max(40, rulerH * ratio);
+        const maxTravel = rulerH - thumbH;
+        const scrollMax = docH - winH;
+
+        // Map click to the centre of where the thumb would sit
+        const targetTop   = clickY - thumbH / 2;
+        const clamped     = Math.max(0, Math.min(maxTravel, targetTop));
+        const scrollTarget = (clamped / maxTravel) * scrollMax;
+
+        window.scrollTo({ top: scrollTarget, behavior: 'smooth' });
+      });
     }
 
     // =============================================
@@ -5542,13 +6860,12 @@
     refreshQuote();
     detectLocation();
     initVisitorCounter();
+    document.addEventListener('DOMContentLoaded', initRuler);
+    initHighlighter();
     initScrollReveal();
     enhanceTerminal();
     calculateReadingTime();
     updateFavicon();
-    
-    // Event listeners
-    document.addEventListener('keydown', handleKeyboardShortcuts);
     
     // Status bar interval
     setInterval(updateStatusBar, 2000);
@@ -5590,5 +6907,10 @@
       });
     });
   </script>
+
+  <!-- Custom Ruler Scrollbar -->
+  <div id="custom-ruler">
+    <div id="ruler-thumb"><span id="ruler-percent">0%</span></div>
+  </div>
 </body>
 </html>
