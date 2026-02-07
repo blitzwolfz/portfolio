@@ -2691,7 +2691,7 @@
   </nav>
 
   <!-- Hero -->
-  <section data-x="00" data-y="00" class="pt-36 md:pt-40 pb-16 md:pb-20 px-4 md:px-8 min-h-[92vh] md:min-h-screen flex flex-col justify-center max-w-7xl mx-auto">
+  <section data-x="00" data-y="00" class="pt-28 md:pt-32 pb-10 md:pb-14 px-4 md:px-8 min-h-[56vh] md:min-h-[62vh] flex flex-col justify-start max-w-7xl mx-auto">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 items-start">
       <div class="space-y-6 md:space-y-8">
         <div class="inline-block bg-brutal-yellow text-brutal-green px-4 py-2 mono text-xs md:text-sm font-bold transform -rotate-1 brutal-card border-[3px]">
@@ -2722,6 +2722,7 @@
             BUSINESS_CARD
           </button>
         </div>
+
       </div>
 
       <div class="space-y-4 lg:pt-20">
@@ -2739,6 +2740,15 @@
           <div class="mono text-[11px] md:text-xs uppercase opacity-80 mb-2">Currently</div>
           <div class="text-xl md:text-2xl font-bold">Optimizing Bitboards</div>
         </div>
+      </div>
+
+      <div class="brutal-card bg-white dark:bg-brutal-dark p-5 md:p-6 tape-patch lg:col-span-2">
+        <div class="mono text-[11px] md:text-xs uppercase text-brutal-gray mb-3">NOW.TXT</div>
+        <ul class="space-y-2 text-sm md:text-base leading-relaxed">
+          <li><span class="mono font-bold">BUILDING:</span> <span id="hero-now-building">AI-powered code intelligence startup</span></li>
+          <li><span class="mono font-bold">LEARNING:</span> <span id="hero-now-learning">compiler internals and LLVM optimization passes</span></li>
+          <li><span class="mono font-bold">SHIPPING NEXT:</span> <span id="hero-now-shipping-next">faster chess engine search + eval tuning</span></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -3825,6 +3835,11 @@
         // Profile image - set to null or "" for placeholder
         profileImage: "headshot.png", // e.g., "profile.jpg" or "images/headshot.png"
       },
+      heroNow: {
+        building: "Courier - Postman alternative for developers with built-in API testing",
+        learning: "React Native & Expo for cross-platform mobile development",
+        shippingNext: "Roster - Machine Learning powered networking app for professionals",
+      },
       // =============================================
       // SKILLS
       // =============================================
@@ -4611,6 +4626,17 @@
       } else {
         bioResumeLink.href = CONFIG.resume.downloadUrl;
       }
+    }
+
+    function initHeroNowBlock() {
+      const nowConfig = CONFIG.heroNow || {};
+      const building = document.getElementById("hero-now-building");
+      const learning = document.getElementById("hero-now-learning");
+      const shippingNext = document.getElementById("hero-now-shipping-next");
+
+      if (building && nowConfig.building) building.textContent = nowConfig.building;
+      if (learning && nowConfig.learning) learning.textContent = nowConfig.learning;
+      if (shippingNext && nowConfig.shippingNext) shippingNext.textContent = nowConfig.shippingNext;
     }
 
     function toggleTheme() {
@@ -6848,6 +6874,7 @@
     initResumeModule();
     initSoleProprietorship();
     initBioResumeLink();
+    initHeroNowBlock();
     renderProfileImage();
     renderWork();
     renderProjects();
