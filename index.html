@@ -194,21 +194,14 @@
     }
 
     /* ============================================
-       CURSOR TRAIL EFFECT
+       CUSTOM TOOL CURSORS
        ============================================ */
-    .cursor-trail {
-      position: fixed;
-      width: 8px;
-      height: 8px;
-      background: #30d158;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9995;
-      opacity: 0.6;
-      transition: opacity 0.3s ease;
+    :root {
+      --cursor-pencil: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='translate(3 1) rotate(-135 12 12)'%3E%3Crect x='11' y='2' width='6' height='16' rx='2' fill='%23f6d365' stroke='%23222' stroke-width='1.2'/%3E%3Crect x='11' y='17.5' width='6' height='4' fill='%23ff8f4d' stroke='%23222' stroke-width='1.2'/%3E%3Cpolygon points='11,2 14,0 17,2' fill='%23d9d9d9' stroke='%23222' stroke-width='1.2'/%3E%3Cpolygon points='12.5,0.8 14,0 15.5,0.8 14,2' fill='%23222'/%3E%3C/g%3E%3C/svg%3E") 4 28, auto;
+      --cursor-highlighter: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='translate(2 1) rotate(45 13 13)'%3E%3Crect x='9' y='4' width='8' height='14' rx='2' fill='%23ffd400' stroke='%23222' stroke-width='1.2'/%3E%3Crect x='9' y='18' width='8' height='4' fill='%23ffc300' stroke='%23222' stroke-width='1.2'/%3E%3Cpolygon points='9,22 13,29 17,22' fill='%23ffb703' stroke='%23222' stroke-width='1.2'/%3E%3Crect x='9.8' y='22.5' width='6.4' height='1.8' fill='%23f59e0b'/%3E%3C/g%3E%3C/svg%3E") 4 28, auto;
     }
-    .dark .cursor-trail {
-      background: #0a84ff;
+    body {
+      cursor: var(--cursor-pencil);
     }
 
     /* ============================================
@@ -1090,7 +1083,7 @@
     /* ── Highlighter (Ctrl + drag to mark, Ctrl + click mark to erase) ── */
     body.ctrl-highlight-mode,
     body.ctrl-highlight-mode * {
-      cursor: crosshair !important;
+      cursor: var(--cursor-highlighter) !important;
     }
     .highlight-mark {
       background: rgba(255, 235, 100, 0.45);
@@ -1221,6 +1214,24 @@
       .glitch-blocks::before,
       .glitch-blocks::after {
         animation: none !important;
+      }
+    }
+
+    /* Keep offline/coming-soon banners readable across narrow widths */
+    .tape-banner {
+      position: relative;
+      overflow: hidden;
+    }
+    .tape-banner .glitch-badge,
+    .tape-banner .opacity-80 {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+    @media (max-width: 640px) {
+      .tape-banner {
+        padding: 10px 12px !important;
+        font-size: 11px !important;
       }
     }
 
@@ -2292,6 +2303,15 @@
     @media (max-width: 640px) {
       .manuscript section { width: calc(100% - 32px) !important; margin: 48px auto !important; padding: 28px 20px !important; }
       .manuscript nav { top: 56px !important; }
+      .manuscript .tape-banner {
+        width: 100% !important;
+        margin-left: 0 !important;
+        transform: none !important;
+      }
+      .manuscript .spec-card .tape-banner {
+        left: 0 !important;
+        width: 100% !important;
+      }
     }
   </style>
 
@@ -6713,7 +6733,7 @@
       const isModKey = (key) => key === 'Control' || key === 'Meta';
       const isModEvent = (e) => e.ctrlKey || e.metaKey;
 
-      // Mod key held → crosshair cursor
+      // Mod key held → highlighter cursor
       document.addEventListener('keydown', (e) => {
         if (isModKey(e.key)) {
           modHeld = true;
@@ -6909,31 +6929,6 @@
     // Update favicon on theme change
     const observer = new MutationObserver(updateFavicon);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-    
-    // Cursor trail effect (desktop only)
-    if (!window.matchMedia('(pointer: coarse)').matches) {
-      const trails = [];
-      const maxTrails = 10;
-      
-      document.addEventListener('mousemove', (e) => {
-        const trail = document.createElement('div');
-        trail.className = 'cursor-trail';
-        trail.style.left = e.pageX + 'px';
-        trail.style.top = e.pageY + 'px';
-        document.body.appendChild(trail);
-        trails.push(trail);
-        
-        if (trails.length > maxTrails) {
-          const old = trails.shift();
-          old.remove();
-        }
-        
-        setTimeout(() => {
-          trail.style.opacity = '0';
-          setTimeout(() => trail.remove(), 300);
-        }, 100);
-      });
-    }
     
     // Add click-to-copy for email
     document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
