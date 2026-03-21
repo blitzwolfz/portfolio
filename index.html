@@ -201,6 +201,92 @@
     }
 
     /* ============================================
+       DRAW MODE CANVAS
+       ============================================ */
+    #draw-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      cursor: crosshair;
+    }
+    #draw-canvas.active {
+      pointer-events: auto;
+      opacity: 1;
+    }
+    #draw-toolbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: var(--token-bg-surface);
+      border: 2px solid var(--token-border-strong);
+      box-shadow: 4px 4px 0 var(--token-shadow-hard);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--token-text-primary);
+    }
+    #draw-toolbar.active {
+      display: flex;
+    }
+    #draw-toolbar button {
+      padding: 4px 10px;
+      border: 1.5px solid var(--token-border-strong);
+      border-radius: 6px;
+      background: var(--token-bg-page);
+      color: var(--token-text-primary);
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #draw-toolbar button:hover {
+      background: var(--token-bg-muted);
+    }
+    #draw-toolbar .draw-color {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--token-border-strong);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    #draw-toolbar .draw-color:hover,
+    #draw-toolbar .draw-color.active {
+      transform: scale(1.25);
+      box-shadow: 0 0 0 2px var(--token-bg-page), 0 0 0 4px var(--token-border-strong);
+    }
+    #draw-toolbar .draw-size {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 1.5px solid var(--token-border-strong);
+      background: var(--token-bg-page);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    #draw-toolbar .draw-size:hover,
+    #draw-toolbar .draw-size.active {
+      background: var(--token-bg-muted);
+    }
+    #draw-toolbar .separator {
+      width: 1px;
+      height: 22px;
+      background: var(--token-border-soft);
+    }
+
+    /* ============================================
        CUSTOM TOOL CURSORS
        ============================================ */
     :root {
@@ -2720,6 +2806,26 @@
 
   <!-- MATRIX RAIN CANVAS -->
   <canvas id="matrix-canvas"></canvas>
+
+  <!-- DRAW MODE CANVAS -->
+  <canvas id="draw-canvas"></canvas>
+  <div id="draw-toolbar">
+    <span style="font-weight:600;">DRAW</span>
+    <div class="separator"></div>
+    <div class="draw-color active" data-color="#2b2e34" style="background:#2b2e34;" title="Black"></div>
+    <div class="draw-color" data-color="#e06666" style="background:#e06666;" title="Red"></div>
+    <div class="draw-color" data-color="#5aa7d8" style="background:#5aa7d8;" title="Blue"></div>
+    <div class="draw-color" data-color="#72c48b" style="background:#72c48b;" title="Green"></div>
+    <div class="draw-color" data-color="#f1d14b" style="background:#f1d14b;" title="Yellow"></div>
+    <div class="separator"></div>
+    <div class="draw-size active" data-size="3" title="Thin"><svg width="8" height="8"><circle cx="4" cy="4" r="2" fill="currentColor"/></svg></div>
+    <div class="draw-size" data-size="6" title="Medium"><svg width="12" height="12"><circle cx="6" cy="6" r="4" fill="currentColor"/></svg></div>
+    <div class="draw-size" data-size="12" title="Thick"><svg width="16" height="16"><circle cx="8" cy="8" r="7" fill="currentColor"/></svg></div>
+    <div class="separator"></div>
+    <button id="draw-eraser" title="Eraser">Eraser</button>
+    <button id="draw-clear" title="Clear canvas">Clear</button>
+    <button id="draw-exit" title="Exit draw mode (Ctrl+Alt / Cmd+Alt)">Exit</button>
+  </div>
 
   <!-- DYNAMIC GRID BACKGROUND -->
   <div id="grid-bg"></div>
@@ -7150,6 +7256,160 @@
         copyToClipboard(link.href.replace('mailto:', ''), 'Email');
       });
     });
+
+    // =============================================
+    // DRAW MODE (Ctrl+Alt / Cmd+Alt toggle)
+    // =============================================
+    (function initDrawMode() {
+      const canvas = document.getElementById('draw-canvas');
+      const toolbar = document.getElementById('draw-toolbar');
+      const ctx = canvas.getContext('2d');
+      let drawActive = false;
+      let drawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let strokeColor = '#2b2e34';
+      let strokeWidth = 3;
+      let eraserMode = false;
+
+      function resizeCanvas() {
+        // Save current drawing
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        // Restore drawing
+        ctx.putImageData(imageData, 0, 0);
+      }
+
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      // Detect platform for shortcut
+      const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ||
+                    (navigator.userAgentData && navigator.userAgentData.platform === 'macOS');
+
+      function toggleDrawMode() {
+        drawActive = !drawActive;
+        canvas.classList.toggle('active', drawActive);
+        toolbar.classList.toggle('active', drawActive);
+        if (drawActive) {
+          showToast(`Draw mode ON — ${isMac ? 'Cmd' : 'Ctrl'}+Alt to exit`, 'info', 2500);
+        } else {
+          showToast('Draw mode OFF', 'info', 1500);
+        }
+      }
+
+      // Keyboard shortcut: Ctrl+Alt (Win/Linux) or Cmd+Alt (Mac)
+      document.addEventListener('keydown', (e) => {
+        // Ctrl+Alt on Windows/Linux, Cmd+Alt on Mac
+        const modMatch = isMac
+          ? (e.metaKey && e.altKey && !e.ctrlKey && !e.shiftKey)
+          : (e.ctrlKey && e.altKey && !e.metaKey && !e.shiftKey);
+
+        if (modMatch && e.key === 'Alt') {
+          e.preventDefault();
+          toggleDrawMode();
+        }
+      });
+
+      // Drawing handlers
+      function getPos(e) {
+        if (e.touches) {
+          return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
+      }
+
+      function startDraw(e) {
+        if (!drawActive) return;
+        drawing = true;
+        const pos = getPos(e);
+        lastX = pos.x;
+        lastY = pos.y;
+        // Draw a dot for single clicks
+        ctx.beginPath();
+        ctx.arc(lastX, lastY, (eraserMode ? strokeWidth * 2 : strokeWidth) / 2, 0, Math.PI * 2);
+        ctx.fillStyle = eraserMode ? 'rgba(0,0,0,1)' : strokeColor;
+        if (eraserMode) {
+          ctx.globalCompositeOperation = 'destination-out';
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+        }
+        ctx.fill();
+      }
+
+      function draw(e) {
+        if (!drawing || !drawActive) return;
+        e.preventDefault();
+        const pos = getPos(e);
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.strokeStyle = eraserMode ? 'rgba(0,0,0,1)' : strokeColor;
+        ctx.lineWidth = eraserMode ? strokeWidth * 2 : strokeWidth;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (eraserMode) {
+          ctx.globalCompositeOperation = 'destination-out';
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+        }
+        ctx.stroke();
+
+        lastX = pos.x;
+        lastY = pos.y;
+      }
+
+      function stopDraw() {
+        drawing = false;
+      }
+
+      canvas.addEventListener('mousedown', startDraw);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDraw);
+      canvas.addEventListener('mouseleave', stopDraw);
+      canvas.addEventListener('touchstart', startDraw, { passive: false });
+      canvas.addEventListener('touchmove', draw, { passive: false });
+      canvas.addEventListener('touchend', stopDraw);
+
+      // Toolbar: color selection
+      toolbar.querySelectorAll('.draw-color').forEach(el => {
+        el.addEventListener('click', () => {
+          toolbar.querySelectorAll('.draw-color').forEach(c => c.classList.remove('active'));
+          el.classList.add('active');
+          strokeColor = el.dataset.color;
+          eraserMode = false;
+          document.getElementById('draw-eraser').style.background = '';
+          canvas.style.cursor = 'crosshair';
+        });
+      });
+
+      // Toolbar: size selection
+      toolbar.querySelectorAll('.draw-size').forEach(el => {
+        el.addEventListener('click', () => {
+          toolbar.querySelectorAll('.draw-size').forEach(s => s.classList.remove('active'));
+          el.classList.add('active');
+          strokeWidth = parseInt(el.dataset.size);
+        });
+      });
+
+      // Toolbar: eraser
+      document.getElementById('draw-eraser').addEventListener('click', () => {
+        eraserMode = !eraserMode;
+        const btn = document.getElementById('draw-eraser');
+        btn.style.background = eraserMode ? 'var(--token-bg-muted)' : '';
+        canvas.style.cursor = eraserMode ? 'cell' : 'crosshair';
+      });
+
+      // Toolbar: clear
+      document.getElementById('draw-clear').addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      });
+
+      // Toolbar: exit
+      document.getElementById('draw-exit').addEventListener('click', toggleDrawMode);
+    })();
   </script>
 
   <!-- Custom Ruler Scrollbar -->
