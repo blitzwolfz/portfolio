@@ -287,6 +287,121 @@
     }
 
     /* ============================================
+       SHORTCUTS HINT WIDGET
+       ============================================ */
+    #shortcuts-hint-btn {
+      position: fixed;
+      bottom: 36px;
+      right: 16px;
+      z-index: 50;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--token-border-strong);
+      background: var(--token-bg-surface);
+      color: var(--token-text-primary);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 2px 2px 0 var(--token-shadow-hard);
+    }
+    #shortcuts-hint-btn:hover {
+      transform: scale(1.12);
+      box-shadow: 3px 3px 0 var(--token-shadow-hard);
+    }
+    #shortcuts-panel {
+      position: fixed;
+      bottom: 72px;
+      right: 16px;
+      z-index: 51;
+      width: 260px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 2px solid var(--token-border-strong);
+      background: var(--token-bg-surface);
+      box-shadow: 4px 4px 0 var(--token-shadow-hard);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--token-text-primary);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    #shortcuts-panel.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+    #shortcuts-panel h4 {
+      margin: 0 0 10px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--token-text-muted);
+    }
+    #shortcuts-panel .shortcut-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+    }
+    #shortcuts-panel .shortcut-row + .shortcut-row {
+      border-top: 1px solid var(--token-border-soft);
+    }
+    #shortcuts-panel kbd {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--token-border-soft);
+      background: var(--token-bg-muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+    #shortcuts-panel .shortcut-desc {
+      font-size: 11px;
+      color: var(--token-text-muted);
+    }
+    #shortcuts-toast {
+      position: fixed;
+      bottom: 42px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      z-index: 52;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1.5px solid var(--token-border-strong);
+      background: var(--token-bg-surface);
+      box-shadow: 3px 3px 0 var(--token-shadow-hard);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      color: var(--token-text-primary);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      text-align: center;
+      max-width: 400px;
+    }
+    #shortcuts-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    body.business-card-active #shortcuts-hint-btn,
+    body.business-card-active #shortcuts-panel,
+    body.business-card-active #shortcuts-toast {
+      display: none;
+    }
+
+    /* ============================================
        CUSTOM TOOL CURSORS
        ============================================ */
     :root {
@@ -4075,6 +4190,25 @@
   </footer>
 
   <!-- Bottom Status Bar -->
+  <!-- SHORTCUTS HINT WIDGET -->
+  <button id="shortcuts-hint-btn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">?</button>
+  <div id="shortcuts-panel">
+    <h4>Shortcuts</h4>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Highlight text</span>
+      <span><kbd id="sc-highlight"></kbd> + select</span>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Draw on page</span>
+      <span><kbd id="sc-draw"></kbd></span>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-desc">Konami code</span>
+      <span style="font-size:11px;">↑↑↓↓←→←→BA</span>
+    </div>
+  </div>
+  <div id="shortcuts-toast"></div>
+
   <div id="status-bar" class="text-brutal-white">
     <div class="flex items-center gap-4">
       <span class="status-indicator">
@@ -7409,6 +7543,58 @@
 
       // Toolbar: exit
       document.getElementById('draw-exit').addEventListener('click', toggleDrawMode);
+    })();
+
+    // =============================================
+    // SHORTCUTS HINT WIDGET
+    // =============================================
+    (function initShortcutsHint() {
+      const isMac = /Mac|iPod|iPhone|iPad/.test(navigator.platform) ||
+                    (navigator.userAgentData && navigator.userAgentData.platform === 'macOS');
+      const modKey = isMac ? 'Cmd' : 'Ctrl';
+
+      // Fill in platform-specific keys
+      document.getElementById('sc-highlight').textContent = modKey;
+      document.getElementById('sc-draw').textContent = modKey + '+Alt';
+
+      // Toggle panel on "?" button click
+      const btn = document.getElementById('shortcuts-hint-btn');
+      const panel = document.getElementById('shortcuts-panel');
+      let panelOpen = false;
+
+      btn.addEventListener('click', () => {
+        panelOpen = !panelOpen;
+        panel.classList.toggle('visible', panelOpen);
+      });
+
+      // Close panel when clicking outside
+      document.addEventListener('click', (e) => {
+        if (panelOpen && !panel.contains(e.target) && e.target !== btn) {
+          panelOpen = false;
+          panel.classList.remove('visible');
+        }
+      });
+
+      // Close panel on Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && panelOpen) {
+          panelOpen = false;
+          panel.classList.remove('visible');
+        }
+      });
+
+      // One-time intro toast after site loads (only once per session)
+      if (!sessionStorage.getItem('shortcutsHintShown')) {
+        const toast = document.getElementById('shortcuts-toast');
+        // Wait for business card to dismiss + boot sequence
+        const delay = localStorage.getItem('hasVisitedPortfolio') ? 3000 : 12000;
+        setTimeout(() => {
+          toast.innerHTML = `<strong>Tip:</strong> Hold <kbd style="padding:1px 5px;border-radius:3px;border:1px solid var(--token-border-soft);background:var(--token-bg-muted);font-size:11px;">${modKey}</kbd> + select to highlight &nbsp;|&nbsp; <kbd style="padding:1px 5px;border-radius:3px;border:1px solid var(--token-border-soft);background:var(--token-bg-muted);font-size:11px;">${modKey}+Alt</kbd> to draw`;
+          toast.classList.add('visible');
+          sessionStorage.setItem('shortcutsHintShown', 'true');
+          setTimeout(() => toast.classList.remove('visible'), 6000);
+        }, delay);
+      }
     })();
   </script>
 
