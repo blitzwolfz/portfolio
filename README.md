@@ -1,303 +1,165 @@
-# SAMIN QURESHI
+# Samin Qureshi · Portfolio
 
-**Software Developer** building chess engines, iOS apps, and code intelligence platforms.
+Personal site. Backend, systems, and iOS work, on one quiet page.
 
-[![Portfolio](https://img.shields.io/badge/PORTFOLIO-LIVE-0a84ff?style=for-the-badge&labelColor=0a0a0a&logo=google-chrome&logoColor=white)](https://saminqureshi.dev)
-[![Resume](https://img.shields.io/badge/RESUME-PDF-30d158?style=for-the-badge&labelColor=0a0a0a&logo=adobe-acrobat-reader&logoColor=white)](./Sam_Qureshi.pdf)
-[![GitHub](https://img.shields.io/badge/GITHUB-blitzwolfz-FFD700?style=for-the-badge&labelColor=0a0a0a&logo=github&logoColor=white)](https://github.com/blitzwolfz)
-[![LinkedIn](https://img.shields.io/badge/LINKEDIN-Connect-ff453a?style=for-the-badge&labelColor=0a0a0a&logo=linkedin&logoColor=white)](https://linkedin.com/in/saminqureshi)
+**[saminqureshi.dev](https://saminqureshi.dev)** · [Résumé](./Samin_Qureshi.pdf) · [GitHub](https://github.com/blitzwolfz) · [LinkedIn](https://linkedin.com/in/saminqureshi)
 
 ---
 
-## 🎯 ABOUT
+## Stack
 
-Computer Programming Analysis student at **George Brown College** with a passion for low-level systems and high-level user experiences. Co-Founder & CTO at a stealth AI startup building next-generation code intelligence platforms.
+There isn't one. The site is a single `index.html`: hand-written HTML and CSS,
+plus about 30 lines of JavaScript that exist only to send the contact form.
+No build step, no bundler, no framework, no CSS library. Open the file and it
+runs.
 
-> 💭 **Core Philosophy:**
-> *"We are the facilitators of our own creative evolution"* — Bill Hicks
-
-I believe software development is more than writing code—it's about solving real problems that impact people's lives. My journey from building chess engines 🏰 to mental health applications 🧠 reflects my belief that **technology should serve humanity**.
-
----
-
-## 🚀 FEATURED PROJECTS
-
-### ♟️ COREX — C++ Chess Engine
-
-<img align="right" width="120" src="https://img.shields.io/badge/ELO-1867+-0a84ff?style=for-the-badge&labelColor=0a0a0a">
-
-High-performance chess engine achieving **1800+ Elo rating** with GPU acceleration for position evaluation.
+Fonts are self-hosted from `fonts/`. The only third-party request on the page is
+the EmailJS browser SDK, and the page works without it (the form falls back to a
+message pointing at the email address).
 
 | | |
 |---|---|
-| **Tech Stack** | `C++` `Zobrist Hashing` `Bitboards` `UCI Protocol` |
-| **Status** | 🟢 Active Development |
-| **Links** | [View Code](https://github.com/blitzwolfz) |
+| **Markup & styling** | HTML5 + hand-written CSS (custom properties, grid) |
+| **Behaviour** | One vanilla JS handler for the contact form; the four alternate eras are pure CSS |
+| **Type** | Jost (display) and Archivo (body), self-hosted variable woff2 |
+| **Contact form** | EmailJS |
+| **Serverless** | Cloudflare Pages Functions (see [SETUP.md](./SETUP.md)) |
+| **Hosting** | Cloudflare Pages |
 
 ---
 
-### 🧘 Serenity+ — Mental Health App
+## Design
 
-<img align="right" width="120" src="https://img.shields.io/badge/APP_STORE-LIVE-30d158?style=for-the-badge&labelColor=0a0a0a&logo=apple&logoColor=white">
+As simple as it can be while still getting the information across. One column,
+hairline rules, a hanging label in the left margin for each section. No cards,
+shadows, gradients, animation, or decorative chrome.
 
-Mental health application and lifestyle tracker published on the **App Store**. Built with SwiftUI and Core Data.
+- **Palette.** The two spot inks from the printed business card and nothing
+  else: British Racing Green `#004225`, Maroon `#6B2135`, bone stock `#F6F1E3`,
+  with `#1A1712` type and `#8A8275` for secondary text. See
+  `SQ-Business-Card-Spec.pdf`, which is the authority for the brand.
+- **Type.** Jost sets the name, the section labels, and entry titles. Archivo
+  sets everything else, because Archivo is the typeface on the card. No
+  monospace.
+- **The one flourish.** Metrics carried over from the résumé (`50%`, `100+`,
+  `150+`) are set in the maroon ink so a recruiter scanning the page lands on
+  the results. That is the only place the second ink appears in the body.
+- **No dark mode.** The palette stays exactly as printed.
+
+**Deliberately avoided:** purple, tape strips, pushpins, tilted cards, noise
+grain, terminal panels, monospace labels, and scroll reveals. All are either
+overused elsewhere or lineage from earlier versions of this site.
+
+---
+
+## Eras
+
+The footer carries a five-way era switch. The same résumé, redrawn in the design
+language of a different year.
+
+| Era | Look | Type | Switcher |
+|---|---|---|---|
+| **1996** | Geocities: navy panel on a tiled starfield, rainbow name, marquee, under-construction sign, LED visitor counter, webring | Impact + Comic Sans | Win95 buttons in a beveled tray, top right |
+| **2006** | Web 2.0: white card on sky, gel pills, letterpress, rounded corners, a reflection under the name, a BETA ribbon, a "Digg this" row | Trebuchet MS + Lucida Grande | Glossy gel pills in a rounded tray, top right |
+| **2016** | Flat: a light centred hero, ghost buttons, a stat strip, Material cards and elevation | The system font stack, headings at weight 200 | A flat elevated bar, pinned bottom centre |
+| **2026** | The real site. One column, hanging labels, hairline rules | Jost + Archivo | Plain text links in the footer |
+| **2036** | Ambient: no boxes and no chrome, type floating on a dark aurora field, and the section label sticks in the margin while you read it | Jost only, light weights, wide tracking | A glass capsule, pinned bottom centre |
+
+It is all CSS. One visually hidden radio group drives it and every rule is
+scoped under `body:has(#eYYYY:checked)`, so the 2026 page is untouched by any of
+it. Arrow keys move between eras because they are real radios. Nothing is
+persisted, so a reload returns to 2026.
+
+Each skin picks a ground colour first and then a palette that clears 4.5:1 on
+it, so the pastiche never costs legibility: 1996 puts white, yellow, cyan, and
+lime on `#000080` at 11:1 and up; 2006 uses `#1B6BB0` on white at 5.6:1; 2016
+uses indigo at 6.9:1 and teal at 5.3:1; 2036 runs cyan at 11.8:1 and violet at
+9.4:1 on `#07090C`.
+
+Era-only furniture carries `.f90` / `.f06` / `.f16` / `.f26` / `.f36`, is hidden
+by default, and is `aria-hidden`, so a screen reader gets the same page in every
+era. The marquee and the blinking text stop under `prefers-reduced-motion`.
+
+---
+
+## Sections
 
 | | |
 |---|---|
-| **Tech Stack** | `Swift` `SwiftUI` `Core Data` `Combine` |
-| **Status** | ✅ Live on [App Store](https://apps.apple.com/us/app/serenityplus/id6754047372) |
+| Masthead | Name, what I do, two short paragraphs, and four links |
+| Experience | Five roles with the résumé bullets |
+| Projects | CoreX and Serenity+ |
+| Education | Guelph and George Brown |
+| Coursework | Five projects, one line each |
+| Skills | Six groups, straight from the résumé |
+| Contact | Direct links plus the form |
+| Footer | Colophon and the era switch |
 
 ---
 
-### 📱 LMNL.app — Capstone Project
+## Editing content
 
-<img align="right" width="120" src="https://img.shields.io/badge/STATUS-IN_DEV-FFD700?style=for-the-badge&labelColor=0a0a0a">
+Content is written directly in the markup. There is no `CONFIG` object any more,
+and nothing is rendered by JavaScript, so what you read in `index.html` is what
+ships.
 
-Social media usage tracking application designed to combat digital addiction through mindful usage limits.
+`Samin_Qureshi.pdf` is the source of truth. If the site and the PDF disagree,
+the PDF wins. Anything not in the PDF and not inferable from it should be
+checked before it goes on the page.
 
-| | |
-|---|---|
-| **Role** | Back-end & Database Developer |
-| **Tech Stack** | `Expo` `React Native` `Supabase` `PostgreSQL` |
-| **Timeline** | W25 Semester |
+To change how it looks, start with the custom properties on `:root`. The
+palette, the two type stacks, and the section gap are all there.
 
 ---
 
-## 🛠️ TECHNICAL SKILLS
-
-### 💻 Languages
-
-| Language | Proficiency | Experience | Level Bar |
-|----------|-------------|------------|-----------|
-| ![Swift](https://img.shields.io/badge/Swift-FA7343?style=flat-square&logo=swift&logoColor=white) | **Expert** | 3+ years | `██████████` 100% |
-| ![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white) | **Advanced** | 2+ years | `████████░░` 80% |
-| ![Java](https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white) | **Advanced** | 2+ years | `████████░░` 80% |
-| ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) | **Proficient** | 2+ years | `███████░░░` 70% |
-| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white) | **Intermediate** | 1+ year | `██████░░░░` 60% |
-
-### 🧰 Frameworks & Tools
+## Structure
 
 ```
-📱 iOS Development     → SwiftUI | UIKit | Metal | Core ML
-🌐 Web Development    → React | React Native | Expo | Node.js | Express
-🗄️  Backend            → Supabase | PostgreSQL | MongoDB
-🎯 Specialized        → Chess Engines | Compiler Design | GPU Computing
+├── index.html               # the entire site
+├── Samin_Qureshi.pdf        # résumé, source of truth for content
+├── fonts/                   # self-hosted Jost + Archivo (latin, latin-ext)
+├── SQ-Business-Card-Spec.pdf    # brand authority: inks and typeface
+├── Business Card - SQ-selection.png
+├── headshot.png             # not used by the current page
+├── functions/
+│   └── api/
+│       ├── github.js        # GitHub activity endpoint
+│       └── spotify.js       # Last.fm now-playing endpoint
+├── SETUP.md                 # Cloudflare Functions setup
+├── ideas.md                 # idea backlog
+└── README.md
 ```
 
----
-
-## ✨ PORTFOLIO FEATURES
-
-This portfolio is an **interactive experience** featuring **40+** custom-built features:
-
-### 🎮 Interactive Elements
-| Feature | Description |
-|---------|-------------|
-| 🖥️ **Terminal Interface** | Functional CLI with history, autocomplete, 15+ secret commands |
-| ♟️ **Chess Puzzle** | Daily mate-in-2 challenges with full game logic |
-| ⌨️ **Typing Speed Test** | Real-time WPM and accuracy measurement |
-| 🧪 **Periodic Table** | Visual skill matrix with detailed modals |
-
-### 🎨 Visual Effects
-- 🌧️ Matrix rain background animation
-- 📺 CRT scanline overlay toggle
-- ⚡ System boot sequence on first visit
-- 💫 Glitch hover effects and noise textures
-- 🖱️ Cursor trail effects
-- 📡 Dynamic grid background with radar scan
-
-### ⚙️ System Features
-- 🌓 Dark/light mode with smooth transitions
-- ⌨️ Vim-style keyboard shortcuts (`gg`, `G`, `j`, `k`)
-- 🥚 Konami code easter egg (`↑↑↓↓←→←→BA`)
-- 📍 Geolocation-based welcome messages
-- 📊 Live GitHub activity feed
-- 🎵 Last.fm "Now Playing" widget
-- 👥 Visitor counter and uptime display
+> The `functions/` endpoints are deployed but not consumed by the site. They are
+> kept for a future activity or now-playing line, see [SETUP.md](./SETUP.md).
 
 ---
 
-## 📚 ACADEMIC WORK
-
-### 🎓 Education
-
-**George Brown Polytechnic** — Advanced Diploma, Computer Programming Analysis  
-`🟢 CURRENT` • Expected: **April 2026**
-
-**University of Guelph** — Bachelor of Computing  
-`⏳ UPCOMING` • Starting: **September 2026**
-
----
-
-### 📂 Selected Coursework
-
-| 📋 Project | 🏷️ Course | 🔧 Technologies |
-|------------|-----------|-----------------|
-| Inventory Management System | COMP2139 | C#, .NET, SQL |
-| Employee Management System | COMP3123 | JavaScript, Node.js, Express, MongoDB |
-| TUI Monster Fighting Game | COMP2152 | Python, OOP |
-| Gomoku Bot | COMP2080 | Java, Minimax Algorithm, AI |
-| HR Payroll System | COMP2130 | Java, JavaFX, MySQL |
-
----
-
-## 💼 WORK EXPERIENCE
-
-### 🚀 Co-Founder & CTO — Stealth AI Startup
-`2025 — PRESENT`
-
-Building next-generation **code intelligence platform** combining JavaScript, Java, and Large Language Models for real-world business applications.
-
-![Tech](https://img.shields.io/badge/Stack-JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Tech](https://img.shields.io/badge/Java-007396?style=flat-square&logo=java&logoColor=white)
-![Tech](https://img.shields.io/badge/LLMs-412991?style=flat-square&logo=openai&logoColor=white)
-
----
-
-### 🔧 Hardware & Software Intern — Toronto Metropolitan University
-`2022 — 2023`
-
-Maintained database systems and supported hardware infrastructure across university departments.
-
-![Tech](https://img.shields.io/badge/SQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
-![Tech](https://img.shields.io/badge/Excel-217346?style=flat-square&logo=microsoft-excel&logoColor=white)
-
----
-
-## 📊 STATS
-
-```diff
-+ ♟️ Chess Engine Elo:    1867
-+ 📝 Lines of Code:       150K+
-+ 🏆 Dean's List:         3x
-+ ⚡ Current Focus:       Bitboard Optimization
-```
-
----
-
-## 🏗️ PORTFOLIO ARCHITECTURE
-
-```
-📁 portfolio/
-├── 📄 index.html              # Single-page application
-├── 📄 Sam_Qureshi.pdf         # Resume
-├── 🖼️  headshot.png            # Profile image
-├── 📁 lmnl-shots/             # Capstone wireframes
-├── 📁 functions/
-│   └── 📁 api/
-│       ├── 📄 github.js       # GitHub activity feed
-│       └── 📄 spotify.js      # Last.fm integration
-├── 📄 ideas.md                # Feature roadmap
-└── 📄 SETUP.md                # Deployment guide
-```
-
-### 🎨 Tech Stack
-
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat-square&logo=cloudflare&logoColor=white)
-
-- 🎨 **Styling:** HTML5 + Tailwind CSS + Custom CSS
-- ⚡ **Logic:** Vanilla JavaScript (zero frameworks!)
-- 🔤 **Typography:** IBM Plex Mono & Space Grotesk
-- 📧 **Forms:** EmailJS for contact
-- 🌐 **Hosting:** Cloudflare Pages + Functions
-
----
-
-## 🚀 LOCAL DEVELOPMENT
+## Running it
 
 ```bash
-# 📥 Clone the repository
-git clone https://github.com/blitzwolfz/portfolio.git
-cd portfolio
+# serve it, so the self-hosted fonts load
+python3 -m http.server 4321
 
-# ▶️  Serve locally (Python 3)
-python -m http.server 8000
-
-# ▶️  Or with Node.js
-npx serve .
-
-# ▶️  Or with PHP
-php -S localhost:8000
+# or with the Functions running too
+npx wrangler pages dev .
 ```
 
-Visit `http://localhost:8000` 🌐 to view the portfolio.
+Opening `index.html` directly works, but some browsers block `file://` font
+loads, so the type falls back to Helvetica.
 
 ---
 
-## 🔌 API INTEGRATION
+## Accessibility & performance
 
-The portfolio uses **Cloudflare Pages Functions** for secure API proxying:
-
-| Endpoint | Service | Description | Status |
-|----------|---------|-------------|--------|
-| `/api/spotify` | 🎵 Last.fm | Currently playing music | ✅ Active |
-| `/api/github` | 🐙 GitHub | Public activity feed | ✅ Active |
-
-📖 See [SETUP.md](./SETUP.md) for configuration instructions.
+- One CSS file inline, four woff2 files, no framework payload
+- `prefers-reduced-motion` disables the hover transitions, the marquee, and the blinking
+- Keyboard navigable, with a skip link, visible focus rings, and labelled fields
+- Nothing on the page depends on JavaScript except the form
 
 ---
 
-## ⌨️ KEYBOARD SHORTCUTS
+## Licence
 
-| Shortcut | Action | Category |
-|----------|--------|----------|
-| `?` | 🆘 Show help panel | Help |
-| `/` | 💻 Focus terminal | Navigation |
-| `t` | 🌓 Toggle theme | Display |
-| `m` | 🌧️ Toggle Matrix effect | Effects |
-| `s` | 📺 Toggle scanlines | Effects |
-| `gg` | ⬆️ Scroll to top | Navigation |
-| `G` | ⬇️ Scroll to bottom | Navigation |
-| `j` / `k` | 🔼🔽 Navigate sections | Navigation |
-| `↑↑↓↓←→←→BA` | 🥚 Konami code | Easter Egg |
-
----
-
-## 📦 VERSION HISTORY
-
-### 🎉 v2.0.0 — "The Everything Update" (2026-01-30)
-```diff
-+ Added 40+ interactive features
-+ Chess puzzle mini-game
-+ Typing speed test
-+ Periodic table of skills
-+ System boot sequence
-+ Matrix rain effect
-+ Konami code easter egg
-```
-
-### 🔧 v1.5.0 (2025-12-15)
-- Interactive terminal
-- Dark mode support
-- Responsive mobile design
-
-### 🌱 v1.0.0 (2025-09-01)
-- Initial release
-
----
-
-## 📜 LICENSE
-
-This portfolio is **open source**. Feel free to fork it, study it, or build your own version.
-
-Built by hand with 💙 and too much ☕ Monster Mango Loco.
-
----
-
-<div align="center">
-
-### 🔗 Quick Links
-
-[**🌐 VIEW LIVE PORTFOLIO**](https://saminqureshi.dev) • [**📄 DOWNLOAD RESUME**](./Sam_Qureshi.pdf) • [**💼 CONNECT ON LINKEDIN**](https://linkedin.com/in/saminqureshi)
-
----
-
-```diff
-! TORONTO / REMOTE
-! OPEN TO WORK
-```
-
-</div>
+Code is free to learn from. Please don't redeploy the content: the writing,
+résumé, and photography are mine.

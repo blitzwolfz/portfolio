@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Claude Code
+.claude/
+
+# Node, only ever pulled in by npx wrangler
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Cloudflare Pages / Wrangler
+.wrangler/
+.dev.vars
+.env
+.env.*
+
+# Deliberately tracked, do not add here:
+#   headshot.png, fonts/, Samin_Qureshi.pdf,
+#   SQ-Business-Card-Spec.pdf, Business Card - SQ-selection.png
