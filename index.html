@@ -139,6 +139,37 @@
     }
     .top-links a:hover { color: var(--green); border-color: var(--green); }
 
+    /* ---------- portrait ---------- */
+
+    /* The figure is display:none until toggled. Chrome fetches the image
+       anyway, so loading="lazy" is a best effort rather than a guarantee:
+       the widest the photo is ever drawn is 240px, so the srcset tops out
+       at 480w and costs 35KB on a 1x screen, 70KB on a 2x one. */
+    .portrait-switch { margin-top: 1.5rem; }
+    .portrait-switch label {
+      cursor: pointer;
+      font-size: .84375rem;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1px;
+      transition: color .15s, border-color .15s;
+    }
+    .portrait-switch label:hover { color: var(--green); border-color: var(--green); }
+    #portrait:focus-visible + label { outline: 2px solid currentColor; outline-offset: 3px; }
+    .pt-off { display: none; }
+    body:has(#portrait:checked) .pt-on { display: none; }
+    body:has(#portrait:checked) .pt-off { display: inline; }
+
+    .portrait { display: none; margin-top: 1.5rem; }
+    body:has(#portrait:checked) .portrait { display: block; }
+    .portrait img {
+      display: block;
+      width: 240px;
+      max-width: 55vw;
+      height: auto;
+      border: 1px solid var(--rule);
+    }
+
     /* ---------- sections ---------- */
 
     .sec {
@@ -1327,6 +1358,126 @@
       box-shadow: 0 0 26px rgba(95, 216, 224, .45);
     }
 
+    /* ==========================================================
+       THE PORTRAIT, PER ERA.
+       Same photo, framed the way each year framed a photo: a beveled
+       plate in 1996, a glossy rounded card with a reflection in 2006,
+       a Material avatar in 2016, and a soft-lit panel in 2036. The
+       circular crops sit at 50% 30% because the hairline is near the
+       top of the frame.
+       ========================================================== */
+
+    /* 1996: chunky beveled plate, centred, with a caption */
+    body:has(#e1996:checked) .portrait-switch { text-align: center; }
+    body:has(#e1996:checked) .portrait-switch label {
+      display: inline-block;
+      background: #C0C0C0;
+      color: #000080;
+      border: 3px outset #E8E8E8;
+      border-radius: 0;
+      padding: .25rem .8rem;
+      font-family: var(--body);
+      font-weight: 700;
+      font-size: .8125rem;
+    }
+    body:has(#e1996:checked) .portrait-switch label:hover { background: #FFFF00; color: #000000; }
+    body:has(#e1996:checked) .portrait img {
+      width: 220px;
+      border: 6px ridge #C0C0C0;
+      margin-inline: auto;
+    }
+    body:has(#e1996:checked) .portrait::after {
+      content: "\2190 THAT'S ME";
+      display: block;
+      margin-top: .6rem;
+      text-align: center;
+      color: #00FF00;
+      font-weight: 700;
+      font-size: .8125rem;
+      letter-spacing: .08em;
+    }
+
+    /* 2006: rounded, white matte, drop shadow and the obligatory reflection */
+    body:has(#e2006:checked) .portrait-switch { text-align: center; }
+    body:has(#e2006:checked) .portrait-switch label {
+      display: inline-block;
+      background: linear-gradient(#FFFFFF, #E2EFF8);
+      border: 1px solid #C3DAEA;
+      border-radius: 14px;
+      padding: .3rem .9rem;
+      color: #1B5E96;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: .8125rem;
+      text-shadow: 0 1px 0 #FFFFFF;
+      box-shadow: 0 1px 2px rgba(20, 70, 110, .14);
+    }
+    body:has(#e2006:checked) .portrait-switch label:hover { background: linear-gradient(#FFFFFF, #CCE3F5); }
+    /* the reflection paints outside the box, so leave it somewhere to land */
+    body:has(#e2006:checked) .portrait { margin: 1.8rem 0 5rem; }
+    body:has(#e2006:checked) .portrait img {
+      width: 210px;
+      border: 6px solid #FFFFFF;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(20, 70, 110, .28);
+      margin-inline: auto;
+      -webkit-box-reflect: below 3px linear-gradient(transparent 68%, rgba(255, 255, 255, .28));
+    }
+
+    /* 2016: a circular avatar on elevation, lifted above the name */
+    body:has(#e2016:checked) header { display: flex; flex-direction: column; }
+    body:has(#e2016:checked) .portrait-switch { text-align: center; order: 9; }
+    body:has(#e2016:checked) .portrait-switch label {
+      display: inline-block;
+      border: 2px solid #3F51B5;
+      border-radius: 2px;
+      color: #3F51B5;
+      padding: .7rem 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-size: .6875rem;
+      font-weight: 600;
+      transition: background .2s, color .2s;
+    }
+    body:has(#e2016:checked) .portrait-switch label:hover { background: #3F51B5; color: #FFFFFF; }
+    body:has(#e2016:checked) .portrait { order: -1; margin: 0 0 1.8rem; }
+    body:has(#e2016:checked) .portrait img {
+      width: 150px;
+      height: 150px;
+      max-width: none;
+      border: 0;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 50% 30%;
+      margin-inline: auto;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
+    }
+
+    /* 2036: soft-lit panel, hairline, a little atmosphere */
+    body:has(#e2036:checked) .portrait-switch label {
+      display: inline-block;
+      border: 1px solid rgba(95, 216, 224, .5);
+      border-radius: 999px;
+      background: rgba(95, 216, 224, .08);
+      color: #5FD8E0;
+      padding: .45rem 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .625rem;
+    }
+    body:has(#e2036:checked) .portrait-switch label:hover {
+      background: rgba(95, 216, 224, .18);
+      color: #BFF3F7;
+      border-color: #5FD8E0;
+    }
+    body:has(#e2036:checked) .portrait img {
+      width: 230px;
+      border: 1px solid rgba(232, 235, 240, .16);
+      border-radius: 14px;
+      filter: grayscale(.2) contrast(1.04);
+      box-shadow: 0 0 60px rgba(95, 216, 224, .18), 0 18px 50px rgba(0, 0, 0, .5);
+    }
+
     /* ---------- era furniture ---------- */
 
     .ribbon {
@@ -1450,6 +1601,23 @@
         <a href="https://www.linkedin.com/in/saminqureshi/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="Samin_Qureshi.pdf">Résumé (PDF)</a>
       </nav>
+
+      <p class="portrait-switch">
+        <input class="vh" type="checkbox" id="portrait" />
+        <label for="portrait">
+          <span class="pt-on">Show portrait</span>
+          <span class="pt-off">Hide portrait</span>
+        </label>
+      </p>
+
+      <figure class="portrait">
+        <img src="img/portrait-320.jpg"
+             srcset="img/portrait-320.jpg 320w, img/portrait-480.jpg 480w"
+             sizes="(max-width: 30rem) 55vw, 240px"
+             width="320" height="427"
+             alt="Samin Qureshi"
+             loading="lazy" decoding="async" />
+      </figure>
     </header>
 
     <div class="f90 construction" aria-hidden="true"><span>THIS PAGE IS UNDER CONSTRUCTION</span></div>

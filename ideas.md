@@ -21,6 +21,7 @@ Status key: ✅ shipped · 🔭 open · ❌ dropped
 | **Toolkit as plain groups** | Where-used context dropped in favour of the résumé's own groups |
 | **Résumé link** | Straight to `Samin_Qureshi.pdf`, no modal viewer |
 | **Era switch** | Five skins (1996 / 2006 / 2016 / 2026 / 2036) from one CSS-only radio group, no JS |
+| **Portrait toggle** | Hidden checkbox, framed per era, served from `img/` at 320w and 480w |
 
 ---
 
@@ -77,6 +78,12 @@ and Brutal Weather (not on the résumé), and all self-assessed skill levels.
 ---
 
 ## Version history
+
+### v4.3.0 (2026-08-31) · "Portrait"
+- Optional portrait in the masthead behind a CSS-only checkbox
+- Framed per era: beveled plate, glossy card with reflection, Material avatar,
+  hairline rectangle, soft-lit panel
+- Resized out of the 9.7MB headshot into `img/` at 320w (35KB) and 480w (76KB)
 
 ### v4.2.0 (2026-08-31) · "Eras"
 - Three more skins: 2006 Web 2.0, 2016 flat/Material, 2036 ambient

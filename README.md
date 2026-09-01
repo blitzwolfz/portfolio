@@ -70,6 +70,18 @@ scoped under `body:has(#eYYYY:checked)`, so the 2026 page is untouched by any of
 it. Arrow keys move between eras because they are real radios. Nothing is
 persisted, so a reload returns to 2026.
 
+The masthead carries a **portrait toggle** on the same principle: a hidden
+checkbox, `body:has(#portrait:checked)`, and a frame styled per era. A beveled
+plate with an "arrow THAT'S ME" caption in 1996, a rounded card with a
+reflection in 2006, a circular Material avatar above the name in 2016, a plain
+hairline rectangle in 2026, and a soft-lit rounded panel in 2036.
+
+The photo is served from `img/` at 320w and 480w, not from the 9.7MB
+`headshot.png`. The widest it is ever drawn is 240px, so those two cover 1x and
+2x, at 35KB and 76KB. It carries `loading="lazy"`, but note that Chrome fetches
+it on page load anyway even though the figure is `display:none`, so treat the
+lazy hint as a best effort rather than a guarantee.
+
 Each skin picks a ground colour first and then a palette that clears 4.5:1 on
 it, so the pastiche never costs legibility: 1996 puts white, yellow, cyan, and
 lime on `#000080` at 11:1 and up; 2006 uses `#1B6BB0` on white at 5.6:1; 2016
@@ -86,7 +98,7 @@ era. The marquee and the blinking text stop under `prefers-reduced-motion`.
 
 | | |
 |---|---|
-| Masthead | Name, what I do, two short paragraphs, and four links |
+| Masthead | Name, what I do, two short paragraphs, four links, and the portrait toggle |
 | Experience | Five roles with the résumé bullets |
 | Projects | CoreX and Serenity+ |
 | Education | Guelph and George Brown |
@@ -118,9 +130,10 @@ palette, the two type stacks, and the section gap are all there.
 ├── index.html               # the entire site
 ├── Samin_Qureshi.pdf        # résumé, source of truth for content
 ├── fonts/                   # self-hosted Jost + Archivo (latin, latin-ext)
+├── img/                     # portrait at 320w and 480w, generated from headshot.png
 ├── SQ-Business-Card-Spec.pdf    # brand authority: inks and typeface
 ├── Business Card - SQ-selection.png
-├── headshot.png             # not used by the current page
+├── headshot.png             # 2316x3088 original, the source for img/
 ├── functions/
 │   └── api/
 │       ├── github.js        # GitHub activity endpoint
