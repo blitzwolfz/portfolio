@@ -100,7 +100,7 @@ era. The marquee and the blinking text stop under `prefers-reduced-motion`.
 |---|---|
 | Masthead | Name, what I do, two short paragraphs, four links, and the portrait toggle |
 | Experience | Five roles with the résumé bullets |
-| Projects | CoreX and Serenity+ |
+| Projects | doodle-run, CoreX and Serenity+ |
 | Education | Guelph and George Brown |
 | Coursework | Five projects, one line each |
 | Skills | Six groups, straight from the résumé |
@@ -176,3 +176,25 @@ loads, so the type falls back to Helvetica.
 
 Code is free to learn from. Please don't redeploy the content: the writing,
 résumé, and photography are mine.
+
+
+## doodle-run product pages
+
+The game has a dedicated static page at `/doodle-run/`, with support and privacy
+pages below that route. Its paper, pen colors and handwritten type follow the
+game. The main Portfolio index retains its existing design and project-entry
+markup. These routes share the current Cloudflare Pages deployment.
+
+`doodle-run/doodle-run.css` styles only the new pages. Optimized WebP images,
+the 60 FPS trailer and English captions live in `img/doodle-run/`. The trailer
+is about 11.8 MB, has a poster and native controls, and loads on demand. No new
+framework, build step or JavaScript dependency was introduced.
+
+Serve the project from its root with `python3 -m http.server 8765 --bind
+127.0.0.1`, then open `http://127.0.0.1:8765/doodle-run/`. Do not use a file URL
+for the product page, because asset paths are relative to the site root.
+
+The App Store link is not yet known. Replace the `#app-store` coming-soon text
+with the verified listing link when available. Review the privacy page against
+the signed release build and publish all three routes before entering their
+URLs in App Store Connect.
