@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Samin Qureshi · Software Developer</title>
-  <meta name="description" content="Samin Qureshi is a backend and systems developer in Toronto. Node, Postgres and DevOps work at George Brown College, plus a C++ chess engine and an iOS app." />
+  <meta name="description" content="Samin Qureshi is a backend and systems developer in Toronto. Node, Postgres and DevOps work at George Brown College, plus a C++ chess engine and iOS and macOS apps." />
   <meta name="theme-color" content="#F6F1E3" />
 
   <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -259,6 +259,7 @@
       transition: opacity .15s;
     }
     .out:hover { opacity: .65; }
+    .out + .out { margin-left: 1.5rem; }
 
     /* ---------- compact rows: coursework, skills ---------- */
 
@@ -1707,6 +1708,21 @@
 
           <article class="entry">
             <div class="entry-head">
+              <h3>doodle-golf</h3>
+              <span class="when">iOS · macOS</span>
+            </div>
+            <p class="sub">Notebook mini-golf · Swift, SwiftUI, SpriteKit</p>
+            <ul class="bul">
+              <li>A minimalist mini-golf game on notebook paper: pull back from the ball, work around a pencil case of hazards, and leave every stroke on the page.</li>
+              <li>Ten hand-drawn holes, Endless Golf and a Daily Challenge, with four difficulty tiers and a deterministic hole generator shared across iPhone and Mac.</li>
+              <li>Every generated hole is re-validated for geometry, navigability and shot space before it reaches the player.</li>
+            </ul>
+            <a class="out" href="/doodle-golf/">Explore doodle-golf</a>
+            <a class="out" href="/doodle/">See both in doodle</a>
+          </article>
+
+          <article class="entry">
+            <div class="entry-head">
               <h3>doodle-run</h3>
               <span class="when">iOS · macOS · Android</span>
             </div>
@@ -1717,6 +1733,7 @@
               <li>Android uses a hardware-backed Canvas renderer, cached code-generated art, runtime PCM audio and cross-language golden parity tests against the Swift core.</li>
             </ul>
             <a class="out" href="/doodle-run/">Explore doodle-run</a>
+            <a class="out" href="/doodle/">See both in doodle</a>
           </article>
 
           <article class="entry">

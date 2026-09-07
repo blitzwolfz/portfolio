@@ -178,23 +178,46 @@ Code is free to learn from. Please don't redeploy the content: the writing,
 résumé, and photography are mine.
 
 
-## doodle-run product pages
+## doodle, doodle-run and doodle-golf product pages
 
-The game has a dedicated static page at `/doodle-run/`, with support and privacy
-pages below that route. Its paper, pen colors and handwritten type follow the
-game. The main Portfolio index retains its existing design and project-entry
-markup. These routes share the current Cloudflare Pages deployment.
+The games sit under one hub. `/doodle/` is the contents page of the notebook
+both books live on: a wordmark, a lead line and two entries that link to
+`/doodle-run/` and `/doodle-golf/`. Each game route has its own support and
+privacy page below it. The site spells both names hyphenated and lower case,
+`doodle-run` and `doodle-golf`, everywhere it shows them.
 
-`doodle-run/doodle-run.css` styles only the new pages. Optimized WebP images,
-the 60 FPS trailer and English captions live in `img/doodle-run/`. The trailer
-is about 11.8 MB, has a poster and native controls, and loads on demand. No new
-framework, build step or JavaScript dependency was introduced.
+The paper is built from the games' own `DesignSystem.swift`: the same palette
+(paper, shade, desk, biro, pencil, teacher red, highlighter), the same 34px
+rule spacing, and the same two hands, a felt marker for titles and a neat hand
+for reading. The marker and hand are loaded with `local()` and fall back to the
+self-hosted Jost in `fonts/` off Apple platforms. Section labels are written
+down the margin in the marking pen, headings are underlined with a hand-drawn
+SVG stroke that inks in when it scrolls into view, screenshots are taped to the
+page, and every route ends on a torn edge with the desk showing through.
+
+Each page has its own standalone stylesheet: `doodle/doodle.css`,
+`doodle-run/doodle-run.css` and `doodle-golf/doodle-golf.css`. They share a
+common core by copy, not by import, so a route can be lifted out whole. The
+only JavaScript is about a dozen lines per page that add a class when a stroke
+scrolls into view; without it the strokes are simply drawn already, and
+`prefers-reduced-motion` turns the animation off. No framework and no build
+step.
+
+Optimized WebP images, the 60 FPS trailer and English captions live in
+`img/doodle-run/`; the iPhone and Mac previews live in `img/doodle-golf/`. The
+trailer is about 11.8 MB, has a poster and native controls, and loads on
+demand.
 
 Serve the project from its root with `python3 -m http.server 8765 --bind
-127.0.0.1`, then open `http://127.0.0.1:8765/doodle-run/`. Do not use a file URL
-for the product page, because asset paths are relative to the site root.
+127.0.0.1`, then open `http://127.0.0.1:8765/doodle/`. Do not use a file URL
+for the product pages, because asset paths are relative to the site root.
 
 The App Store link is not yet known. Replace the `#app-store` coming-soon text
 with the verified listing link when available. Review the privacy page against
-the signed release build and publish all three routes before entering their
-URLs in App Store Connect.
+the signed release build and publish all routes before entering their URLs in
+App Store Connect.
+
+For doodle-golf, use `/doodle-golf/` as the marketing URL,
+`/doodle-golf/support/` as the support URL, and `/doodle-golf/privacy/` as the
+privacy policy URL. The app's privacy answers still need to be published in App
+Store Connect for the iOS and macOS platforms.

@@ -171,12 +171,15 @@ video{display:block;width:100%;height:auto;background:var(--paper)}
   .taped{margin-left:6px}
 }
 
-/* ---------- doodle-run: two orientations of the same page ---------- */
-.orientations{display:grid;grid-template-columns:.62fr 1.38fr;gap:clamp(20px,2.6vw,34px);align-items:center}
-.orientations .taped{justify-self:center;max-width:100%}
-.orientations .portrait img{max-height:540px;width:auto;max-width:100%}
+/* ---------- doodle-golf: a phone and a Mac, side by side ---------- */
+.video-grid{display:grid;grid-template-columns:.44fr 1fr;gap:clamp(24px,3vw,44px);align-items:start;margin-top:4px}
+.video-card figcaption{margin:0 0 12px;color:var(--pencil)}
+.screen-pair{display:grid;grid-template-columns:.44fr 1fr;gap:clamp(18px,2.4vw,32px);align-items:center}
+.screen-pair.mac-first{grid-template-columns:1fr .44fr}
+.screen-pair .taped{justify-self:center;max-width:100%}
+.screen-pair .phone img{max-height:520px;width:auto;max-width:100%}
 @media(max-width:1040px){
-  .orientations{grid-template-columns:1fr;gap:46px;max-width:620px}
-  .orientations .portrait img{max-height:460px}
+  .video-grid,.screen-pair,.screen-pair.mac-first{grid-template-columns:1fr;gap:42px;max-width:640px}
+  .screen-pair .phone img{max-height:440px}
 }
 @media(max-width:1000px){.mark{grid-column:1/-1}}

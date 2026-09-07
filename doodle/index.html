@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>doodle | Two games drawn on notebook paper</title>
+<meta name="description" content="doodle-run and doodle-golf: two native games drawn in ballpoint on the pages of the same exercise book, for iPhone, Mac and Android.">
+<link rel="canonical" href="https://saminqureshi.dev/doodle/">
+<meta name="theme-color" content="#f5f1e4">
+<meta property="og:title" content="doodle | Two games drawn on notebook paper">
+<meta property="og:description" content="doodle-run and doodle-golf: two native games drawn in ballpoint on the pages of the same exercise book.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://saminqureshi.dev/img/doodle-run/macos-01.webp">
+<link rel="stylesheet" href="/doodle/doodle.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="page">
+
+  <nav aria-label="Main navigation">
+    <a href="/">Portfolio</a>
+  </nav>
+
+  <main id="main">
+    <header class="masthead">
+      <h1>doodle</h1>
+      <svg class="ink" viewBox="0 0 560 18" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M5 11c78-6 141 5 219 2s160-7 331 3"/></svg>
+      <p class="lead">Two exercise books. The drawings move.</p>
+    </header>
+
+    <section class="contents" aria-labelledby="contents-title">
+      <h2 id="contents-title">Contents</h2>
+
+      <a class="entry" href="/doodle-run/">
+        <span class="num">1</span>
+        <span class="writes">
+          <span class="name">doodle-run</span>
+          <span class="say">One press. A page to cross.</span>
+        </span>
+        <span class="writes folio">p.&nbsp;1<span class="where">iPhone, Mac, Android</span></span>
+      </a>
+
+      <a class="entry" href="/doodle-golf/">
+        <span class="num">2</span>
+        <span class="writes">
+          <span class="name">doodle-golf</span>
+          <span class="say">Pull back. Let go.</span>
+        </span>
+        <span class="writes folio">p.&nbsp;2<span class="where">iPhone, Mac</span></span>
+      </a>
+    </section>
+  </main>
+
+  <div class="foot">
+    <p class="cont">cont. on <a href="/">Samin Qureshi</a></p>
+    <footer>
+      <span>Drawn and built by Samin Qureshi</span>
+      <div><a href="/doodle-run/support/">doodle-run support</a><a href="/doodle-golf/support/">doodle-golf support</a></div>
+    </footer>
+  </div>
+
+</div>
+<div class="tear" aria-hidden="true"><svg viewBox="0 0 1200 26" preserveAspectRatio="none"><path d="M0 0 H1200 V8.5 L1137 5.4 L1067 12.0 L1021 7.7 L960 17.5 L895 9.2 L838 13.6 L795 7.0 L765 5.0 L704 4.2 L637 14.4 L570 14.5 L514 19.7 L448 14.2 L376 5.5 L339 11.1 L305 16.7 L238 11.6 L178 7.0 L113 11.2 L56 17.9 L0 9 Z"/></svg></div>
+<script>
+(function(){
+  var ink=document.querySelectorAll('.ink,.writes');
+  if(!ink.length)return;
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      for(var i=0;i<ink.length;i++)ink[i].classList.add('drawn');
+    });
+  });
+})();
+</script>
+</body>
+</html>
